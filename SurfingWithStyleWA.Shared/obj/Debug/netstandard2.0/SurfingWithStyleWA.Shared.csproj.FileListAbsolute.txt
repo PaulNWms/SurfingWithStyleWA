@@ -1,0 +1,9 @@
+C:\Users\PaulW\source\repos\SurfingWithStyleWA\SurfingWithStyleWA.Shared\bin\Debug\netstandard2.0\SurfingWithStyleWA.Shared.deps.json
+C:\Users\PaulW\source\repos\SurfingWithStyleWA\SurfingWithStyleWA.Shared\bin\Debug\netstandard2.0\SurfingWithStyleWA.Shared.dll
+C:\Users\PaulW\source\repos\SurfingWithStyleWA\SurfingWithStyleWA.Shared\bin\Debug\netstandard2.0\SurfingWithStyleWA.Shared.pdb
+C:\Users\PaulW\source\repos\SurfingWithStyleWA\SurfingWithStyleWA.Shared\obj\Debug\netstandard2.0\SurfingWithStyleWA.Shared.csprojAssemblyReference.cache
+C:\Users\PaulW\source\repos\SurfingWithStyleWA\SurfingWithStyleWA.Shared\obj\Debug\netstandard2.0\SurfingWithStyleWA.Shared.csproj.CoreCompileInputs.cache
+C:\Users\PaulW\source\repos\SurfingWithStyleWA\SurfingWithStyleWA.Shared\obj\Debug\netstandard2.0\SurfingWithStyleWA.Shared.AssemblyInfoInputs.cache
+C:\Users\PaulW\source\repos\SurfingWithStyleWA\SurfingWithStyleWA.Shared\obj\Debug\netstandard2.0\SurfingWithStyleWA.Shared.AssemblyInfo.cs
+C:\Users\PaulW\source\repos\SurfingWithStyleWA\SurfingWithStyleWA.Shared\obj\Debug\netstandard2.0\SurfingWithStyleWA.Shared.dll
+C:\Users\PaulW\source\repos\SurfingWithStyleWA\SurfingWithStyleWA.Shared\obj\Debug\netstandard2.0\SurfingWithStyleWA.Shared.pdb

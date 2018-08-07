@@ -1,0 +1,153 @@
+﻿@page "/notes/git"
+
+<h1>Git</h1>
+
+<pre>
+
+https://git-scm.com/
+
+# sets up Git with your name
+git config --global user.name "&lt;Your-Full-Name&gt;"
+
+# sets up Git with your email
+git config --global user.email "&lt;your-email-address&gt;"
+
+# makes sure that Git output is colored
+git config --global color.ui auto
+
+# displays the original state in a conflict
+git config --global merge.conflictstyle diff3
+
+git config --global core.editor ("vim"|"code --wait")
+
+git config --list
+
+git init
+
+git clone &lt;URL&gt; [target-name]
+
+git status
+
+git log [--oneline|--stat|-p] [SHA]
+
+# show log of all branches
+git log --oneline --graph --all
+
+git show &lt;SHA&gt;
+
+git add (.|&lt;file&gt;)
+
+git rm --cached &lt;file&gt;
+
+git commit [-m "&lt;message&gt;"]
+
+git diff
+
+The .gitignore file is used to tell Git about the files that Git should not track.
+
+git tag -a &lt;tag&gt; [&lt;SHA&gt;]
+
+# list branches
+git branch
+
+# create branch
+git branch &lt;branch&gt;
+
+# delete branch
+git branch &lt;branch&gt; (-d|-D)
+
+git checkout &lt;branch&gt;
+
+# create and checkout branch
+git checkout -b &lt;branch&gt;
+
+git merge &lt;name-of-branch-to-merge-in&gt;
+
+A Fast-forward merge will just move the currently checked out branch forward until it points to the same commit that the other branch is pointing to.
+
+# alter the most recent commit
+git commit --amend
+
+git revert &lt;SHA-of-commit-to-revert&gt;
+
+Here's how we can refer to previous commits:
+the parent commit – the following indicate the parent commit of the current commit
+HEAD^
+HEAD~
+HEAD~1
+the grandparent commit – the following indicate the grandparent commit of the current commit
+HEAD^^
+HEAD~2 
+the great-grandparent commit – the following indicate the great-grandparent commit of the current commit
+HEAD^^^
+HEAD~3
+
+# delete a commit
+git reset &lt;reference-to-commit&gt;
+
+# show full path to the remote repository
+git remote -v
+
+# add a connection to a new remote repository
+git remote add origin https://github.com/PaulNWms/&lt;repo-name&gt;.git
+
+git push origin master
+
+# fetch and merge
+git pull origin master
+
+# fetch without merging
+git fetch origin master
+
+git merge origin/master
+
+Forking a repository creates an identical copy of the original repository and moves this copy to your GitHub account.
+
+# show contributors
+git shortlog
+
+# sort by activity
+git shortlog -s -n
+
+# show commits by author
+git log --author="&lt;name&gt;"
+
+git log --grep=""&lt;regex&gt;"
+
+CONTRIBUTING.md
+
+# add a connection to a project's main repository (not your fork)
+git remote add upstream https://github.com/
+
+# in case you don't like working with 'origin' and 'upstream'
+git remote rename &lt;name&gt; &lt;new-name&gt;
+
+# bring project's main repository changes into our local branch
+git fetch upstream master
+
+To get commits from a source repository into your forked repository on GitHub you need to:
+- get the cloneable URL of the source repository
+- create a new remote with the git remote add command 
+-- use the shortname upstream to point to the source repository
+-- provide the URL of the source repository
+- fetch the new upstream remote
+- merge the upstream's branch into a local branch
+- push the newly updated local branch to your origin repo
+
+# squash 3 commits together
+# create a backup branch before git rebase
+git rebase -i HEAD~3
+
+# then the change will have to be force pushed to your fork
+git push -f origin &lt;branch&gt;
+
+Links:
+http://up-for-grabs.net/
+http://www.firsttimersonly.com/
+first-timers-only label on GitHub https://github.com/search?utf8=%E2%9C%93&q=label%3Afirst-timers-only+is%3Aopen&type=Issues&ref=searchresults
+"first timers only" blog post https://blog.kentcdodds.com/first-timers-only-78281ea47455
+try tackling some Git and GitHub challenges with the Git-it app https://github.com/jlord/git-it-electron
+http://firstpr.me/
+
+</pre>
+
