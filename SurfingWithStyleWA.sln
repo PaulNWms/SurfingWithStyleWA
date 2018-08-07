@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2047
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurfingWithStyleWA.Server", "SurfingWithStyleWA.Server\SurfingWithStyleWA.Server.csproj", "{8943E746-BBC8-4D19-B38A-1A1D77CADEC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SurfingWithStyleWA.Server", "SurfingWithStyleWA.Server\SurfingWithStyleWA.Server.csproj", "{8943E746-BBC8-4D19-B38A-1A1D77CADEC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurfingWithStyleWA.Client", "SurfingWithStyleWA.Client\SurfingWithStyleWA.Client.csproj", "{83D28E46-0B30-477C-B1BA-0441E4D6077B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SurfingWithStyleWA.Client", "SurfingWithStyleWA.Client\SurfingWithStyleWA.Client.csproj", "{83D28E46-0B30-477C-B1BA-0441E4D6077B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurfingWithStyleWA.Shared", "SurfingWithStyleWA.Shared\SurfingWithStyleWA.Shared.csproj", "{B4583242-CE70-486F-AEBE-F91BBFF2F0D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SurfingWithStyleWA.Shared", "SurfingWithStyleWA.Shared\SurfingWithStyleWA.Shared.csproj", "{B4583242-CE70-486F-AEBE-F91BBFF2F0D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
