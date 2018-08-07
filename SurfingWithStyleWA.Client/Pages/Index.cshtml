@@ -1,7 +1,25 @@
 ﻿@page "/"
+@*@{
+    ViewBag.Title = "Surfing With Style";
+    ViewBag.FileCreated = File.GetCreationTimeUtc(this.Server.MapPath(this.VirtualPath)).ToString("o");
+    ViewBag.FileModified = File.GetLastWriteTimeUtc(this.Server.MapPath(this.VirtualPath)).ToString("o");
+}*@
 
-<h1>Hello, world!</h1>
+@*@section head {
+    <meta name="description" content="A really important website that you should bookmark." />
+}*@
 
-Welcome to your new app.
+<article class="home-page" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/Article">
+    @*@{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}*@
+    <h1 class="cover-heading" itemprop="headline">Surfing With Style</h1>
+    <p itemscope itemtype="http://schema.org/Photograph">
+        <meta itemprop="url" content="https://surfingwithstyle.com/images/surfboard-woody-424.jpg" />
+        <img src="~/images/surfboard-woody-424.jpg" alt="Surfing With Style" itemprop="image" class="splash-screen-image" />
+    </p>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+</article>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
