@@ -1,1 +1,7 @@
 .vs/
+SurfingWithStyleWA.Client/bin
+SurfingWithStyleWA.Client/obj
+SurfingWithStyleWA.Server/bin
+SurfingWithStyleWA.Server/obj
+SurfingWithStyleWA.Shared/bin
+SurfingWithStyleWA.Shared/obj
