@@ -1,0 +1,116 @@
+﻿@page "/practice/help"
+    @*@{
+        ViewBag.Title = "Help for the Scheduled Metronome";
+        ViewBag.FileCreated = File.GetCreationTimeUtc(this.Server.MapPath(this.VirtualPath)).ToString("o");
+        ViewBag.FileModified = File.GetLastWriteTimeUtc(this.Server.MapPath(this.VirtualPath)).ToString("o");
+    }*@
+
+@*@section head {
+        <meta name="viewport" content="width=device-width" />
+        <meta name="description" content="Help for the Scheduled Metronome" />
+    }*@
+
+<article class="narrow-article" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/Article">
+    @*@{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}*@
+    <h1>Help for the Scheduled Metronome</h1>
+
+    <h2>What is a "scheduled metronome"?</h2>
+    <p>
+        The scheduled metronome is a metronome that runs a scheduled routine.  Its intended for the "mindless" portion of your
+        practice routine - scale studies, picking exercises, speed drills and the like.
+    </p>
+
+    <h2>How do you use it?</h2>
+    <p>The basic usage is, you enter a routine, you save it, and then you play it back with instument in hand.</p>
+
+    <h3>To enter your schedule:</h3>
+    <p>Basically, each exercise has a tempo, a duration, and name.</p>
+    <ul>
+        <li>
+            The tempo is the mm or bpm on your metronome.  There are no restrictions, but values below mm=30 or above mm=208 are not likely to work too well.
+        </li>
+        <li>
+            The duration can be entered in [seconds] or in [minutes]:[seconds].  It works similar to the display on a microwave oven.  A value of
+            '90' will be interpreted as 1 minute and 30 seconds, '1:90' will be interpreted as 2 minutes and 30 seconds.
+        </li>
+        <li>Enter the name of the exercise as a free-form string.  Best to keep it short.</li>
+    </ul>
+
+    <p>Each row also has an add button and a delete button, these work in the usual way.</p>
+
+    <p>After the schedule are a few global options.</p>
+    <ul>
+        <li>
+            <b>Rest between exercises:</b> In practice, we need a little time between exercises to get ready for the next one - to flip a page, to change position,
+            or to just mentally prepare. Defaults to 5 sec.
+        </li>
+        <li>
+            <b>Start routine with a rest:</b> Just as you need a little pause to set up before each exercise, you will generally want to set up before the
+            <em>first</em> exercise - but not always.  Occasionally you just want to hit the ground running.  An example of this would be a demo link.
+        </li>
+        <li>
+            <b>End each exercise with a bell:</b> Often it's hard to hear when the metronome stops, especially if you're playing directly on the beat.
+            By default this is cued by a bell that rings at the end of each exercise, but you can turn that off if you want.
+        </li>
+    </ul>
+
+    <h3>To save your schedule:</h3>
+    <p>
+        Although this step is optional, for obvious reasons you will want to save your routine.  The 'editor' is admittedly clunky, especially on a mobile device.
+    </p>
+
+    <p>Now it gets a little bit technical, but you'll need to understand this. Saving is two-step process:</p>
+    <ol>
+        <li>
+            Press the 'Create Link' button.  This will post back to the server, and in a few seconds it will respond with a new URL.  Look at the URL
+            line in your browser.  This is your schedule, in encoded form.  Most likely it has been added to your browser history as well, but I wouldn't
+            rely on that.
+        </li>
+        <li>
+            Now you will need to save it somewhere.  This part is up to you.  You can bookmark it in your current browser, or save it anywhere
+            you like to save your links.  (Personally, I like to copy and paste them into a text file which I keep on my OneDrive.)
+        </li>
+    </ol>
+
+    <p>The takeaway is that the schedule is not stored anywhere on the site, it's encoded in the link.  Managing your links is your own responsibility.</p>
+
+    <h3>To play back your schedule:</h3>
+    <p>Press the play button.  Press a second time to pause.</p>
+
+    <p>
+        Note that by default, your schedule will start with a rest.  This may seem crazy at first, but it's by design. Through usage we are
+        conditioned to start a metronome, <em>and then</em> pick up the instrument and settle into an exercise with the metronome <em>already running</em>.
+        Just because it's been done that way for hundreds of years doesn't make it optimal.  I prefer to start the routine, get situatated
+        with my instrument and be fully prepared when the routine starts.
+    </p>
+
+    <p>Of course if this is too disconcerting, just uncheck 'Start routine with a rest'.</p>
+
+    <h2>Special uses:</h2>
+    <h3>Playing out of time</h3>
+    <p>
+        Certain exercises are best played without a metronome.  A good example of this are certain drum rudiments.
+        Suppose your routine includes a buzz roll and you don't want the metronome engaged for the duration of that exercise.
+        Just set the tempo to 0.  When the tempo is 0, a bell will sound at the <em>beginning</em> as well as the end of an exercise,
+        so you know when to start.
+    </p>
+
+    <h2>Tips:</h2>
+    <ul>
+        <li>
+            Several small schedules are more effective than trying to cram your whole exercise routine into one big one.  In life,
+            things rarely go as planned, and your routine(s) should take that into account.
+        </li>
+        <li>
+            The metronome rate is <em>reasonably</em> accurate, but not perfect.  I have noticed a very slight difference in playback speed
+            on various browsers and devices.  This is a problem in the underlying hardware and browser, not the web application.  It is not fixable.
+        </li>
+        <li>
+            Please report bugs.  I can't possibly test the application on every platform.  If you do report a bug, please include device,
+            OS version and browser version.
+        </li>
+        <li>Actually, any constructive feedback is helpful.</li>
+    </ul>
+
+    <p>Enjoy!</p>
+</article>

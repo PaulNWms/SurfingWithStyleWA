@@ -65,6 +65,24 @@
             <li class="nav-item px-3 dropdown">
                 <NavLink class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Practice
+                </NavLink>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <NavLink class="nav-link" href="notes/csharp" Match=NavLinkMatch.All>
+                        Metronome
+                    </NavLink>
+                    <NavLink class="nav-link" href="notes/git">
+                        Scheduled&nbsp;Metronome
+                    </NavLink>
+                    <div class="dropdown-divider"></div>
+                    <NavLink class="nav-link" href="practice/help">
+                        Scheduled&nbsp;Metronome&nbsp;Help
+                    </NavLink>
+                </div>
+            </li>
+            <li class="nav-item px-3 dropdown">
+                <NavLink class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Notes
                 </NavLink>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -77,12 +95,11 @@
                     <NavLink class="nav-link" href="notes/ml">
                         @*<span class="oi oi-plus" aria-hidden="true"></span>*@ ML
                     </NavLink>
-                    @*<div class="dropdown-divider"></div>*@
                 </div>
             </li>
             @*<li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
-            </li>*@
+            <a class="nav-link disabled" href="#">Disabled</a>
+        </li>*@
         </ul>
         @*<form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

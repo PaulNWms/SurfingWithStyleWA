@@ -1,0 +1,65 @@
+﻿
+@*@{
+    ViewBag.Title = "Metronome";
+    ViewBag.FileCreated = File.GetCreationTimeUtc(this.Server.MapPath(this.VirtualPath)).ToString("o");
+    ViewBag.FileModified = File.GetLastWriteTimeUtc(this.Server.MapPath(this.VirtualPath)).ToString("o");
+}
+
+@section scripts {
+@Scripts.Render("~/bundles/Metronome")
+}
+
+@section head {
+    <meta name="description" content="A basic pendulum metronome." />
+    <link rel="Stylesheet" href="~/Content/Metronome.css" type="text/css" />
+}
+
+<article class="narrow-article" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
+    @{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}
+    <meta itemprop="applicationCategory" content="Tool, Multimedia" />
+    <meta itemprop="applicationSubCategory" content="Music Rehearsal" />
+    <meta itemprop="operatingSystem" content="IIS/ASP.NET MVC" />
+    <h2>Metronome</h2>
+    <div class="row">
+        <div class="jumbotron text-center">
+            <h1>
+                <button type="button" class="btn btn-primary btn-lg metronome-start"><span class="glyphicon glyphicon-play"></span></button>
+                <span class="tempo-display">120</span>
+            </h1>
+            <div class="row tempo-slider-container">
+                <div class="col-xs-1">
+                    <button type="button" class="btn btn-primary btn-xs tempo-decrement"><span class="glyphicon glyphicon-triangle-left"></span></button>
+                </div>
+                <div class="col-xs-10">
+                    <input type="range" id="tempo-slider" class="tempo-slider" min="20" max="240" step="1" value="120">
+                </div>
+                <div class="col-xs-1">
+                    <button type="button" class="btn btn-primary btn-xs tempo-increment"><span class="glyphicon glyphicon-triangle-right"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-offset-5 col-xs-2 unpad">
+            <div class="metronome">
+                <div class="pendulum-crossbar">
+                    <div class="pendulum-grandparent">
+                        <div class="pendulum-parent">
+                            <div class="pendulum-child"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <audio class="downbeat-click" preload="auto" hidden="hidden">
+            <source src="~/Content/Audio/downbeatClick.wav" type="audio/wav">
+            <source src="~/Content/Audio/downbeatClick.mp3" type="audio/mp3">
+        </audio>
+        <audio class="upbeat-click" preload="auto" hidden="hidden">
+            <source src="~/Content/Audio/upbeatClick.wav" type="audio/wav">
+            <source src="~/Content/Audio/upbeatClick.mp3" type="audio/mp3">
+        </audio>
+    </div>
+</article>*@

@@ -16,7 +16,7 @@ The Common Type System (CTS) defines types available to CLI-compliant languages.
 
 The Common Language Specification (CLS) is a subset of CTS types that are guaranteed to be compatible across languages.
 
-The BCL is CLI-compliant.
+The BCL is CLS-compliant.
 
 The lowest level of deployment granularity is the module.
 
@@ -33,5 +33,23 @@ An indexer is a special property that allows access on an object instance as if 
 CLS rules only apply to those parts of a type that are visible outside of the defining assembly.
 
 PE/COFF stands for Portable Executable Common Object File Format.
+
+The _CorExeMain() entry point is imported from mscoree.dll.
+
+The shim loads the specific CLR version (CLR.DLL) calls into Program.Main().
+
+Fusion loads assemblies required by the application on an on-demand basis.
+
+To install assemblies into the GAC, they must be strong named signed.
+
+The GAC is located at %windir%\Microsoft.NET\assembly.
+
+Assembly probing can be monitored with fuslogvw.exe.
+
+
+
+
+
+
 
 </code></pre>

@@ -16,13 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Pages\Git.cshtml">
+    <Content Update="Pages\Notes\Git.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Pages\ML.cshtml">
+    <Content Update="Pages\Notes\ML.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Pages\CSharp.cshtml">
+    <Content Update="Pages\Notes\CSharp.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>

@@ -1,0 +1,131 @@
+﻿@*@model SurfingWithStyleMvc5.ViewModels.MetronomeViewModel
+
+@{
+    ViewBag.Title = "Scheduled Metronome";
+    ViewBag.FileCreated = File.GetCreationTimeUtc(this.Server.MapPath(this.VirtualPath)).ToString("o");
+    ViewBag.FileModified = File.GetLastWriteTimeUtc(this.Server.MapPath(this.VirtualPath)).ToString("o");
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/TimerLib")
+    @Scripts.Render("~/bundles/Metronome")
+}
+
+@section head {
+    <meta name="description" content="A metronome that follows a preprogrammed schedule." />
+    <link rel="Stylesheet" href="~/Content/MiniMetronome.css" type="text/css" />
+}
+
+<article class="narrow-article" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
+    @{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}
+    <meta itemprop="applicationCategory" content="Tool, Multimedia" />
+    <meta itemprop="applicationSubCategory" content="Music Rehearsal" />
+    <meta itemprop="operatingSystem" content="IIS/ASP.NET MVC" />
+    <h2>Scheduled Metronome</h2>
+    <div class="row">
+        <div class="col-xs-9 jumbotron text-center">
+            <div class="row">
+                <h1>
+                    <button type="button" class="btn btn-primary btn-lg timer-start"><span class="glyphicon glyphicon-play" /></button>
+                    <span class="tempo-display">120</span>
+                </h1>
+            </div>
+            <div class="row">
+                <h2 class="col-xs-3">
+                    <span class="timer-display">0:00</span>
+                </h2>
+                <h2 class="col-xs-9">
+                    <span class="exercise-display"></span>
+                </h2>
+            </div>
+        </div>
+        <div class="col-xs-offset-1 col-xs-2">
+            <div class="metronome">
+                <div class="pendulum-crossbar">
+                    <div class="pendulum-grandparent">
+                        <div class="pendulum-parent">
+                            <div class="pendulum-child"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <h3>Schedule:</h3>
+    </div>
+    <div class="row">
+        <form class="form-inline" method="post">
+            <table>
+                <thead>
+                    <tr><th></th><th>Tempo</th><th>Time</th><th>Exercise</th><th></th></tr>
+                </thead>
+                <tbody class="schedule">
+                    @for (int i = 0; i < Model.Rows.Count(); i++)
+                    {
+                        <tr>
+                            <td>
+                                <button type="button" class="btn btn-primary delete-form-row" style="margin-top:0.2em;margin-right:0.2em"><span class="glyphicon glyphicon-remove"></span></button>
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.Rows[i].Tempo[0], new { @style = "width:3em;margin-top:0.2em;margin-right:0.2em;padding-left:0.3em;padding-right:0.3em", @class = "form-control digit-filter tempo-0", @placeholder = "Tempo", @autocomplete = "off" })
+                            </td>
+                            <td>
+                                <input type="text" style="width:3.5em;margin-top:0.2em;margin-right:0.2em;padding-left:0.5em;padding-right:0.5em" class="form-control time-filter midpoint-0" id="midpoint-0" placeholder="Duration" autocomplete="off" value="0:00" />
+                                @Html.HiddenFor(m => m.Rows[i].Seconds[0], new { @class = "midpoint-0-sec" })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.Rows[i].Exercise, new { @style = "margin-top:0.2em;margin-right:0.2em", @class = "form-control exercise", @placeholder = "Exercise" })
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary add-form-row" style="margin-top:0.2em"><span class="glyphicon glyphicon-plus"></span></button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="row">
+                <div class="form-group col-xs-offset-1 col-xs-10">
+                    @Html.LabelFor(m => m.Rest)
+                    @Html.TextBoxFor(m => m.Rest, new { @style = "width:3em;margin-top:0.2em;padding-left=0.3em;padding-right=0.3em;", @class = "form-control digit-filter rest", @id = "rest", @placeholder = "5", @autocomplete = "off" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-offset-1 col-xs-10">
+                    @Html.LabelFor(m => m.StartRoutineWithRest)
+                    @Html.CheckBoxFor(m => m.StartRoutineWithRest, new { @class = "start-with-rest" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-xs-offset-1 col-xs-10">
+                    @Html.LabelFor(m => m.EndExerciseWithBell)
+                    @Html.CheckBoxFor(m => m.EndExerciseWithBell, new { @class = "end-with-bell" })
+                </div>
+            </div>
+            <div class="row col-xs-offset-1 col-xs-10">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default" style="margin-top:0.2em;margin-right:0.2em">Create Link</button>
+                </div>
+            </div>
+            <input type="hidden" name="query" class="query" id="query" />
+        </form>
+    </div>
+    <div class="row">
+        <audio class="downbeat-click" preload="auto">
+            <source src="~/Content/Audio/downbeatClick.wav" type="audio/wav">
+            <source src="~/Content/Audio/downbeatClick.mp3" type="audio/mp3">
+        </audio>
+        <audio class="upbeat-click" preload="auto">
+            <source src="~/Content/Audio/upbeatClick.wav" type="audio/wav">
+            <source src="~/Content/Audio/upbeatClick.mp3" type="audio/mp3">
+        </audio>
+        <audio class="end-exercise-bell" preload="auto">
+            <source src="~/Content/Audio/EndExercise.wav" type="audio/wav">
+            <source src="~/Content/Audio/EndExercise.mp3" type="audio/mp3">
+        </audio>
+        <audio class="end-routine-bell" preload="auto">
+            <source src="~/Content/Audio/EndRoutine.wav" type="audio/wav">
+            <source src="~/Content/Audio/EndRoutine.mp3" type="audio/mp3">
+        </audio>
+    </div>
+</article>*@
