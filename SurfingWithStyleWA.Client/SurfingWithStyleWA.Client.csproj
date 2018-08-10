@@ -16,6 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Pages\Notes\DotNet.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Pages\Notes\Git.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
