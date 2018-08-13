@@ -1,7 +1,19 @@
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio cache/options directory
 .vs/
-SurfingWithStyleWA.Client/bin
-SurfingWithStyleWA.Client/obj
-SurfingWithStyleWA.Server/bin
-SurfingWithStyleWA.Server/obj
-SurfingWithStyleWA.Shared/bin
-SurfingWithStyleWA.Shared/obj
