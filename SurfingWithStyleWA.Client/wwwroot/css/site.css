@@ -22,27 +22,9 @@ app {
 
     .main .top-row {
         /*background-color: #e6e6e6;*/
-        background-color: rgba(0,0,0,0.4);
-        border-bottom: 1px solid #d6d5d5;
-    }
-
-.sidebar {
-    /*background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);*/
-}
-
-    .sidebar .top-row {
-        background-color: rgba(0,0,0,0.4);
-    }
-
-    .sidebar .navbar-brand {
-        font-size: 1.1rem;
-    }
-
-    .sidebar .oi {
-        width: 2rem;
-        font-size: 1.1rem;
-        vertical-align: text-top;
-        top: -2px;
+        /*background-color: rgba(0,0,0,0.4);*/
+        background-color: aquamarine;
+        /*border-bottom: 1px solid #d6d5d5;*/
     }
 
 .nav-item {
@@ -156,6 +138,12 @@ article.instructions {
     margin-left: 25%;
     width: 50%;
 }
+
+.navbar-inverse {
+    background-color: #00bc8c;
+    border-color: transparent;
+}
+
 
 @media (min-width: 992px) and (max-width: 1199px) {
     .narrow-article {
