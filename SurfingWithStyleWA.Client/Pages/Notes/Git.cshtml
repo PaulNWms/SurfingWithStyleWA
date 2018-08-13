@@ -145,6 +145,10 @@ git rebase -i HEAD~3
 # then the change will have to be force pushed to your fork
 git push -f origin &lt;branch&gt;
 
+# apply changes to repo after updating .gitignore
+git rm -r --cached .
+git add .
+
 Links:
 http://up-for-grabs.net/
 http://www.firsttimersonly.com/
