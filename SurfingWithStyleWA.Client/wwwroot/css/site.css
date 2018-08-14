@@ -110,7 +110,11 @@ app {
     background-color: black;
 }
 
-.calculator-title {
+.navbar-dark .navbar-brand:hover {
+    color: #375a7f;
+}
+
+/*.calculator-title {
     text-align: center;
 }
 
@@ -158,7 +162,7 @@ article.instructions {
         margin-left: 0%;
         width: 100%;
     }
-}
+}*/
 
 @media (max-width: 424px) {
     .splash-screen-image {
