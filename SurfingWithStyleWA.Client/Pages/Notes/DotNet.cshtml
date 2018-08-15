@@ -36,7 +36,7 @@ PE/COFF stands for Portable Executable Common Object File Format.
 
 The _CorExeMain() entry point is imported from mscoree.dll.
 
-The shim loads the specific CLR version (CLR.DLL) calls into Program.Main().
+The shim loads the specific CLR version (CLR.DLL) and calls into Program.Main().
 
 Fusion loads assemblies required by the application on an on-demand basis.
 
@@ -50,9 +50,9 @@ Assembly probing can be monitored with fuslogvw.exe.
 
 corflags.exe can be used to modify the JIT target platform.
 
-Before jitting, a type's MethodTable point to a thunk that invokes JIT.
+Before jitting, a type's MethodTable points to a thunk that invokes JIT.
 
-After jitting, a type's MethodTable point to a thunk that calls native code.
+After jitting, a type's MethodTable points to a thunk that calls native code.
 
 Jitted code that has not been called for a long time can be deallocated.
 
