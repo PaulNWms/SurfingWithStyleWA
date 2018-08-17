@@ -6,9 +6,9 @@
 
 $PSVersionTable   # shows version
 
-help Get-EventLog -Online   # online help
+help &lt;cmdlet&gt; -Online   # online help
 
-Show-Command Get-EventLog   # pop up a window
+Show-Command &lt;cmdlet&gt;   # pop up a window
 
 Get-PSProvider
 
@@ -19,5 +19,15 @@ New-Item -ItemType File empty.txt
 Set-Item -Path alias:npp -Value "C:\Program Files\Notepad++\notepad++.exe"
 
 Set-ItemProperty   # change registry value
+
+Export-CSV, Export-CliXML
+
+diff -ReferenceObject &lt;object 1&gt; -DifferenceObject &lt;object 2&gt;
+
+Out-File, Out-Printer, Out-GridView
+
+Get-Process -Name notepad | Stop-Process
+
+$ConfirmPreference
 
 </pre>
