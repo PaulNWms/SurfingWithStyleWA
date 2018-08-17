@@ -25,6 +25,9 @@
     <Content Update="Pages\Notes\Git.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Pages\Notes\MSBuild.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Pages\Notes\ML.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

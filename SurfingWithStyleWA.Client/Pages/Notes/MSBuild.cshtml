@@ -1,0 +1,64 @@
+﻿@page "/notes/msbuild"
+
+<h1>MSBuild</h1>
+<pre class="kaypro10">Link: <a target="_blank" href="https://msdn.microsoft.com/en-us/library/bb629388.aspx">Common MSBuild Project Items</a>
+
+Link: <a target="_blank" href="https://msdn.microsoft.com/en-us/library/ms164313.aspx">MSBuild Well-known Item Metadata</a>
+
+Stare at this:
+
+&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"&gt;
+
+  &lt;PropertyGroup&gt;
+    &lt;Name&gt;Homer&lt;/Name&gt;
+    &lt;FullName&gt;$(Name) Simpson&lt;/FullName&gt;
+    &lt;PicsPath&gt;c:\temp\pics\*.jpg&lt;/PicsPath&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;Pics Include="$(PicsPath)" /&gt;
+  &lt;/ItemGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;Simpsons Include="Homer"&gt;
+      &lt;CatchPhrase&gt;Doh&lt;/CatchPhrase&gt;
+    &lt;/Simpsons&gt;
+    &lt;Simpsons Include="Marge"&gt;
+      &lt;CatchPhrase&gt;Mmmmmmmmph&lt;/CatchPhrase&gt;
+    &lt;/Simpsons&gt;
+    &lt;Simpsons Include="Bart"&gt;
+      &lt;CatchPhrase&gt;Eat my shorts&lt;/CatchPhrase&gt;
+    &lt;/Simpsons&gt;
+    &lt;Simpsons Include="Lisa"&gt;
+      &lt;CatchPhrase&gt;Bart!&lt;/CatchPhrase&gt;
+    &lt;/Simpsons&gt;
+    &lt;Simpsons Include="Maggie"&gt;
+      &lt;CatchPhrase&gt;slurp, slurp, slurp&lt;/CatchPhrase&gt;
+    &lt;/Simpsons&gt;
+  &lt;/ItemGroup&gt;
+
+  &lt;Target Name="ListSimpsons"&gt;
+    &lt;Message Text="@@(Simpsons)" /&gt;
+    &lt;Message Text="@@(Simpsons-&gt;'%(CatchPhrase)')" /&gt;
+  &lt;/Target&gt;
+
+  &lt;Target Name="ListPics"&gt;
+    &lt;Message Text="@@(Pics)" /&gt;
+    &lt;Message Text="@@(Pics-&gt;'%(ModifiedTime)')" /&gt;
+  &lt;/Target&gt;
+
+  &lt;Target Name="ReservedProps"&gt;
+    &lt;Message Text="MSBuildProjectDirectory : $(MSBuildProjectDirectory)" /&gt;
+    &lt;Message Text="LOGONSERVER : $(LOGONSERVER)" /&gt;
+  &lt;/Target&gt;
+  
+  &lt;Target Name="GoodbyeWorld"&gt;
+    &lt;Message Text="Goodbye, $(FullName)!" /&gt;
+  &lt;/Target&gt;
+
+  &lt;Target Name="HelloWorld"&gt;
+    &lt;Message Text="Hello, $(Name)!" /&gt;
+  &lt;/Target&gt;
+&lt;/Project&gt;
+</pre>
