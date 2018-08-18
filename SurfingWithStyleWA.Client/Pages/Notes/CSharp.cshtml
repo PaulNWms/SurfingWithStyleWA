@@ -10,7 +10,7 @@ Generics (C# 2), e.g. List&lt;int&gt;
 
 Nullable types (C# 2), e.g. int?
 
-Iterators (C# 2), e.g. IEnumerable&lt;int&gt; w/ yield return
+Iterators (C# 2), e.g. IEnumerator&lt;int&gt; w/ yield return
 
 Anonymous types (C# 3) with the var keyword.
 
@@ -40,9 +40,12 @@ The CLR is located under %windir%\Microsoft.NET\Framework
 
 To look at array initialization data, find the array's address using ildasm.exe and look at the module with dumpbin.exe.
 
-int[][] vectors = new int[3][];  // jagged array
+// jagged array
+int[][] vectors = new int[3][];
 
-byte[,] sudoku = new byte[9,9];  // multidimensional array
+// multidimensional array
+byte[,] sudoku = new byte[9,9];
 
-int? d = null;  // nullable
+// nullable
+int? d = null;
 </pre>
