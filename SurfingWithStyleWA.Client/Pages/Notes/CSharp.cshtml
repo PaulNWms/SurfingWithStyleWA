@@ -37,4 +37,12 @@ Contravariance (C# 4), e.g. interface IComparer&lt;in T&gt;
 async/await (C# 5)
 
 The CLR is located under %windir%\Microsoft.NET\Framework
+
+To look at array initialization data, find the array's address using ildasm.exe and look at the module with dumpbin.exe.
+
+int[][] vectors = new int[3][];  // jagged array
+
+byte[,] sudoku = new byte[9,9];  // multidimensional array
+
+int? d = null;  // nullable
 </pre>
