@@ -61,4 +61,51 @@ Stare at this:
     &lt;Message Text="Hello, $(Name)!" /&gt;
   &lt;/Target&gt;
 &lt;/Project&gt;
+
+&lt;!-- Targets can be called explicitly (uncommon) with the CallTarget task --&gt;
+&lt;CallTarget Target="TargetA;TargetB" /&gt;
+
+&lt;!-- Targets can have dependencies --&gt;
+&lt;Target Name="TargetC" DependsOnTargets="TargetA;TargetB" /&gt;
+
+&lt;!-- Invoking TargetC will then be followed by TargetB --&gt;
+&lt;Target Name="TargetB" AfterTargets="TargetC" /&gt;
+
+&lt;!-- Invoking TargetC will then be followed by TargetA --&gt;
+&lt;Target Name="TargetA" BeforeTargets="TargetC" /&gt;
+
+&lt;!-- Conditional invocation --&gt;
+&lt;PropertyGroup&gt;
+  &lt;DoIt&gt;true&lt;/DoIt&gt;
+&lt;/PropertyGroup&gt;
+&lt;Target Name="TargetC" Condition="$(DoIt)" /&gt;
+
+&lt;!-- Typically .proj imports .targets, and .targets imports .props --&gt;
+&lt;Import Project="Common.props" /&gt;
+
+&lt;!-- The mother ship is --&gt;
+&lt;Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" /&gt;
+
+&lt;!-- Special targets defined in Microsoft.CSharp.targets --&gt;
+&lt;Target Name="BeforeBuild" /&gt;
+&lt;Target Name="AfterBuild" /&gt;
+
+Stare at this:
+
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;Project DefaultTargets="CrossJoin" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"&gt;
+  &lt;ItemGroup&gt;
+    &lt;Locales Include="en;fr" /&gt;
+    &lt;Files Include="A.md;B.md" /&gt;
+  &lt;/ItemGroup&gt;
+
+  &lt;Target Name="CrossJoin"&gt;
+    &lt;ItemGroup&gt;
+      &lt;OutputFiles Include="@@(Files)"&gt;
+        &lt;Locale&gt;%(Locales.Identity)&lt;/Locale&gt;
+      &lt;/OutputFiles&gt; 
+    &lt;/ItemGroup&gt;
+    &lt;Message Text="%(OutputFiles.Locale)\%(OutputFiles.Identity)" /&gt;
+  &lt;/Target&gt; 
+&lt;/Project&gt;
 </pre>
