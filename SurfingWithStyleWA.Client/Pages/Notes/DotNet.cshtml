@@ -61,4 +61,7 @@ Objects who share their location with unmanaged code must be pinned.
 When an API has security requirements, CAS walks the stack to make sure all callers are granted permission.
 
 COM interop is facilitated by tlbimp.exe, tlbexp.exe and PIAs.
+
+// Test for overflow, which is unchecked by default
+int res = checked(max +1);
 </pre>

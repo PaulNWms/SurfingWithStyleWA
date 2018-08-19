@@ -1,66 +1,32 @@
 ﻿@page "/notes/msbuild"
-
 <h1>MSBuild</h1>
-<pre class="kaypro10">Link: <a target="_blank" href="https://msdn.microsoft.com/en-us/library/bb629388.aspx">Common MSBuild Project Items</a>
-
-Link: <a target="_blank" href="https://msdn.microsoft.com/en-us/library/ms164313.aspx">MSBuild Well-known Item Metadata</a>
+<pre class="kaypro10">Links:
+<a target="_blank" href="https://msdn.microsoft.com/en-us/library/dd576348.aspx">Walkthrough: Creating an MSBuild Project File from Scratch</a>
+<a target="_blank" href="https://msdn.microsoft.com/en-us/library/bb629388.aspx">Common MSBuild Project Items</a>
+<a target="_blank" href="https://msdn.microsoft.com/en-us/library/ms164313.aspx">MSBuild Well-known Item Metadata</a>
+<a target="_blank" href="https://msdn.microsoft.com/en-us/library/7z253716.aspx">MSBuild Task Reference</a>
+<a target="_blank" href="https://github.com/mikefourie/MSBuildExtensionPack">MSBuild Extension Pack</a>
 
 Stare at this:
 
 &lt;?xml version="1.0" encoding="utf-8" ?&gt;
-&lt;Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003"&gt;
-
-  &lt;PropertyGroup&gt;
-    &lt;Name&gt;Homer&lt;/Name&gt;
-    &lt;FullName&gt;$(Name) Simpson&lt;/FullName&gt;
-    &lt;PicsPath&gt;c:\temp\pics\*.jpg&lt;/PicsPath&gt;
-  &lt;/PropertyGroup&gt;
-
-  &lt;ItemGroup&gt;
-    &lt;Pics Include="$(PicsPath)" /&gt;
-  &lt;/ItemGroup&gt;
-
-  &lt;ItemGroup&gt;
-    &lt;Simpsons Include="Homer"&gt;
-      &lt;CatchPhrase&gt;Doh&lt;/CatchPhrase&gt;
-    &lt;/Simpsons&gt;
-    &lt;Simpsons Include="Marge"&gt;
-      &lt;CatchPhrase&gt;Mmmmmmmmph&lt;/CatchPhrase&gt;
-    &lt;/Simpsons&gt;
-    &lt;Simpsons Include="Bart"&gt;
-      &lt;CatchPhrase&gt;Eat my shorts&lt;/CatchPhrase&gt;
-    &lt;/Simpsons&gt;
-    &lt;Simpsons Include="Lisa"&gt;
-      &lt;CatchPhrase&gt;Bart!&lt;/CatchPhrase&gt;
-    &lt;/Simpsons&gt;
-    &lt;Simpsons Include="Maggie"&gt;
-      &lt;CatchPhrase&gt;slurp, slurp, slurp&lt;/CatchPhrase&gt;
-    &lt;/Simpsons&gt;
-  &lt;/ItemGroup&gt;
-
-  &lt;Target Name="ListSimpsons"&gt;
-    &lt;Message Text="@@(Simpsons)" /&gt;
-    &lt;Message Text="@@(Simpsons-&gt;'%(CatchPhrase)')" /&gt;
-  &lt;/Target&gt;
-
-  &lt;Target Name="ListPics"&gt;
-    &lt;Message Text="@@(Pics)" /&gt;
-    &lt;Message Text="@@(Pics-&gt;'%(ModifiedTime)')" /&gt;
-  &lt;/Target&gt;
-
-  &lt;Target Name="ReservedProps"&gt;
-    &lt;Message Text="MSBuildProjectDirectory : $(MSBuildProjectDirectory)" /&gt;
-    &lt;Message Text="LOGONSERVER : $(LOGONSERVER)" /&gt;
-  &lt;/Target&gt;
-  
-  &lt;Target Name="GoodbyeWorld"&gt;
-    &lt;Message Text="Goodbye, $(FullName)!" /&gt;
-  &lt;/Target&gt;
-
-  &lt;Target Name="HelloWorld"&gt;
-    &lt;Message Text="Hello, $(Name)!" /&gt;
-  &lt;/Target&gt;
-&lt;/Project&gt;
+&lt;Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003"&gt;  
+  &lt;PropertyGroup&gt;  
+    &lt;AssemblyName&gt;MSBuildSample&lt;/AssemblyName&gt;  
+    &lt;OutputPath&gt;Bin\&lt;/OutputPath&gt;  
+  &lt;/PropertyGroup&gt;  
+  &lt;ItemGroup&gt;  
+    &lt;Compile Include="helloworld.cs" /&gt;
+  &lt;/ItemGroup&gt;  
+  &lt;Target Name="Build"&gt;  
+    &lt;MakeDir Directories="$(OutputPath)" Condition="!Exists('$(OutputPath)')" /&gt;
+    &lt;Csc Sources="@@(Compile)" OutputAssembly="$(OutputPath)$(AssemblyName).exe" /&gt;
+  &lt;/Target&gt;  
+  &lt;Target Name="Clean"&gt;  
+    &lt;Delete Files="$(OutputPath)$(AssemblyName).exe" /&gt;
+  &lt;/Target&gt;  
+  &lt;Target Name="Rebuild" DependsOnTargets="Clean;Build" /&gt;
+&lt;/Project&gt;  
 
 &lt;!-- Targets can be called explicitly (uncommon) with the CallTarget task --&gt;
 &lt;CallTarget Target="TargetA;TargetB" /&gt;
@@ -81,6 +47,7 @@ Stare at this:
 &lt;Target Name="TargetC" Condition="$(DoIt)" /&gt;
 
 &lt;!-- Typically .proj imports .targets, and .targets imports .props --&gt;
+&lt;!-- Import .tasks where needed --&gt;
 &lt;Import Project="Common.props" /&gt;
 
 &lt;!-- The mother ship is --&gt;
@@ -103,9 +70,21 @@ Stare at this:
     &lt;ItemGroup&gt;
       &lt;OutputFiles Include="@@(Files)"&gt;
         &lt;Locale&gt;%(Locales.Identity)&lt;/Locale&gt;
-      &lt;/OutputFiles&gt; 
+      &lt;/OutputFiles&gt;
     &lt;/ItemGroup&gt;
     &lt;Message Text="%(OutputFiles.Locale)\%(OutputFiles.Identity)" /&gt;
-  &lt;/Target&gt; 
+  &lt;/Target&gt;
 &lt;/Project&gt;
+
+&lt;!-- Bring in custom task --&gt;
+&lt;UsingTask AssemblyFile="file name" TaskName="task name" /&gt;
+
+Custom tasks extend Task (recommended) or at implement ITask.
+
+Consider using inline tasks.
+
+&lt;!-- List of recursive files --&gt;
+&lt;ItemGroup&gt;
+  &lt;Compile Include=".\**\*.cs" /&gt;
+&lt;/ItemGroup&gt;
 </pre>

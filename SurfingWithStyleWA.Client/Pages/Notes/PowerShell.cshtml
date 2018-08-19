@@ -2,11 +2,14 @@
 
 <h1>PowerShell</h1>
 
-<pre class="kaypro10">$PSVersionTable   # shows version
+<pre class="kaypro10"># show version
+$PSVersionTable
 
-help &lt;cmdlet&gt; -Online   # online help
+# online help
+help &lt;cmdlet&gt; -Online
 
-Show-Command &lt;cmdlet&gt;   # pop up a window
+# pop up a window
+Show-Command &lt;cmdlet&gt;
 
 Get-PSProvider
 
@@ -16,7 +19,8 @@ New-Item -ItemType File empty.txt
 
 Set-Item -Path alias:npp -Value "C:\Program Files\Notepad++\notepad++.exe"
 
-Set-ItemProperty   # change registry value
+# change registry value
+Set-ItemProperty
 
 Export-CSV, Export-CliXML
 
@@ -27,4 +31,16 @@ Out-File, Out-Printer, Out-GridView
 Get-Process -Name notepad | Stop-Process
 
 $ConfirmPreference
+
+# list snapins
+Get-PSSnapin
+
+# show module path
+Get-Content env:PSModulePath
+
+# load a module and list its API
+Import-Module DnsClient
+Get-Command -Module DnsClient
+
+
 </pre>
