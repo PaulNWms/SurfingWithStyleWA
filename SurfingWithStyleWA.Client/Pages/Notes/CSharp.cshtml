@@ -48,4 +48,7 @@ byte[,] sudoku = new byte[9,9];
 
 // nullable
 int? d = null;
+
+// Test for overflow, which is unchecked by default
+int res = checked(max +1);
 </pre>
