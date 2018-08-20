@@ -1,60 +1,4 @@
-﻿@*<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">SurfingWithStyleWA</a>
-    <button class="navbar-toggler" onclick=@ToggleNavMenu>
-        <span class="navbar-toggler-icon"></span>
-    </button>
-</div>*@
-
-@*<div class=@(collapseNavMenu ? "collapse" : null) onclick=@ToggleNavMenu>
-    <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match=NavLinkMatch.All>
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item px-3">
-            <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item px-3 dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-        </li>
-        <li class="nav-item px-3">
-            <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
-    </ul>
-</div>*@
-
-@*@functions {
-    bool collapseNavMenu = true;
-
-    void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}*@
-
-<nav class="top-row navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
+﻿<nav class="top-row navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#" role="button">Surfing With Style</a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -103,6 +47,9 @@
                     </NavLink>
                     <NavLink class="nav-link" href="notes/powershell">
                         PowerShell
+                    </NavLink>
+                    <NavLink class="nav-link" href="notes/solid">
+                        SOLID
                     </NavLink>
                 </div>
             </li>
