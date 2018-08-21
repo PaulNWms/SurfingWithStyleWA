@@ -87,6 +87,11 @@ Proxy
 Repository
 
 Singleton
+- Example: return (instance == null) ? new MyClass() : instance;
+- Everyday usage: static
+- Breaks Single Responsibility Principle
+- Difficult to test
+- Anti-pattern, better to use IoC container
 - Creational
 
 State
