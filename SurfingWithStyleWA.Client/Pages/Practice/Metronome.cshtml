@@ -1,21 +1,7 @@
-﻿
-@*@{
-    ViewBag.Title = "Metronome";
-    ViewBag.FileCreated = File.GetCreationTimeUtc(this.Server.MapPath(this.VirtualPath)).ToString("o");
-    ViewBag.FileModified = File.GetLastWriteTimeUtc(this.Server.MapPath(this.VirtualPath)).ToString("o");
-}
-
-@section scripts {
-@Scripts.Render("~/bundles/Metronome")
-}
-
-@section head {
-    <meta name="description" content="A basic pendulum metronome." />
-    <link rel="Stylesheet" href="~/Content/Metronome.css" type="text/css" />
-}
+﻿@page "/practice/metronome"
 
 <article class="narrow-article" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
-    @{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}
+    @*@{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}*@
     <meta itemprop="applicationCategory" content="Tool, Multimedia" />
     <meta itemprop="applicationSubCategory" content="Music Rehearsal" />
     <meta itemprop="operatingSystem" content="IIS/ASP.NET MVC" />
@@ -62,4 +48,4 @@
             <source src="~/Content/Audio/upbeatClick.mp3" type="audio/mp3">
         </audio>
     </div>
-</article>*@
+</article>
