@@ -2,7 +2,13 @@
 
 <h1>Design Patterns</h1>
 
-<pre class="kaypro10">Abstract Factory
+<pre class="kaypro10">Links:
+<a target="_blank" href="https://sourcemaking.com/design_patterns">Design patterns (and anti-patterns) site</a>
+
+Abstract Factory
+- Everyday usage: DbProviderFactory is an abstract base class for SqlClientFactory
+- Everyday usage: SqlClientFactory.CreateCommand() creates instances of DbCommand
+- A Factory represents a "family" of objects that it can create 
 - Creational
 
 Adapter
@@ -41,7 +47,9 @@ Façade
 - Structural
 
 Factory Method
-- Decides which concrete type to return
+- "Everyday" usage: IDbCommand.CreateParameter(), System.Windows.Forms.Control.CreateControlsInstance()
+- A base class or interface defines the creation method
+- Subclasses implement the creation method in different ways 
 - Creational
 
 Flyweight
@@ -85,6 +93,11 @@ Proxy
 - Structural
 
 Repository
+
+Simple Factory
+- Everyday usage: System.Threading.Tasks.TaskFactory.Run() creates instances of Task
+- Decides which concrete type to return
+- Creational
 
 Singleton
 - Example: return (instance == null) ? new MyClass() : instance;
