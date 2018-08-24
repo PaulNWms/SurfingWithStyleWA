@@ -2,13 +2,28 @@
 
 <h1>SOLID Principles</h1>
 
-<pre class="kaypro10">Single Responsibility Principle
+<pre class="kaypro10">Links:
+<a target="_blank" href="https://deviq.com/solid/">DevIQ SOLID Principles of Object Oriented Design</a>
+
+Single Responsibility Principle
 - Every object should have a single responsibility, and that responsibility should be entirely encapsulated by the class. 
 - There should never be more than one reason for a class to change.
 
 Open / Closed Principle
+- Software entities (classes, modules, functions, etc.) should be open for extension, but closed for modification.
+- Achieved with interfaces, abstract base classes and parameters
+- Don’t apply OCP at first
+- If the module changes once, accept it.
+- If it changes a second time, refactor to achieve OCP
+- OCP adds complexity to design
+- No design can be closed against all changes
 
 Liskov Substitution Principle
+- Subtypes must be substitutable for their base types.
+- Client code expects child classes to work in place of their base classes
+- LSP violation smells
+  - conditional based on object type (especially inside a loop)
+  - partially implemented interfaces/base classes
 
 Interface Segregation Principle
 - Clients should not be forced to depend on methods they do not use.
@@ -16,4 +31,28 @@ Interface Segregation Principle
 - Refactor large interfaces so they inherit smaller interfaces.
 
 Dependency Inversion Principle
+- High-level modules should not depend on low-level modules.  Both should depend on abstractions. 
+- Abstractions should not depend on details.  Details should depend on abstractions
+- Common dependencies
+  - Framework
+  - Third Party Libraries
+  - Database
+  - File System
+  - Email
+  - Web Services
+  - System Resources (Clock)
+  - Configuration
+  - The new Keyword
+  - Static methods
+  - Thread.Sleep
+  - Random 
+- The Hollywood Principle - "Don’t call us; we’ll call you"
+- Three Primary Techniques
+  - Constructor Injection (Strategy pattern)
+  - Property Injection
+  - Parameter Injection
+- Design smells
+  - new keyword
+  - static methods &amp; properties (DateTime.Now)
+  - No way to change implementation details without recompile (OCP violation)
 </pre>
