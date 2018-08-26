@@ -12,7 +12,7 @@ Abstract Factory
 - Creational
 
 Adapter
-- Example: SQL data adapter
+- Everyday usage: Entity Framework
 - Resolves incompatible interfaces
 - Structural
 
@@ -20,7 +20,12 @@ Bridge
 - Structural
 
 Builder
--Creational
+- Example: Jimmy John's (order from a menu) vs. Subway (specify all the ingredients)
+- Useful when you have a constructor with lots of parameters
+- Has a Director base class, which defines the assembly steps
+- Has 2 or more Concrete Builder child classes, which actually create objects
+- Similar to Template Method, but for constructors
+- Creational
 
 Chain of Responsibility
 - Everyday usage: exception handling
@@ -38,8 +43,6 @@ Decorator (wrapper)
 - Attach additional responsibilities to an object (but use the same interface)
 - Even sealed classes can be wrapped
 - Structural
-
-Dependency Injection (DI)
 
 Façade
 - Everyday usage: foreach
@@ -116,6 +119,13 @@ Strategy
 - Behavioral
 
 Template Method
+- Everyday usage: ASP.NET
+- Base class defines the (sealed) template method, subclasses override steps
+- Clients depend on base class
+- Use when:
+  - 2 or more classes follow the same workflow
+  - The workflow is invariant
+  - Some workflow steps may be encapsulated in the base class
 - Behavioral
 
 Visitor
