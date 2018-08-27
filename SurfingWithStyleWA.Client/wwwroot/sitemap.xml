@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+
+<url>
+  <loc>http://surfingwithstyle.com/</loc>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://surfingwithstyle.com/tools/calculator/</loc>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://surfingwithstyle.com/notes/dotnet/</loc>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://surfingwithstyle.com/notes/csharp/</loc>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://surfingwithstyle.com/notes/designpatterns/</loc>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://surfingwithstyle.com/notes/git/</loc>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://surfingwithstyle.com/notes/ml/</loc>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://surfingwithstyle.com/notes/msbuild/</loc>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://surfingwithstyle.com/notes/powershell/"/</loc>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://surfingwithstyle.com/notes/solid/"/</loc>
+  <changefreq>monthly</changefreq>
+</url>
+
+</urlset>
