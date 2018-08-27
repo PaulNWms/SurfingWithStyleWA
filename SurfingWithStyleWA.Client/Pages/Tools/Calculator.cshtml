@@ -1,6 +1,49 @@
 ﻿@page "/tools/calculator"
 
-<h1>Basic Calculator Demo Using Blazor</h1>
+<article class="narrow-article" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
+    @*@{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}*@
+    <meta itemprop="applicationCategory" content="Tool, Multimedia" />
+    <meta itemprop="applicationSubCategory" content="Math" />
+    <meta itemprop="operatingSystem" content="IIS/ASP.NET MVC" />
+    <h1 class="calculator-title" itemprop="name">Desktop Calculator</h1>
+    <table class="calculator">
+        <tr><td class="display" colspan="5"><input readonly bind="@finalresult" /></td></tr>
+        <tr>
+            <td><button type="button" class="btn btn-default digit" onclick="@Backspace">←</button></td>
+            <td><button type="button" class="btn btn-default correctError" onclick="@CorrectError">CE</button></td>
+            <td><button type="button" class="btn btn-default clear" onclick="@Clear">C</button></td>
+            <td><button type="button" class="btn btn-default negate" onclick="@Negate">±</button></td>
+            <td><button type="button" class="btn btn-default sqrt" onclick="@SquareRoot">√</button></td>
+        </tr>
+        <tr>
+            <td><button type="button" class="btn btn-default digit" onclick="@Append7">7</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Append8">8</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Append9">9</button></td>
+            <td><button type="button" class="btn btn-default binaryOp">/</button></td>
+            <td><button type="button" class="btn btn-default percent" onclick="@Percent">%</button></td>
+        </tr>
+        <tr>
+            <td><button type="button" class="btn btn-default digit" onclick="@Append4">4</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Append5">5</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Append6">6</button></td>
+            <td><button type="button" class="btn btn-default binaryOp">*</button></td>
+            <td><button type="button" class="btn btn-default invert" onclick="@Invert">1/x</button></td>
+        </tr>
+        <tr>
+            <td><button type="button" class="btn btn-default digit" onclick="@Append1">1</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Append2">2</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Append3">3</button></td>
+            <td><button type="button" class="btn btn-default binaryOp">-</button></td>
+            <td rowspan="2"><button type="button" class="btn btn-default equals">=</button></td>
+        </tr>
+        <tr>
+            <td colspan="2"><button type="button" class="btn btn-default digit zero" onclick="@Append0">0</button></td>
+            <td><button type="button" class="btn btn-default digit">.</button></td>
+            <td><button type="button" class="btn btn-default binaryOp">+</button></td>
+        </tr>
+    </table>
+    <p class="col-sm-offset-3" itemprop="description"><b>Disclaimer:</b> This calculator is for demonstration purposes only.</p>
+</article>
 <hr />
 <div>
     <div class="row">
@@ -47,35 +90,100 @@
 </div>
 
 @functions {
-string num1;
-string num2;
-string finalresult;
+    enum FsmState { Number1, Number2display1, Number2, Equals };
 
-void AddNumbers()
-{
-    finalresult = (Convert.ToDouble(num1) + Convert.ToDouble(num2)).ToString();
-}
+    FsmState state;
+    double value = 0.0;
+    double oldValue = 0.0;
+    double newValue = 0.0;
 
-void SubtractNumbers()
-{
-    finalresult = (Convert.ToDouble(num1) - Convert.ToDouble(num2)).ToString();
-}
+    string num1;
+    string num2;
+    string finalresult;
 
-void MultiplyNumbers()
-{
-    finalresult = (Convert.ToDouble(num1) * Convert.ToDouble(num2)).ToString();
-}
 
-void DivideNumbers()
-{
-    if (Convert.ToDouble(num2) != 0)
+    void Append0() { if (finalresult == "0") finalresult = "0"; else finalresult += '0'; }
+    void Append1() { if (finalresult == "1") finalresult = "1"; else finalresult += '1'; }
+    void Append2() { if (finalresult == "2") finalresult = "2"; else finalresult += '2'; }
+    void Append3() { if (finalresult == "3") finalresult = "3"; else finalresult += '3'; }
+    void Append4() { if (finalresult == "4") finalresult = "4"; else finalresult += '4'; }
+    void Append5() { if (finalresult == "5") finalresult = "5"; else finalresult += '5'; }
+    void Append6() { if (finalresult == "6") finalresult = "6"; else finalresult += '6'; }
+    void Append7() { if (finalresult == "7") finalresult = "7"; else finalresult += '7'; }
+    void Append8() { if (finalresult == "8") finalresult = "8"; else finalresult += '8'; }
+    void Append9() { if (finalresult == "9") finalresult = "9"; else finalresult += '9'; }
+
+    void Backspace()
     {
-        finalresult = (Convert.ToDouble(num1) / Convert.ToDouble(num2)).ToString();
+        if (finalresult.Length > 1)
+        {
+            finalresult = finalresult.Substring(0, finalresult.Length - 1);
+        }
+        else
+        {
+            finalresult = "0";
+        }
     }
 
-    else
+    void CorrectError()
     {
-        finalresult = "Cannot Divide by Zero";
+        finalresult = "0";
     }
-}
+
+    void Clear()
+    {
+        finalresult = "0";
+    }
+
+    void Negate()
+    {
+        double d = -Double.Parse(finalresult);
+        finalresult = d.ToString();
+    }
+
+    void SquareRoot()
+    {
+        double d = Math.Sqrt(Double.Parse(finalresult));
+        finalresult = d.ToString();
+    }
+
+    void Invert()
+    {
+        double d = 1.0 / Double.Parse(finalresult);
+        finalresult = d.ToString();
+    }
+
+    void Percent()
+    {
+        double d = Double.Parse(finalresult) / 100.0;
+        finalresult = d.ToString();
+    }
+
+    void AddNumbers()
+    {
+        finalresult = (Convert.ToDouble(num1) + Convert.ToDouble(num2)).ToString();
+    }
+
+    void SubtractNumbers()
+    {
+        finalresult = (Convert.ToDouble(num1) - Convert.ToDouble(num2)).ToString();
+    }
+
+    void MultiplyNumbers()
+    {
+        finalresult = (Convert.ToDouble(num1) * Convert.ToDouble(num2)).ToString();
+    }
+
+    void DivideNumbers()
+    {
+        if (Convert.ToDouble(num2) != 0)
+        {
+            finalresult = (Convert.ToDouble(num1) / Convert.ToDouble(num2)).ToString();
+        }
+
+        else
+        {
+            finalresult = "Cannot Divide by Zero";
+        }
+    }
 }  
