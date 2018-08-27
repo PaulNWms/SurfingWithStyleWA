@@ -7,7 +7,7 @@
     <meta itemprop="operatingSystem" content="IIS/ASP.NET MVC" />
     <h1 class="calculator-title" itemprop="name">Desktop Calculator</h1>
     <table class="calculator">
-        <tr><td class="display" colspan="5"><input readonly bind="@finalresult" /></td></tr>
+        <tr><td class="display" colspan="5"><input readonly bind="@display" /></td></tr>
         <tr>
             <td><button type="button" class="btn btn-default digit" onclick="@Backspace">←</button></td>
             <td><button type="button" class="btn btn-default correctError" onclick="@CorrectError">CE</button></td>
@@ -16,78 +16,35 @@
             <td><button type="button" class="btn btn-default sqrt" onclick="@SquareRoot">√</button></td>
         </tr>
         <tr>
-            <td><button type="button" class="btn btn-default digit" onclick="@Append7">7</button></td>
-            <td><button type="button" class="btn btn-default digit" onclick="@Append8">8</button></td>
-            <td><button type="button" class="btn btn-default digit" onclick="@Append9">9</button></td>
-            <td><button type="button" class="btn btn-default binaryOp">/</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Digit7">7</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Digit8">8</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Digit9">9</button></td>
+            <td><button type="button" class="btn btn-default binaryOp" onclick="@Divide">/</button></td>
             <td><button type="button" class="btn btn-default percent" onclick="@Percent">%</button></td>
         </tr>
         <tr>
-            <td><button type="button" class="btn btn-default digit" onclick="@Append4">4</button></td>
-            <td><button type="button" class="btn btn-default digit" onclick="@Append5">5</button></td>
-            <td><button type="button" class="btn btn-default digit" onclick="@Append6">6</button></td>
-            <td><button type="button" class="btn btn-default binaryOp">*</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Digit4">4</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Digit5">5</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Digit6">6</button></td>
+            <td><button type="button" class="btn btn-default binaryOp" onclick="@Multiply">*</button></td>
             <td><button type="button" class="btn btn-default invert" onclick="@Invert">1/x</button></td>
         </tr>
         <tr>
-            <td><button type="button" class="btn btn-default digit" onclick="@Append1">1</button></td>
-            <td><button type="button" class="btn btn-default digit" onclick="@Append2">2</button></td>
-            <td><button type="button" class="btn btn-default digit" onclick="@Append3">3</button></td>
-            <td><button type="button" class="btn btn-default binaryOp">-</button></td>
-            <td rowspan="2"><button type="button" class="btn btn-default equals">=</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Digit1">1</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Digit2">2</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Digit3">3</button></td>
+            <td><button type="button" class="btn btn-default binaryOp" onclick="@Subtract">-</button></td>
+            <td rowspan="2"><button type="button" class="btn btn-default equals" onclick="@Equals">=</button></td>
         </tr>
         <tr>
-            <td colspan="2"><button type="button" class="btn btn-default digit zero" onclick="@Append0">0</button></td>
-            <td><button type="button" class="btn btn-default digit">.</button></td>
-            <td><button type="button" class="btn btn-default binaryOp">+</button></td>
+            <td colspan="2"><button type="button" class="btn btn-default digit zero" onclick="@Digit0">0</button></td>
+            <td><button type="button" class="btn btn-default digit" onclick="@Point">.</button></td>
+            <td><button type="button" class="btn btn-default binaryOp" onclick="@Add">+</button></td>
         </tr>
     </table>
     <p class="col-sm-offset-3" itemprop="description"><b>Disclaimer:</b> This calculator is for demonstration purposes only.</p>
 </article>
-<hr />
-<div>
-    <div class="row">
-        <div class="col-sm-3">
-            <p>First Number</p>
-        </div>
-        <div class="col-sm-4">
-            <input placeholder="Enter First Number" bind="@num1" />
-        </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-sm-3">
-            <p>Second Number</p>
-        </div>
-        <div class="col-sm-4">
-            <input placeholder="Enter Second Number" bind="@num2" />
-        </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-sm-3">
-            <p>Result</p>
-        </div>
-        <div class="col-sm-4">
-            <input readonly bind="@finalresult" />
-        </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-sm-2">
-            <button onclick="@AddNumbers" class="btn">Add (+)</button>
-        </div>
-        <div class="col-sm-2">
-            <button onclick="@SubtractNumbers" class="btn btn-primary">Subtract (−)</button>
-        </div>
-        <div class="col-sm-2">
-            <button onclick="@MultiplyNumbers" class="btn btn-success ">Multiply (X)</button>
-        </div>
-        <div class="col-sm-2">
-            <button onclick="@DivideNumbers" class="btn btn-info">Divide (X)</button>
-        </div>
-    </div>
-</div>
+
 
 @functions {
     enum FsmState { Number1, Number2display1, Number2, Equals };
@@ -96,94 +53,133 @@
     double value = 0.0;
     double oldValue = 0.0;
     double newValue = 0.0;
+    char binaryOperator = ' ';
 
     string num1;
     string num2;
-    string finalresult;
+    string display;
 
+    void Digit0() { Digit('0'); }
+    void Digit1() { Digit('1'); }
+    void Digit2() { Digit('2'); }
+    void Digit3() { Digit('3'); }
+    void Digit4() { Digit('4'); }
+    void Digit5() { Digit('5'); }
+    void Digit6() { Digit('6'); }
+    void Digit7() { Digit('7'); }
+    void Digit8() { Digit('8'); }
+    void Digit9() { Digit('9'); }
+    void Point()  { Digit('.'); }
+    void Backspace() { Digit('\b'); }
 
-    void Append0() { if (finalresult == "0") finalresult = "0"; else finalresult += '0'; }
-    void Append1() { if (finalresult == "1") finalresult = "1"; else finalresult += '1'; }
-    void Append2() { if (finalresult == "2") finalresult = "2"; else finalresult += '2'; }
-    void Append3() { if (finalresult == "3") finalresult = "3"; else finalresult += '3'; }
-    void Append4() { if (finalresult == "4") finalresult = "4"; else finalresult += '4'; }
-    void Append5() { if (finalresult == "5") finalresult = "5"; else finalresult += '5'; }
-    void Append6() { if (finalresult == "6") finalresult = "6"; else finalresult += '6'; }
-    void Append7() { if (finalresult == "7") finalresult = "7"; else finalresult += '7'; }
-    void Append8() { if (finalresult == "8") finalresult = "8"; else finalresult += '8'; }
-    void Append9() { if (finalresult == "9") finalresult = "9"; else finalresult += '9'; }
+    void Negate() { SetValue(-value); }
+    void SquareRoot() { SetValue(Math.Sqrt(value)); }
+    void Invert() { SetValue(1.0 / value); }
+    void Percent() { SetValue(oldValue * value / 100.0); }
 
-    void Backspace()
-    {
-        if (finalresult.Length > 1)
-        {
-            finalresult = finalresult.Substring(0, finalresult.Length - 1);
-        }
-        else
-        {
-            finalresult = "0";
-        }
-    }
+    void Divide() { BinaryOperator('/'); }
+    void Multiply() { BinaryOperator('*'); }
+    void Add() { BinaryOperator('+'); }
+    void Subtract() { BinaryOperator('-'); }
 
     void CorrectError()
     {
-        finalresult = "0";
+        display = "0";
     }
 
     void Clear()
     {
-        finalresult = "0";
+        oldValue = newValue = 0;
+        CorrectError();
+        state = FsmState.Number1;
     }
 
-    void Negate()
+    void Equals()
     {
-        double d = -Double.Parse(finalresult);
-        finalresult = d.ToString();
-    }
-
-    void SquareRoot()
-    {
-        double d = Math.Sqrt(Double.Parse(finalresult));
-        finalresult = d.ToString();
-    }
-
-    void Invert()
-    {
-        double d = 1.0 / Double.Parse(finalresult);
-        finalresult = d.ToString();
-    }
-
-    void Percent()
-    {
-        double d = Double.Parse(finalresult) / 100.0;
-        finalresult = d.ToString();
-    }
-
-    void AddNumbers()
-    {
-        finalresult = (Convert.ToDouble(num1) + Convert.ToDouble(num2)).ToString();
-    }
-
-    void SubtractNumbers()
-    {
-        finalresult = (Convert.ToDouble(num1) - Convert.ToDouble(num2)).ToString();
-    }
-
-    void MultiplyNumbers()
-    {
-        finalresult = (Convert.ToDouble(num1) * Convert.ToDouble(num2)).ToString();
-    }
-
-    void DivideNumbers()
-    {
-        if (Convert.ToDouble(num2) != 0)
+        if (state == FsmState.Number2)
         {
-            finalresult = (Convert.ToDouble(num1) / Convert.ToDouble(num2)).ToString();
+            newValue = value;
         }
 
+        switch (binaryOperator)
+        {
+            case '+':
+                SetValue(oldValue + newValue);
+                break;
+            case '-':
+                SetValue(oldValue - newValue);
+                break;
+            case '*':
+                SetValue(oldValue * newValue);
+                break;
+            case '/':
+                SetValue(oldValue / newValue);
+                break;
+        }
+
+        oldValue = value;
+        state = FsmState.Equals;
+    }
+
+    void SetValue(double number)
+    {
+        value = number;
+        display = value.ToString();
+    }
+
+    void BinaryOperator(char op)
+    {
+        binaryOperator = op;
+        oldValue = value;
+        value = 0.0;
+        state = FsmState.Number2display1;
+    }
+
+    void Digit(char c) {
+        switch (state)
+        {
+            case FsmState.Number2display1:
+            case FsmState.Equals:
+                SetValue(0);
+                state = FsmState.Number2;
+                break;
+            default:
+                break;
+        }
+
+        ParseAndFormat(c);
+    }
+
+    void ParseAndFormat(char c)
+    {
+        // backspace
+        if (c == '\b')
+        {
+            if (display.Length > 1)
+            {
+                display = display.Substring(0, display.Length - 1);
+            }
+            else
+            {
+                display = "0";
+            }
+        }
         else
         {
-            finalresult = "Cannot Divide by Zero";
+            display += c;
+        }
+
+        value = Double.Parse(display);
+        display = value.ToString();
+
+        if (c == '.')
+        {
+            bool isInteger = value % 1 == 0;
+
+            if (isInteger)
+            {
+                display += '.';
+            }
         }
     }
-}  
+}
