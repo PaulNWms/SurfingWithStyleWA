@@ -5,7 +5,7 @@
     <meta itemprop="applicationCategory" content="Tool, Multimedia" />
     <meta itemprop="applicationSubCategory" content="Math" />
     <meta itemprop="operatingSystem" content="IIS/ASP.NET MVC" />
-    <h1 class="calculator-title" itemprop="name">Desktop Calculator</h1>
+    <h1 class="calculator-text" itemprop="name">Desktop Calculator</h1>
     <table class="calculator">
         <tr><td class="display" colspan="5"><input readonly bind="@display" /></td></tr>
         <tr>
@@ -42,7 +42,7 @@
             <td><button type="button" class="btn btn-default binaryOp" onclick="@Add">+</button></td>
         </tr>
     </table>
-    <p class="col-sm-offset-3" itemprop="description"><b>Disclaimer:</b> This calculator is for demonstration purposes only.</p>
+    <p class="calculator-text" itemprop="description"><b>Disclaimer:</b> This calculator is for demonstration purposes only.</p>
 </article>
 
 
@@ -50,14 +50,11 @@
     enum FsmState { Number1, Number2display1, Number2, Equals };
 
     FsmState state;
+    string display;
     double value = 0.0;
     double oldValue = 0.0;
     double newValue = 0.0;
     char binaryOperator = ' ';
-
-    string num1;
-    string num2;
-    string display;
 
     void Digit0() { Digit('0'); }
     void Digit1() { Digit('1'); }
