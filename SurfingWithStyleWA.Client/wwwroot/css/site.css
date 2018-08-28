@@ -119,14 +119,19 @@ app {
     color: #375a7f;
 }
 
-.vegetable {
-    background-color: green;
-    color: white;
-}
-
 .vitamin {
     background-color: gold;
     color: purple;
+}
+
+.mineral {
+    background-color: slategray;
+    color: white;
+}
+
+.fat {
+    background-color: antiquewhite;
+    color: saddlebrown;
 }
 
 .mushroom {
@@ -134,8 +139,8 @@ app {
     color: blue;
 }
 
-.mineral {
-    background-color: slategray;
+.vegetable {
+    background-color: green;
     color: white;
 }
 
