@@ -134,5 +134,9 @@ Template Method
 - Behavioral
 
 Visitor
+- Implement interface IBlah { void Accept(IVisitor visitor); } in each of the classes (double dispatch)
+- Implement interface IVisitor, which has a method for each type to be visited
+- Puts all the logic for all of the classes in a single Visitor class
+- Use when: looping over a collection of unrelated objects and performing an operation on each, without modifying them
 - Behavioral
 </pre>
