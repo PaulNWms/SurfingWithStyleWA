@@ -119,6 +119,26 @@ app {
     color: #375a7f;
 }
 
+.vegetable {
+    background-color: green;
+    color: white;
+}
+
+.vitamin {
+    background-color: gold;
+    color: purple;
+}
+
+.mushroom {
+    background-color: darkgoldenrod;
+    color: blue;
+}
+
+.mineral {
+    background-color: slategray;
+    color: white;
+}
+
 /*.calculator-title {
     text-align: center;
 }
