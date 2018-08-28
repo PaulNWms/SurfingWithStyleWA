@@ -49,6 +49,12 @@ byte[,] sudoku = new byte[9,9];
 // nullable
 int? d = null;
 
+// null coalescing operator
+return d ?? 0;
+
 // Test for overflow, which is unchecked by default
 int res = checked(max +1);
+
+// 'is' operator
+bool isInt = d is int;
 </pre>
