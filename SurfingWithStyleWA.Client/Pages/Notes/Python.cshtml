@@ -49,7 +49,7 @@ x = 1 + 2j
 # null
 x = None
 
-# length of a string, list
+# length of a string, list, tuple
 len(s)
 
 # string case
@@ -103,4 +103,89 @@ x[::-1]
 
 # slicing works on LHS of assignment
 x[1:3] = [1, 2]
+
+Tuples are immutable.
+
+Indexing, slicing, and many other list functions work on tuples.
+
+# set operations
+primes | odds <=> primes.union(odds)
+primes & odds <=> primes.intersection(odds)
+primes - odds <=> primes.difference(odds)
+primes ^ odds <=> primes.symmetric_difference(odds)
+
+# other useful collections (there are still more)
+collections.namedtuple  # Like a tuple, but each value has a name
+collections.defaultdict # Like a dictionary, but unspecified keys have a user-specified default value
+collections.OrderedDict # Like a dictionary, but the order of keys is maintained
+
+if x == 0:
+    print(x, "is zero")
+elif x > 0:
+    print(x, "is positive")
+elif x < 0:
+    print(x, "is negative")
+else:
+    print(x, "is unlike anything I've ever seen...")
+
+for N in [2, 3, 5, 7]:
+    print(N, end=' ') # print all on same line
+
+for i in range(10):
+    print(i, end=' ')
+
+# range object
+list(range(5, 10))
+list(range(0, 10, 2))
+
+i = 0
+while i < 10:
+    print(i, end=' ')
+    i += 1
+
+break
+
+continue
+
+# define functions with def
+def f(val):
+    return ('f', val)
+
+Functions can have default arguments.
+
+Functions can be called using named arguments.
+
+# varargs - the significant things are the '*' and '**' modifiers
+def catch_all(*args, **kwargs):
+    print("args =", args)
+    print("kwargs = ", kwargs)
+
+# lambda statement - functions are objects too
+add = lambda x, y: x + y
+    add(1, 2)
+
+# sort list of dict alphabetically by first name
+sorted(data, key=lambda item: item['first'])
+
+try:
+    print("try something here")
+except:
+    print("this happens only if it fails")
+else:
+    print("this happens only if it succeeds")
+finally:
+    print("this happens no matter what")
+
+raise RuntimeError("fail")
+
+try:
+    x = 1 / 0
+except ZeroDivisionError as err:
+    print("Error class is:  ", type(err))
+    print("Error message is:", err)
+
+# define a custom exception
+class MySpecialError(ValueError):
+    pass
+raise MySpecialError("here's the message")
 </pre>

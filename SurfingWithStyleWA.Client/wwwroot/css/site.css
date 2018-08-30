@@ -144,6 +144,11 @@ app {
     color: white;
 }
 
+.drug {
+    background-color: white;
+    color: red;
+}
+
 /*.calculator-title {
     text-align: center;
 }
