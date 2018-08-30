@@ -44,7 +44,7 @@
     <Content Update="Pages\Notes\MSBuild.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Pages\Notes\ML.cshtml">
+    <Content Update="Pages\Notes\MachineLearning.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Pages\Notes\CSharp.cshtml">

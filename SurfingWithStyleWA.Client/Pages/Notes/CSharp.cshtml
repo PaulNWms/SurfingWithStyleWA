@@ -55,6 +55,9 @@ return d ?? 0;
 // Test for overflow, which is unchecked by default
 int res = checked(max +1);
 
-// 'is' operator
+// "soft" type check operator (IL: isinst)
 bool isInt = d is int;
+
+// "soft" type cast operator (IL: isinst)
+string s = o as string;
 </pre>
