@@ -3,6 +3,7 @@
 <h1>Python</h1>
 
 <pre class="kaypro10">Links:
+<a target="_blank" href="https://www.oreilly.com/programming/free/files/a-whirlwind-tour-of-python.pdf">A Whirlwind Tour of Python</a>
 <a target="_blank" href="https://www.python.org/dev/peps/pep-0008/">PEP 8 -- Style Guide for Python Code</a>
 
 Continue one line with '\'
@@ -222,4 +223,59 @@ val if val >= 0 else -val
 
 # generator expression
 (n**2 for n in range(12))
+
+# to print a generator expression
+list(n**2 for n in range(12))
+
+A generator is used up after one iteration.
+
+Generator functions return values with 'yield'.
+
+import math
+import numpy as np
+from math import cos, pi
+from math import *
+
+# standard libraries
+os and sys - Tools for interfacing with the operating system, including navigating file directory structures and executing shell commands
+math and cmath - Mathematical functions and operations on real and complex numbers 
+itertools - Tools for constructing and interacting with iterators and generators 
+functools - Tools that assist with functional programming 
+random - Tools for generating pseudorandom numbers
+pickle - Tools for object persistence: saving objects to and loading objects from disk 
+json and csv - Tools for reading JSON-formatted and CSV-formatted files 
+urllib - Tools for doing HTTP and other web requests
+
+# string trimming
+line.strip()
+line.lstrip()
+line.rstrip()
+
+# justify
+line.ljust()
+line.rjust()
+
+# find / replace
+line.find('fox')
+line.rfind('fox')
+line.index('fox')
+line.rindex('fox')
+line.startswith('fox')
+line.endswith('dog')
+line.replace('brown', 'red')
+
+# splitting
+line.partition('fox')
+line.split()
+
+# formatting
+"pi = {0:.3f}".format(pi)
+
+# regex
+import re
+regex = re.compile('\s+')
+regex.split(line)
+found = regex.match(s)
+
+Common tools include numpy, scipy, pandas, matplotlib, scikit-learn.
 </pre>
