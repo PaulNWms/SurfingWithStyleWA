@@ -33,6 +33,9 @@
     <Content Update="Pages\Notes\DotNet.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Pages\Notes\TypeScript.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Pages\Notes\Python.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
