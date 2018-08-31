@@ -1,0 +1,81 @@
+﻿@page "/tools/timer"
+
+<article class="narrow-article" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
+    @*@{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}*@
+    <meta itemprop="applicationCategory" content="Tool, Multimedia" />
+    <meta itemprop="applicationSubCategory" content="Time Management" />
+    <meta itemprop="operatingSystem" content="IIS/ASP.NET MVC" />
+    <h2 itemprop="name">Timer</h2>
+    <div class="jumbotron text-center">
+        <h1>
+            <button type="button" class="btn btn-primary btn-lg timer-start" disabled="disabled"><span class="glyphicon glyphicon-play" /></button>
+            <span class="timer-display">@formattedDurationSeconds</span>
+        </h1>
+    </div>
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-2" for="FormattedDuration">Duration:</label>
+            <input class="col-sm-2 form-control duration-minutes"
+                   data-val="true"
+                   data-val-length="Format: (h:)mm(:ss)"
+                   data-val-length-max="20"
+                   data-val-length-min="1"
+                   data-val-regex="Format: (h:)mm(:ss)"
+                   data-val-regex-pattern="^(P((\d+)D)?T((\d+)H)?((\d+)M)?((\d+)S)?)$|^(((\d+):)?(\d+)(:(\d+))?)$"
+                   id="FormattedDuration"
+                   name="FormattedDuration"
+                   type="text"
+                   value="@formattedDuration" />
+        </div>
+        <div class="form-group">
+            <span class="field-validation-valid" data-valmsg-for="FormattedDuration" data-valmsg-replace="true"></span>
+        </div>
+    </div>
+    <p>Enter the timer duration, or choose one of the presets.</p>
+    <p>
+        <button class="btn btn-default btn-xs" onclick="@Min1">1 min.</button>
+        <button class="btn btn-default btn-xs" onclick="@Min2">2 min.</button>
+        <button class="btn btn-default btn-xs" onclick="@Min3">Egg Timer (3 min.)</button>
+        <button class="btn btn-default btn-xs" onclick="@Min5">5 min.</button>
+        <button class="btn btn-default btn-xs" onclick="@Min10">10 min.</button>
+        <button class="btn btn-default btn-xs" onclick="@Min15">15 min.</button>
+        <button class="btn btn-default btn-xs" onclick="@Min20">20 min.</button>
+        <button class="btn btn-default btn-xs" onclick="@Min25">Tomato Timer (25 min.)</button>
+        <button class="btn btn-default btn-xs" onclick="@Min30">30 min.</button>
+        <button class="btn btn-default btn-xs" onclick="@Min45">45 min.</button>
+        <button class="btn btn-default btn-xs" onclick="@Min60">1 hour</button>
+    </p>
+</article>
+
+<audio class="bell" preload="auto">
+    <source src="~/Content/Audio/Bell.wav" type="audio/wav">
+    <source src="~/Content/Audio/Bell.mp3" type="audio/mp3">
+</audio>
+
+@functions {
+    enum TimerState { stopped, running, paused };
+
+    string formattedDurationSeconds = string.Empty;
+    string formattedDuration = string.Empty;
+    string durationMinutes = "25";
+    string timerDisplay = "25:00";
+
+    void Min1() { UsePreset("1-minute-timer", "1"); }
+    void Min2() { UsePreset("2-minute-timer", "2"); }
+    void Min3() { UsePreset("egg-timer", "3"); }
+    void Min5() { UsePreset("5-minute-timer", "5"); }
+    void Min10() { UsePreset("10-minute-timer", "10"); }
+    void Min15() { UsePreset("15-minute-timer", "15"); }
+    void Min20() { UsePreset("20-minute-timer", "20"); }
+    void Min25() { UsePreset("tomato-timer", "25"); }
+    void Min30() { UsePreset("30-minute-timer", "30"); }
+    void Min45() { UsePreset("45-minute-timer", "45"); }
+    void Min60() { UsePreset("1-hour-timer", "60"); }
+
+    void UsePreset(string url, string minutes)
+    {
+        timerDisplay = minutes + ":00";
+        durationMinutes = minutes;
+        JSRuntime.Current.InvokeAsync<object>("history.pushState", "", "", url);
+    }
+}
