@@ -30,28 +30,28 @@
     <Content Update="Pages\Notes\DesignPatterns.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Pages\Notes\DotNet.cshtml">
+    <Content Update="Pages\Notes\MS\DotNet.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Pages\Notes\TypeScript.cshtml">
+    <Content Update="Pages\Notes\MS\TypeScript.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Pages\Notes\Python.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Pages\Notes\FSharp.cshtml">
+    <Content Update="Pages\Notes\MS\FSharp.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Pages\Notes\Git.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Pages\Notes\MSBuild.cshtml">
+    <Content Update="Pages\Notes\MS\MSBuild.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Pages\Notes\MachineLearning.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Pages\Notes\CSharp.cshtml">
+    <Content Update="Pages\Notes\MS\CSharp.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Pages\Notes\Food.cshtml">
