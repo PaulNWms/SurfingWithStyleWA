@@ -3,10 +3,12 @@
 <h1>Python</h1>
 
 <pre class="kaypro10">Links:
+<a target="_blank" href="https://pypi.org/">PyPI package browser</a>
 <a target="_blank" href="https://www.jetbrains.com/pycharm/download/">PyCharm</a>
 <a target="_blank" href="https://www.oreilly.com/programming/free/files/a-whirlwind-tour-of-python.pdf">A Whirlwind Tour of Python</a>
 <a target="_blank" href="https://www.oreilly.com/programming/free/files/how-to-make-mistakes-in-python.pdf">How to Make Mistakes in Python</a>
 <a target="_blank" href="https://www.python.org/dev/peps/pep-0008/">PEP 8 -- Style Guide for Python Code</a>
+<a target="_blank" href="http://www.jrsoftware.org/isinfo.php">Inno Setup install wizard creator</a>
 
 Continue one line with '\'
 
@@ -233,8 +235,11 @@ A generator is used up after one iteration.
 
 Generator functions return values with 'yield'.
 
+# requires all imported functions to be prefixed with package name
 import math
 import numpy as np
+
+# imported functions can be used w/o prefix
 from math import cos, pi
 from math import *
 
@@ -373,4 +378,20 @@ def read_file():
     except Exception:
         print("Could not read file")
 
+There are no access modifiers.  All class methods and members are public.
+
+By convention, methods are marked "private" by preceding them with an underscore.
+
+There are no interfaces.
+
+pip install virtualenv
+virtualenv &lt;name&gt;
+source &lt;path&gt;&lt;name&gt;/bin/activate
+deactivate
+
+# create .exe
+pip install pyinstaller
+pyinstaller --onefile &lt;filename containing entry point&gt;
+
+Use InnoSetup to create installer, see links.
 </pre>
