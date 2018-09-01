@@ -350,8 +350,27 @@ del student_names[2]
 try:
     x = 1 / 0
 except Exception:
-    "Fail!"
+    print("Fail!")
 
 # converting a list to a set removes duplicates and sorts it
 set([3, 2, 3, 1, 5]) == (1, 2, 3, 5)
+
+def save_file(student):
+    try:
+        f = open("students.txt", "a")
+        f.write(student + "\n")
+        f.close()
+    except Exception:
+        print("Could not save file")
+
+
+def read_file():
+    try:
+        f = open("students.txt", "r")
+        for student in f.readlines():
+            add_student(student)
+        f.close()
+    except Exception:
+        print("Could not read file")
+
 </pre>
