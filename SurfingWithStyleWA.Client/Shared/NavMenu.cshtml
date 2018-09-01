@@ -4,27 +4,22 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item px-3 dropdown">
-                <NavLink class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                <NavLink class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Tools
                 </NavLink>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     @*<li>
                             <NavLink class="nav-link" href="tools/timer">
                                 Timer
                             </NavLink>
                         </li>*@
                     <li>
-                        <NavLink class="nav-link" href="tools/calculator" Match=NavLinkMatch.All>
+                        <NavLink class="nav-link" href="tools/calculator">
                             Calculator
                         </NavLink>
                     </li>
                 </ul>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <NavLink class="nav-link" href="tools/calculator">
-                        Calculator
-                    </NavLink>
-                </div>
             </li>
             @*<li class="nav-item px-3 dropdown">
                     <NavLink class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -48,7 +43,7 @@
                     </div>
                 </li>*@
             <li class="nav-item px-3 dropdown">
-                <NavLink class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                <NavLink class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Notes
                 </NavLink>
@@ -59,7 +54,7 @@
                         </NavLink>
                         <ul class="dropdown-menu">
                             <li>
-                                <NavLink class="nav-link" href="notes/ms/dotnet" Match=NavLinkMatch.All>
+                                <NavLink class="nav-link" href="notes/ms/dotnet">
                                     .NET
                                 </NavLink>
                             </li>
@@ -132,7 +127,7 @@
                 </NavLink>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <li>
-                        <NavLink class="nav-link" href="links/tools" Match=NavLinkMatch.All>
+                        <NavLink class="nav-link" href="links/tools">
                             Tools
                         </NavLink>
                     </li>
