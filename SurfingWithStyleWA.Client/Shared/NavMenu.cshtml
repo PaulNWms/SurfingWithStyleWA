@@ -8,91 +8,135 @@
                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Tools
                 </NavLink>
+                <ul class="dropdown-menu">
+                    @*<li>
+                            <NavLink class="nav-link" href="tools/timer">
+                                Timer
+                            </NavLink>
+                        </li>*@
+                    <li>
+                        <NavLink class="nav-link" href="tools/calculator" Match=NavLinkMatch.All>
+                            Calculator
+                        </NavLink>
+                    </li>
+                </ul>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    @*<NavLink class="nav-link" href="tools/timer">
-                        Timer
-                    </NavLink>*@
                     <NavLink class="nav-link" href="tools/calculator">
                         Calculator
                     </NavLink>
                 </div>
             </li>
             @*<li class="nav-item px-3 dropdown">
-            <NavLink class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Practice
-            </NavLink>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <NavLink class="nav-link" href="practice/metronome" Match=NavLinkMatch.All>
-                Metronome
-            </NavLink>
-            <NavLink class="nav-link" href="practice/scheduledmetronome">
-                Scheduled&nbsp;Metronome
-            </NavLink>
-            <NavLink class="nav-link" href="practice/presets">
-                Scheduled&nbsp;Metronome
-            </NavLink>
-                <div class="dropdown-divider"></div>
-                <NavLink class="nav-link" href="practice/scheduled-metronome-help">
-                    Scheduled&nbsp;Metronome&nbsp;Help
-                </NavLink>
-            </div>
-        </li>*@
+                    <NavLink class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Practice
+                    </NavLink>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <NavLink class="nav-link" href="practice/metronome" Match=NavLinkMatch.All>
+                        Metronome
+                    </NavLink>
+                    <NavLink class="nav-link" href="practice/scheduledmetronome">
+                        Scheduled&nbsp;Metronome
+                    </NavLink>
+                    <NavLink class="nav-link" href="practice/presets">
+                        Scheduled&nbsp;Metronome
+                    </NavLink>
+                        <div class="dropdown-divider"></div>
+                        <NavLink class="nav-link" href="practice/scheduled-metronome-help">
+                            Scheduled&nbsp;Metronome&nbsp;Help
+                        </NavLink>
+                    </div>
+                </li>*@
             <li class="nav-item px-3 dropdown">
                 <NavLink class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Notes
                 </NavLink>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <NavLink class="nav-link" href="notes/dotnet" Match=NavLinkMatch.All>
-                        .NET
-                    </NavLink>
-                    <NavLink class="nav-link" href="notes/csharp">
-                        C#
-                    </NavLink>
-                    <NavLink class="nav-link" href="notes/designpatterns">
-                        Design Patterns
-                    </NavLink>
-                    <NavLink class="nav-link" href="notes/fsharp">
-                        F#
-                    </NavLink>
-                    <NavLink class="nav-link" href="notes/git">
-                        Git
-                    </NavLink>
-                    <NavLink class="nav-link" href="notes/machinelearning">
-                        Machine Learning
-                    </NavLink>
-                    <NavLink class="nav-link" href="notes/msbuild">
-                        MSBuild
-                    </NavLink>
-                    <NavLink class="nav-link" href="notes/powershell">
-                        PowerShell
-                    </NavLink>
-                    <NavLink class="nav-link" href="notes/python">
-                        Python
-                    </NavLink>
-                    <NavLink class="nav-link" href="notes/solid">
-                        SOLID
-                    </NavLink>
-                    <NavLink class="nav-link" href="notes/typescript">
-                        TypeScript
-                    </NavLink>
-                    <div class="dropdown-divider" />
-                    <NavLink class="nav-link" href="notes/food">
-                        Food
-                    </NavLink>
-                </div>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li class="dropdown-submenu">
+                        <NavLink class="dropdown-item dropdown-toggle" href="#">
+                            .NET
+                        </NavLink>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <NavLink class="nav-link" href="notes/dotnet" Match=NavLinkMatch.All>
+                                    .NET
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink class="nav-link" href="notes/csharp">
+                                    C#
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink class="nav-link" href="notes/fsharp">
+                                    F#
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink class="nav-link" href="notes/msbuild">
+                                    MSBuild
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink class="nav-link" href="notes/powershell">
+                                    PowerShell
+                                </NavLink>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <NavLink class="nav-link" href="notes/designpatterns">
+                            Design Patterns
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink class="nav-link" href="notes/git">
+                            Git
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink class="nav-link" href="notes/machinelearning">
+                            Machine Learning
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink class="nav-link" href="notes/python">
+                            Python
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink class="nav-link" href="notes/solid">
+                            SOLID
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink class="nav-link" href="notes/typescript">
+                            TypeScript
+                        </NavLink>
+                    </li>
+                    <li>
+                        <div class="dropdown-divider" />
+                    </li>
+                    <li>
+                        <NavLink class="nav-link" href="notes/food">
+                            Food
+                        </NavLink>
+                    </li>
+                </ul>
             </li>
             <li class="nav-item px-3 dropdown">
-                <NavLink class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                <NavLink class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Links
                 </NavLink>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <NavLink class="nav-link" href="links/tools" Match=NavLinkMatch.All>
-                        Tools
-                    </NavLink>
-                </div>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li>
+                        <NavLink class="nav-link" href="links/tools" Match=NavLinkMatch.All>
+                            Tools
+                        </NavLink>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>
