@@ -3,19 +3,19 @@
     partial class Constants
     {
         public const string ERROR = "ERROR";
-        public const string FORMAT = "0.##";
+        public const string FORMAT = "#,##0.##";
     }
 
     interface IWeight
     {
-        void Convert(ref string kilos, ref string pounds, ref string stone);
+        void Convert(ref string kilos, ref string grams, ref string stone, ref string pounds, ref string ounces);
     }
 
-    class Weight
+    class SimpleMeasure
     {
         public double UnitVal { get; private set; }
 
-        public Weight(string unit)
+        public SimpleMeasure(string unit)
         {
             try { UnitVal = double.Parse(unit); }
             catch { UnitVal = double.NaN; }
@@ -30,28 +30,36 @@
         }
     }
 
-    class Kilo : Weight, IWeight
+    class Kilo : SimpleMeasure, IWeight
     {
         public Kilo(string kilos) : base(kilos) { }
 
-        public void Convert(ref string kilos, ref string pounds, ref string stone)
+        public void Convert(ref string kilos, ref string grams, ref string stone, ref string pounds, ref string ounces)
         {
-            double p = this.UnitVal * 2.2046;
-            Stone s = new Stone(p);
-            pounds = p.ToString(Constants.FORMAT);
+            double g = 1000.0 * this.UnitVal;
+            double oz = 0.03527396 * g;
+            double lb = 0.0625 * oz;
+            Stone s = new Stone(lb);
+            grams = g.ToString(Constants.FORMAT);
             stone = s.ToString();
+            pounds = lb.ToString(Constants.FORMAT);
+            ounces = oz.ToString(Constants.FORMAT);
         }
     }
 
-    class Pound : Weight, IWeight
+    class Gram : SimpleMeasure, IWeight
     {
-        public Pound(string pounds) : base(pounds) { }
+        public Gram(string grams) : base(grams) { }
 
-        public void Convert(ref string kilos, ref string pounds, ref string stone)
+        public void Convert(ref string kilos, ref string grams, ref string stone, ref string pounds, ref string ounces)
         {
-            Stone s = new Stone(UnitVal);
-            kilos = (this.UnitVal * 0.4536).ToString(Constants.FORMAT);
+            double oz = 0.03527396 * this.UnitVal;
+            double lb = 0.0625 * oz;
+            Stone s = new Stone(lb);
+            kilos = (this.UnitVal / 1000).ToString(Constants.FORMAT);
             stone = s.ToString();
+            pounds = lb.ToString(Constants.FORMAT);
+            ounces = oz.ToString(Constants.FORMAT);
         }
     }
 
@@ -83,11 +91,15 @@
             }
         }
 
-        public void Convert(ref string kilos, ref string pounds, ref string stone)
+        public void Convert(ref string kilos, ref string grams, ref string stone, ref string pounds, ref string ounces)
         {
-            double p = 14 * StoneVal + PoundVal;
-            pounds = p.ToString();
-            kilos = (p * 0.4536).ToString(Constants.FORMAT);
+            double lb = 14 * StoneVal + PoundVal;
+            double oz = 16 * lb;
+            double g = 28.3495231 * oz;
+            kilos = (g / 1000).ToString(Constants.FORMAT);
+            grams = g.ToString(Constants.FORMAT);
+            pounds = lb.ToString();
+            ounces = oz.ToString(Constants.FORMAT);
         }
 
         public override string ToString()
@@ -96,6 +108,38 @@
                 return string.Format("{0} stone {1}", this.StoneVal, this.PoundVal.ToString(Constants.FORMAT));
             else
                 return Constants.ERROR;
+        }
+    }
+
+    class Pound : SimpleMeasure, IWeight
+    {
+        public Pound(string pounds) : base(pounds) { }
+
+        public void Convert(ref string kilos, ref string grams, ref string stone, ref string pounds, ref string ounces)
+        {
+            Stone s = new Stone(UnitVal);
+            double oz = 16 * this.UnitVal;
+            double g = 28.3495231 * oz;
+            kilos = (g / 1000).ToString(Constants.FORMAT);
+            grams = g.ToString(Constants.FORMAT);
+            stone = s.ToString();
+            ounces = oz.ToString(Constants.FORMAT);
+        }
+    }
+
+    class Ounce : SimpleMeasure, IWeight
+    {
+        public Ounce(string pounds) : base(pounds) { }
+
+        public void Convert(ref string kilos, ref string grams, ref string stone, ref string pounds, ref string ounces)
+        {
+            double g = 28.3495231 * this.UnitVal;
+            double lb = this.UnitVal / 16;
+            Stone s = new Stone(lb);
+            kilos = (g / 1000).ToString(Constants.FORMAT);
+            grams = g.ToString(Constants.FORMAT);
+            stone = s.ToString();
+            pounds = lb.ToString(Constants.FORMAT);
         }
     }
 }
