@@ -7,12 +7,13 @@
     <meta itemprop="operatingSystem" content="IIS/ASP.NET MVC" />
     <h1 class="calculator-text" itemprop="name">Measurement Converter</h1>
     <h5 class="calculator-text">An Experiment in WebAssembly w/ ASP.NET Blazor</h5>
+    <br/>
     <form>
         <div class="form-row">
             <div class="col-md-4 mb-3">
                 <label for="validationDefaultUsername">Pounds</label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Pounds" aria-label="Pounds" aria-describedby="button-pounds" bind="@pounds"/>
+                    <input type="text" class="form-control" placeholder="Pounds" aria-label="Pounds" aria-describedby="button-pounds" bind="@pounds" />
                     <div class="input-group-append">
                         <button class="btn-outline-secondary" type="button" id="button-pounds" onclick="@OnPounds">Calc</button>
                     </div>
@@ -21,9 +22,18 @@
             <div class="col-md-4 mb-3">
                 <label for="validationDefaultUsername">Kilos</label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Kilos" aria-label="Kilos" aria-describedby="button-kilos" bind="@kilos"/>
+                    <input type="text" class="form-control" placeholder="Kilos" aria-label="Kilos" aria-describedby="button-kilos" bind="@kilos" />
                     <div class="input-group-append">
                         <button class="btn-outline-secondary" type="button" id="button-kilos" onclick="@OnKilos">Calc</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="validationDefaultUsername">Stone</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Stone" aria-label="Stone" aria-describedby="button-stone" bind="@stone" />
+                    <div class="input-group-append">
+                        <button class="btn-outline-secondary" type="button" id="button-stone" onclick="@OnStone">Calc</button>
                     </div>
                 </div>
             </div>
@@ -33,18 +43,66 @@
 </article>
 
 @functions {
-    const string pattern = @"";
-    string pounds = "";
-    string kilos = "";
+    const string ERROR = "ERROR";
+    string pounds = string.Empty;
+    string kilos = string.Empty;
+    string stone = string.Empty;
     double temp;
 
     void OnPounds()
     {
-        kilos = (Double.TryParse(pounds, out temp) ? (temp / 2.2046).ToString("0.##") : "ERROR");
+        kilos = (double.TryParse(pounds, out temp) ? (temp * 0.4536).ToString("0.##") : ERROR);
+        stone = (new Stone(temp)).ToString();
     }
 
     void OnKilos()
     {
-        pounds = (Double.TryParse(kilos, out temp) ? (temp * 0.4536).ToString("0.##") : "ERROR");
+        pounds = (double.TryParse(kilos, out temp) ? (temp * 2.2046).ToString("0.##") : ERROR);
+        stone = (new Stone(temp * 2.2046)).ToString();
+    }
+
+    void OnStone()
+    {
+        var s = new Stone(stone);
+        pounds = s.ToPounds().ToString("0.##");
+        kilos = s.ToKilos().ToString("0.##");
+    }
+
+    class Stone
+    {
+        public Stone(double pounds)
+        {
+            this.StoneVal = (int)(pounds / 14);
+            this.PoundVal = pounds % 14;
+        }
+
+        public Stone(string stone)
+        {
+            var regex = new System.Text.RegularExpressions.Regex(@"^(\d+)(\s*stone\s*(\d+(\.\d+)?))?$");
+            var matches = regex.Match(stone);
+
+            if (matches.Success)
+            {
+                this.StoneVal = (int)double.Parse(matches.Groups[1].Value);
+                this.PoundVal = double.Parse("0" + matches.Groups[3].Value);
+            }
+            else
+            {
+                this.StoneVal = -1;
+                this.PoundVal = -1.0;
+            }
+        }
+
+        public int StoneVal { get; private set; }
+        public double PoundVal { get; private set; }
+        public double ToPounds() { return 14 * StoneVal + PoundVal; }
+        public double ToKilos() { return 0.4536 * ToPounds(); }
+        public override string ToString()
+        {
+            if (this.StoneVal < 0)
+                return ERROR;
+            else
+                return string.Format("{0} stone {1}", this.StoneVal, this.PoundVal.ToString("0.##"));
+        }
     }
 }
