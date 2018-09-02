@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="col-md-4 mb-3">
-                <label for="validationDefaultUsername">Stone</label>
+                <label for="validationDefaultUsername">UK Stone</label>
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Stone" aria-label="Stone" aria-describedby="button-stone" bind="@stone" />
                     <div class="input-group-append">
@@ -39,11 +39,12 @@
             </div>
         </div>
     </form>
-    <p class="calculator-text" itemprop="description"><b>Disclaimer:</b> This calculator is for demonstration purposes only.</p>
+    <p class="calculator-text" itemprop="description"><b>Disclaimer:</b> This converter is for demonstration purposes only.</p>
 </article>
 
 @functions {
     const string ERROR = "ERROR";
+    const string FORMAT = "0.##";
     string pounds = string.Empty;
     string kilos = string.Empty;
     string stone = string.Empty;
@@ -51,21 +52,21 @@
 
     void OnPounds()
     {
-        kilos = (double.TryParse(pounds, out temp) ? (temp * 0.4536).ToString("0.##") : ERROR);
+        kilos = (double.TryParse(pounds, out temp) ? (temp * 0.4536).ToString(FORMAT) : ERROR);
         stone = (new Stone(temp)).ToString();
     }
 
     void OnKilos()
     {
-        pounds = (double.TryParse(kilos, out temp) ? (temp * 2.2046).ToString("0.##") : ERROR);
+        pounds = (double.TryParse(kilos, out temp) ? (temp * 2.2046).ToString(FORMAT) : ERROR);
         stone = (new Stone(temp * 2.2046)).ToString();
     }
 
     void OnStone()
     {
         var s = new Stone(stone);
-        pounds = s.ToPounds().ToString("0.##");
-        kilos = s.ToKilos().ToString("0.##");
+        pounds = s.ToPounds().ToString(FORMAT);
+        kilos = s.ToKilos().ToString(FORMAT);
     }
 
     class Stone
@@ -99,10 +100,10 @@
         public double ToKilos() { return 0.4536 * ToPounds(); }
         public override string ToString()
         {
-            if (this.StoneVal < 0)
-                return ERROR;
+            if (this.StoneVal >= 0)
+                return string.Format("{0} stone {1}", this.StoneVal, this.PoundVal.ToString(FORMAT));
             else
-                return string.Format("{0} stone {1}", this.StoneVal, this.PoundVal.ToString("0.##"));
+                return ERROR;
         }
     }
 }
