@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SurfingWithStyleWA.Client.Pages.Tools
+﻿namespace SurfingWithStyleWA.Client.Pages.Tools
 {
     partial class Constants
     {
@@ -11,8 +6,60 @@ namespace SurfingWithStyleWA.Client.Pages.Tools
         public const string FORMAT = "0.##";
     }
 
-    class Stone
+    interface IWeight
     {
+        void Convert(ref string kilos, ref string pounds, ref string stone);
+    }
+
+    class Weight
+    {
+        public double UnitVal { get; private set; }
+
+        public Weight(string unit)
+        {
+            try { UnitVal = double.Parse(unit); }
+            catch { UnitVal = double.NaN; }
+        }
+
+        public override string ToString()
+        {
+            if (this.UnitVal >= 0)
+                return this.UnitVal.ToString(Constants.FORMAT);
+            else
+                return Constants.ERROR;
+        }
+    }
+
+    class Kilo : Weight, IWeight
+    {
+        public Kilo(string kilos) : base(kilos) { }
+
+        public void Convert(ref string kilos, ref string pounds, ref string stone)
+        {
+            double p = this.UnitVal * 2.2046;
+            Stone s = new Stone(p);
+            pounds = p.ToString(Constants.FORMAT);
+            stone = s.ToString();
+        }
+    }
+
+    class Pound : Weight, IWeight
+    {
+        public Pound(string pounds) : base(pounds) { }
+
+        public void Convert(ref string kilos, ref string pounds, ref string stone)
+        {
+            Stone s = new Stone(UnitVal);
+            kilos = (this.UnitVal * 0.4536).ToString(Constants.FORMAT);
+            stone = s.ToString();
+        }
+    }
+
+    class Stone : IWeight
+    {
+        public int StoneVal { get; private set; }
+        public double PoundVal { get; private set; }
+
         public Stone(double pounds)
         {
             this.StoneVal = (int)(pounds / 14);
@@ -32,14 +79,17 @@ namespace SurfingWithStyleWA.Client.Pages.Tools
             else
             {
                 this.StoneVal = -1;
-                this.PoundVal = -1.0;
+                this.PoundVal = double.NaN;
             }
         }
 
-        public int StoneVal { get; private set; }
-        public double PoundVal { get; private set; }
-        public double ToPounds() { return 14 * StoneVal + PoundVal; }
-        public double ToKilos() { return 0.4536 * ToPounds(); }
+        public void Convert(ref string kilos, ref string pounds, ref string stone)
+        {
+            double p = 14 * StoneVal + PoundVal;
+            pounds = p.ToString();
+            kilos = (p * 0.4536).ToString(Constants.FORMAT);
+        }
+
         public override string ToString()
         {
             if (this.StoneVal >= 0)
