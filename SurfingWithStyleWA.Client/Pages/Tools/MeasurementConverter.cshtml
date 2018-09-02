@@ -43,8 +43,6 @@
 </article>
 
 @functions {
-    const string ERROR = "ERROR";
-    const string FORMAT = "0.##";
     string pounds = string.Empty;
     string kilos = string.Empty;
     string stone = string.Empty;
@@ -52,58 +50,20 @@
 
     void OnPounds()
     {
-        kilos = (double.TryParse(pounds, out temp) ? (temp * 0.4536).ToString(FORMAT) : ERROR);
+        kilos = (double.TryParse(pounds, out temp) ? (temp * 0.4536).ToString(Constants.FORMAT) : Constants.ERROR);
         stone = (new Stone(temp)).ToString();
     }
 
     void OnKilos()
     {
-        pounds = (double.TryParse(kilos, out temp) ? (temp * 2.2046).ToString(FORMAT) : ERROR);
+        pounds = (double.TryParse(kilos, out temp) ? (temp * 2.2046).ToString(Constants.FORMAT) : Constants.ERROR);
         stone = (new Stone(temp * 2.2046)).ToString();
     }
 
     void OnStone()
     {
         var s = new Stone(stone);
-        pounds = s.ToPounds().ToString(FORMAT);
-        kilos = s.ToKilos().ToString(FORMAT);
-    }
-
-    class Stone
-    {
-        public Stone(double pounds)
-        {
-            this.StoneVal = (int)(pounds / 14);
-            this.PoundVal = pounds % 14;
-        }
-
-        public Stone(string stone)
-        {
-            var regex = new System.Text.RegularExpressions.Regex(@"^(\d+)(\s*stone\s*(\d+(\.\d+)?))?$");
-            var matches = regex.Match(stone);
-
-            if (matches.Success)
-            {
-                this.StoneVal = (int)double.Parse(matches.Groups[1].Value);
-                this.PoundVal = double.Parse("0" + matches.Groups[3].Value);
-            }
-            else
-            {
-                this.StoneVal = -1;
-                this.PoundVal = -1.0;
-            }
-        }
-
-        public int StoneVal { get; private set; }
-        public double PoundVal { get; private set; }
-        public double ToPounds() { return 14 * StoneVal + PoundVal; }
-        public double ToKilos() { return 0.4536 * ToPounds(); }
-        public override string ToString()
-        {
-            if (this.StoneVal >= 0)
-                return string.Format("{0} stone {1}", this.StoneVal, this.PoundVal.ToString(FORMAT));
-            else
-                return ERROR;
-        }
+        pounds = s.ToPounds().ToString(Constants.FORMAT);
+        kilos = s.ToKilos().ToString(Constants.FORMAT);
     }
 }
