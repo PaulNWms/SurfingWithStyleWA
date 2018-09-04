@@ -1,0 +1,23 @@
+﻿@page "/notes/python/matplotlib"
+
+<h1>Matplotlib</h1>
+
+<pre class="kaypro10">Links:
+<a target="_blank" href="https://matplotlib.org/">Matplotlib</a>
+
+%matplotlib inline
+import matplotlib.pyplot as plt
+
+def save_fig(fig_id, tight_layout=True):
+    path = os.path.join(PROJECT_ROOT_DIR, "images", CHAPTER_ID, fig_id + ".png")
+    print("Saving figure", fig_id)
+    if tight_layout:
+        plt.tight_layout()
+    plt.savefig(path, format='png', dpi=300)
+
+housing.hist(bins=50, figsize=(20,15))
+save_fig("attribute_histogram_plots")
+plt.show()
+
+country_stats.plot(kind='scatter', x="GDP per capita", y='Life satisfaction')
+</pre>

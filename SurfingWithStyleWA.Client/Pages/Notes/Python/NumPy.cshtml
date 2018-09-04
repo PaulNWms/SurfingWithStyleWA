@@ -1,0 +1,19 @@
+﻿@page "/notes/python/numpy"
+
+<h1>NumPy &amp; SciPy</h1>
+
+<pre class="kaypro10">Links:
+<a target="_blank" href="https://docs.scipy.org/doc/">Numpy and Scipy Documentation</a>
+
+X = np.linspace(0, 110000, 1000)
+
+# to make this notebook's output identical at every run
+np.random.seed(42)
+
+# Divide by 1.5 to limit the number of income categories
+housing["income_cat"] = np.ceil(housing["median_income"] / 1.5)
+# Label those above 5 as 5
+housing["income_cat"].where(housing["income_cat"] < 5, 5.0, inplace=True)
+
+housing["income_cat"].value_counts()
+</pre>

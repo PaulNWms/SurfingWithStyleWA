@@ -36,6 +36,12 @@
     <Content Update="Pages\Notes\MS\TypeScript.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Pages\Notes\Python\MatplotLib.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Pages\Notes\Python\NumPy.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Pages\Notes\Python\ScikitLearn.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

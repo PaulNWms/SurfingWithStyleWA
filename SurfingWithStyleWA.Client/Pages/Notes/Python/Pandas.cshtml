@@ -4,4 +4,34 @@
 
 <pre class="kaypro10">Links:
 <a target="_blank" href="https://pandas.pydata.org/">pandas</a>
+
+import pandas as pd
+gdp_per_capita = pd.read_csv(datapath+"gdp_per_capita.csv", thousands=',', delimiter='\t',
+                             encoding='latin1', na_values="n/a")
+gdp_per_capita.rename(columns={"2015": "GDP per capita"}, inplace=True)
+gdp_per_capita.set_index("Country", inplace=True)
+gdp_per_capita.head(2)
+full_country_stats = pd.merge(left=oecd_bli, right=gdp_per_capita, left_index=True, right_index=True)
+full_country_stats.sort_values(by="GDP per capita", inplace=True)
+
+def load_housing_data(housing_path=HOUSING_PATH):
+    csv_path = os.path.join(housing_path, "housing.csv")
+    return pd.read_csv(csv_path)
+
+housing = load_housing_data()
+housing.head()
+housing.info()
+housing["ocean_proximity"].value_counts()
+housing.describe()
+
+from pandas.plotting import scatter_matrix
+attributes = ["median_house_value", "median_income", "total_rooms",
+              "housing_median_age"]
+scatter_matrix(housing[attributes], figsize=(12, 8))
+save_fig("scatter_matrix_plot")
+
+housing_extra_attribs = pd.DataFrame(
+    housing_extra_attribs,
+    columns=list(housing.columns)+["rooms_per_household", "population_per_household"])
+housing_extra_attribs.head()
 </pre>
