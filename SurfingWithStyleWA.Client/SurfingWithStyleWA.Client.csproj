@@ -36,7 +36,13 @@
     <Content Update="Pages\Notes\MS\TypeScript.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Pages\Notes\Python.cshtml">
+    <Content Update="Pages\Notes\Python\ScikitLearn.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Pages\Notes\Python\Pandas.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Pages\Notes\Python\Python.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Pages\Notes\MS\FSharp.cshtml">

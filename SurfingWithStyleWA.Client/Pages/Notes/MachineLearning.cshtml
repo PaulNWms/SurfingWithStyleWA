@@ -89,7 +89,6 @@ In cross-validation, a validation set is randomly held out from the training set
 
 The No Free Lunch Theorem states that there is no model that is guaranteed to work best on a given dataset.  The only way to know for sure is to evaluate them all.
 
-
 1. Look at the big picture.
   - Frame the problem
   -- How will the model benefit the company?
@@ -104,9 +103,20 @@ The No Free Lunch Theorem states that there is no model that is guaranteed to wo
   - Plot histograms (matplotlib)
   - Create a test set
 3. Discover and visualize the data to gain insights.
+  - Scatter plots (pandas)
+  - Correlations plots 
 4. Prepare the data.
+  - Clean data
+  -- Delete rows with nulls (dropna)
+  -- Delete attributes with nulls (drop)
+  -- Replace nulls with default value (fillna or imputer)
+  - Convert text to integers (factorize() to integer or one-hot encode)
+  - Feature scaling (min-max scaling or standardization)
 5. Select a model and train it.
+  - Cross-validation (cross_val_score)
 6. Fine-tune your model.
+  - GridSearchCV
+  - RandomizedSearchCV
 7. Present your solution.
 8. Launch, monitor and maintain your system.
 </pre>
