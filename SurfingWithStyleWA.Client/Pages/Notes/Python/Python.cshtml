@@ -415,4 +415,54 @@ def fetch_housing_data(housing_url=HOUSING_URL, housing_path=HOUSING_PATH):
     housing_tgz = tarfile.open(tgz_path)
     housing_tgz.extractall(path=housing_path)
     housing_tgz.close()
+
+conda upgrade conda
+conda upgrade --all
+conda install package_name
+conda install numpy=1.10
+conda remove package_name
+conda update package_name
+conda list
+conda search *beautifulsoup*
+conda create -n env_name list of packages
+conda create -n py2 python=2
+conda create -n py python=3.3
+source activate my_env
+source deactivate
+conda env export > environment.yaml
+conda env create -f environment.yaml
+conda env list
+conda env remove -n env_name
+pip freeze > requirements.txt
+pip install -r requirements.txt
+
+conda install jupyter notebook
+jupyter notebook
+conda install nb_conda
+
+Then if you run the notebook server from a conda environment, you'll also have access to the "Conda" tab.
+
+Magic keywords
+
+# set up matplotlib to work interactively in the notebook
+%matplotlib
+
+# time how long it takes for a function to run
+%timeit fibo1(20)
+
+# time how long it takes for a whole cell to run
+%%timeit
+
+# render figures directly in the notebook
+%matplotlib inline
+
+# On higher resolution screens, use
+%config InlineBackend.figure_format = 'retina'
+
+# turn on the interactive debugger
+%pdb
+
+jupyter nbconvert --to html notebook.ipynb
+jupyter nbconvert notebook.ipynb --to slides
+jupyter nbconvert notebook.ipynb --to slides --post serve
 </pre>
