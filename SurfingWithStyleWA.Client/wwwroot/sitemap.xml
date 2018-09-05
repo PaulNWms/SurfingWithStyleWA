@@ -4,47 +4,80 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-
-
-<url>
-  <loc>http://surfingwithstyle.com/</loc>
-  <changefreq>monthly</changefreq>
-</url>
-<url>
-  <loc>http://surfingwithstyle.com/tools/calculator/</loc>
-  <changefreq>monthly</changefreq>
-</url>
-<url>
-  <loc>http://surfingwithstyle.com/notes/dotnet/</loc>
-  <changefreq>monthly</changefreq>
-</url>
-<url>
-  <loc>http://surfingwithstyle.com/notes/csharp/</loc>
-  <changefreq>monthly</changefreq>
-</url>
-<url>
-  <loc>http://surfingwithstyle.com/notes/designpatterns/</loc>
-  <changefreq>monthly</changefreq>
-</url>
-<url>
-  <loc>http://surfingwithstyle.com/notes/git/</loc>
-  <changefreq>monthly</changefreq>
-</url>
-<url>
-  <loc>http://surfingwithstyle.com/notes/ml/</loc>
-  <changefreq>monthly</changefreq>
-</url>
-<url>
-  <loc>http://surfingwithstyle.com/notes/msbuild/</loc>
-  <changefreq>monthly</changefreq>
-</url>
-<url>
-  <loc>http://surfingwithstyle.com/notes/powershell/"/</loc>
-  <changefreq>monthly</changefreq>
-</url>
-<url>
-  <loc>http://surfingwithstyle.com/notes/solid/"/</loc>
-  <changefreq>monthly</changefreq>
-</url>
-
+  <url>
+    <loc>http://surfingwithstyle.com/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/tools/measurementconverter/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/tools/calculator/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/ms/dotnet/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/ms/csharp/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/ms/fsharp/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/ms/msbuild/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/ms/powershell/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/ms/typescript/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/python/python/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/python/numpy/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/python/pandas/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/python/matplotlib/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/python/scikit-learn/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/designpatterns/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/git/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/machinelearning/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/solid/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/food/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
 </urlset>
