@@ -119,4 +119,35 @@ The No Free Lunch Theorem states that there is no model that is guaranteed to wo
   - RandomizedSearchCV
 7. Present your solution.
 8. Launch, monitor and maintain your system.
+
+# Translates slice objects to concatenation along the first axis.
+example_images = np.r_[X[:12000:600], X[13000:30600:600], X[30600:60000:590]]
+
+from sklearn.linear_model import SGDClassifier
+sgd_clf = SGDClassifier(max_iter=5, random_state=42)
+sgd_clf.fit(X_train, y_train_5)
+sgd_clf.predict([some_digit])
+
+from sklearn.model_selection import cross_val_predict
+y_train_pred = cross_val_predict(sgd_clf, X_train, y_train_5, cv=3)
+
+from sklearn.metrics import confusion_matrix
+confusion_matrix(y_train_5, y_train_pred)
+
+precision = TP / (TP + FP)
+
+recall = TP / (TP + FN)
+
+F<sub>1</sub> = 2 / (1 / precision + 1 / recall)
+   = 2 * precision * recall / (precision + recall)
+   = TP / (TP + (FN + FP) / 2)
+
+from sklearn.metrics import precision_recall_curve
+precisions, recalls, thresholds = precision_recall_curve(y_train_5, y_scores)
+
+from sklearn.metrics import roc_curve
+fpr, tpr, thresholds = roc_curve(y_train_5, y_scores)
+
+from sklearn.metrics import roc_auc_score
+roc_auc_score(y_train_5, y_scores)
 </pre>
