@@ -112,5 +112,24 @@ cvres = rnd_search.cv_results_
 for mean_score, params in zip(cvres["mean_test_score"], cvres["params"]):
     print(np.sqrt(-mean_score), params)
 feature_importances = grid_search.best_estimator_.feature_importances_
-feature_importances
+
+from sklearn.linear_model import SGDClassifier
+sgd_clf = SGDClassifier(max_iter=5, random_state=42)
+sgd_clf.fit(X_train, y_train_5)
+sgd_clf.predict([some_digit])
+
+from sklearn.model_selection import cross_val_predict
+y_train_pred = cross_val_predict(sgd_clf, X_train, y_train_5, cv=3)
+
+from sklearn.metrics import confusion_matrix
+confusion_matrix(y_train_5, y_train_pred)
+
+from sklearn.metrics import precision_recall_curve
+precisions, recalls, thresholds = precision_recall_curve(y_train_5, y_scores)
+
+from sklearn.metrics import roc_curve
+fpr, tpr, thresholds = roc_curve(y_train_5, y_scores)
+
+from sklearn.metrics import roc_auc_score
+roc_auc_score(y_train_5, y_scores)
 </pre>

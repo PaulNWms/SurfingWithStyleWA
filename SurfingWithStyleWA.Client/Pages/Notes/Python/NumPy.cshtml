@@ -16,4 +16,7 @@ housing["income_cat"] = np.ceil(housing["median_income"] / 1.5)
 housing["income_cat"].where(housing["income_cat"] < 5, 5.0, inplace=True)
 
 housing["income_cat"].value_counts()
+
+# Translates slice objects to concatenation along the first axis.
+example_images = np.r_[X[:12000:600], X[13000:30600:600], X[30600:60000:590]]
 </pre>
