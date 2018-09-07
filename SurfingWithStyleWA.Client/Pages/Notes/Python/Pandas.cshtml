@@ -6,32 +6,67 @@
 <a target="_blank" href="https://pandas.pydata.org/">pandas</a>
 
 import pandas as pd
-gdp_per_capita = pd.read_csv(datapath+"gdp_per_capita.csv", thousands=',', delimiter='\t',
-                             encoding='latin1', na_values="n/a")
-gdp_per_capita.rename(columns={"2015": "GDP per capita"}, inplace=True)
-gdp_per_capita.set_index("Country", inplace=True)
-gdp_per_capita.head(2)
-full_country_stats = pd.merge(left=oecd_bli, right=gdp_per_capita, left_index=True, right_index=True)
-full_country_stats.sort_values(by="GDP per capita", inplace=True)
+df = pd.read_csv('student_scores.csv', index_col='ID')
+df.head()
 
-def load_housing_data(housing_path=HOUSING_PATH):
-    csv_path = os.path.join(housing_path, "housing.csv")
-    return pd.read_csv(csv_path)
+df_powerplant.to_csv('powerplant_data_edited.csv', index=False)
 
-housing = load_housing_data()
-housing.head()
-housing.info()
-housing["ocean_proximity"].value_counts()
-housing.describe()
+Pandas actually stores pointers to strings in dataframes and series, which is why object instead of str appears as the datatype.
 
-from pandas.plotting import scatter_matrix
-attributes = ["median_house_value", "median_income", "total_rooms",
-              "housing_median_age"]
-scatter_matrix(housing[attributes], figsize=(12, 8))
-save_fig("scatter_matrix_plot")
+df.shape
+df.dtypes
+df.info()
+df.nunique()
+# this returns useful descriptive statistics for each column of data
+df.describe()
+df.tail(2)
 
-housing_extra_attribs = pd.DataFrame(
-    housing_extra_attribs,
-    columns=list(housing.columns)+["rooms_per_household", "population_per_household"])
-housing_extra_attribs.head()
+# select all the columns from 'id' to the last mean column
+df_means = df.loc[:,'id':'fractal_dimension_mean']
+
+# repeat the step above using index numbers
+df_means = df.iloc[:,:11]
+
+# pick and choose columns with np.r_ and df.iloc
+cols = np.r_[0:1, 12:22]
+df_stderr = df.iloc[:, cols]
+
+# fill missing data with mean
+mean = df['view_duration'].mean()
+df['view_duration'].fillna(mean, inplace=True)
+
+# duplicates
+df.duplicated()
+sum(df.duplicated())
+df.drop_duplicates(inplace=True)
+
+# convert text to datetime
+df['timestamp'] = pd.to_datetime(df['timestamp'])
+
+# pandas uses Matplotlib as a back end
+%matplotlib inline
+
+# semicolon suppresses unwanted output
+df.hist(figsize=(8,8));
+
+# bar chart
+df_census['education'].value_counts().plot(kind='bar')
+
+# pie chart
+df_census['workclass'].value_counts().plot(kind='pie', figsize=(8,8))
+
+# scatter plots
+pd.plotting.scatter_matrix(df_cancer, figsize=(15, 15));
+df_cancer.plot(x='compactness', y='concavity', kind='scatter');
+
+# box plots
+df_cancer['concave_points'].plot(kind='box');
+
+# filter data
+df_m = df[df['diagnosis'] == 'M']
+
+# order multiple bar charts with the same index
+ind = df_x['education'].value_counts().index
+df_a['education'].value_counts()[ind].plot(kind='bar');
+df_b['education'].value_counts()[ind].plot(kind='bar');
 </pre>
