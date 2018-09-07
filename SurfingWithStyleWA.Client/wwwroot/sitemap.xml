@@ -37,6 +37,10 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>http://surfingwithstyle.com/notes/ms/typescript/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>http://surfingwithstyle.com/notes/python/python/"/</loc>
     <changefreq>monthly</changefreq>
   </url>
@@ -57,27 +61,7 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>http://surfingwithstyle.com/notes/web/html/"/</loc>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>http://surfingwithstyle.com/notes/web/typescript/"/</loc>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>http://surfingwithstyle.com/notes/web/webassembly/"/</loc>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>http://surfingwithstyle.com/notes/cpp/"/</loc>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
     <loc>http://surfingwithstyle.com/notes/designpatterns/"/</loc>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>http://surfingwithstyle.com/notes/docker/"/</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
@@ -89,15 +73,7 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>http://surfingwithstyle.com/notes/ros/"/</loc>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
     <loc>http://surfingwithstyle.com/notes/solid/"/</loc>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>http://surfingwithstyle.com/notes/sql/"/</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
