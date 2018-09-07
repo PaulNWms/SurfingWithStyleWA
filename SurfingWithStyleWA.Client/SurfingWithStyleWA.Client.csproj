@@ -33,7 +33,7 @@
     <Content Update="Pages\Notes\MS\DotNet.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Pages\Notes\MS\TypeScript.cshtml">
+    <Content Update="Pages\Notes\Web\TypeScript.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Pages\Notes\Python\MatplotLib.cshtml">
