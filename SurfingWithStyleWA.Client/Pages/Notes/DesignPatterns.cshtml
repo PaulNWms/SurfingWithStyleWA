@@ -85,6 +85,11 @@ Mediator
 - Behavioral
 
 Memento
+- Use when: undo/redo
+- Operations are placed on an Undo stack, undone operations are placed on a Redo stack
+- The <em>originator</em> is the object whose state is being tracked.
+- The <em>caretaker</em> performs operations on the originator.
+- The <em>memento</em> holds the state of the originator.
 - Behavioral
 
 MVC
