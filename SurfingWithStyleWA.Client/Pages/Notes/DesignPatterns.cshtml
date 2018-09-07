@@ -51,6 +51,8 @@ Decorator (wrapper)
 - Even sealed classes can be wrapped
 - Structural
 
+Event Aggregator
+
 Façade
 - Everyday usage: foreach
 - Hides complexity
@@ -81,6 +83,8 @@ Iterator
 - yield return
 - Behavioral
 
+Lazy Load
+
 Mediator
 - Behavioral
 
@@ -98,6 +102,8 @@ MVP
 
 MVVM
 
+Null Object
+
 Observer
 - Everyday usage: Event Handlers
 - Everyday usage: IObservable&lt;T&gt; and IObserver&lt;T&gt;
@@ -114,6 +120,10 @@ Proxy
 
 Repository
 
+Rules
+
+Service Locator
+
 Simple Factory
 - Everyday usage: System.Threading.Tasks.TaskFactory.Run() creates instances of Task
 - Decides which concrete type to return
@@ -126,6 +136,8 @@ Singleton
 - Difficult to test
 - Anti-pattern, better to use IoC container
 - Creational
+
+Specification
 
 State
 - Implement an FSM with state objects derived from a base class
@@ -147,6 +159,8 @@ Template Method
   - The workflow is invariant
   - Some workflow steps may be encapsulated in the base class
 - Behavioral
+
+Unit of Work
 
 Visitor
 - Implement interface IBlah { void Accept(IVisitor visitor); } in each of the classes (double dispatch)
