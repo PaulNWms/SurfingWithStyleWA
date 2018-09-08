@@ -5,20 +5,22 @@
 <pre class="kaypro10">Links:
 <a target="_blank" href="https://pandas.pydata.org/">pandas</a>
 
+# load DataFrame
 import pandas as pd
 df = pd.read_csv('student_scores.csv', index_col='ID')
-df.head()
 
+# save DataFrame
 df_powerplant.to_csv('powerplant_data_edited.csv', index=False)
 
 Pandas actually stores pointers to strings in dataframes and series, which is why object instead of str appears as the datatype.
 
+# inspect DataFrame
+df.head()
 df.shape
 df.dtypes
 df.info()
 df.nunique()
-# this returns useful descriptive statistics for each column of data
-df.describe()
+df.describe() # descriptive statistics for each column of data
 df.tail(2)
 
 # select all the columns from 'id' to the last mean column
@@ -69,4 +71,15 @@ df_m = df[df['diagnosis'] == 'M']
 ind = df_x['education'].value_counts().index
 df_a['education'].value_counts()[ind].plot(kind='bar');
 df_b['education'].value_counts()[ind].plot(kind='bar');
+
+# Find the mean quality of each wine type (red and white) with groupby
+grouped = df.groupby('color')
+
+# Creates acidity_levels column
+df['acidity_levels'] = pd.cut(df['pH'], bin_edges, labels=bin_names)
+
+# query() is equivalent to selecting with a mask
+df_m = df[df['diagnosis'] == 'M']
+df_m = df.query('diagnosis == "M"')
+
 </pre>

@@ -1,12 +1,25 @@
 ﻿@page "/notes/python/matplotlib"
 
-<h1>Matplotlib</h1>
+<h1>Matplotlib &amp; seaborn</h1>
 
 <pre class="kaypro10">Links:
 <a target="_blank" href="https://matplotlib.org/">Matplotlib</a>
 
-%matplotlib inline
 import matplotlib.pyplot as plt
+import seaborn as sns
+%matplotlib inline
+
+# plot bars
+plt.bar([1, 2, 3], [224, 620, 425])
+
+# specify x coordinates of tick labels and their labels
+plt.xticks([1, 2, 3], ['a', 'b', 'c']);
+
+# plot bars with x tick labels
+plt.bar([1, 2, 3], [224, 620, 425], tick_label=['a', 'b', 'c'])
+plt.title('Some Title')
+plt.xlabel('Some X Label')
+plt.ylabel('Some Y Label');
 
 def save_fig(fig_id, tight_layout=True):
     path = os.path.join(PROJECT_ROOT_DIR, "images", CHAPTER_ID, fig_id + ".png")
