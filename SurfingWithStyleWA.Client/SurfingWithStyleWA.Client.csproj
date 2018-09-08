@@ -30,6 +30,9 @@
     <Content Update="Pages\Notes\DesignPatterns.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Pages\Notes\Other\Chords.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Pages\Notes\MS\DotNet.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -66,7 +69,7 @@
     <Content Update="Pages\Notes\MS\CSharp.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Pages\Notes\Life\Food.cshtml">
+    <Content Update="Pages\Notes\Other\Food.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Pages\Notes\SOLID.cshtml">
