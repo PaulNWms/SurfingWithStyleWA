@@ -9,8 +9,8 @@
     <h2 itemprop="name">Timer</h2>
     <div class="jumbotron text-center">
         <h1>
-            <button type="button" class="btn btn-primary btn-lg timer-start" onclick="@StartStop"><span class="glyphicon glyphicon-play" /></button>
-            <span class="timer-display">@formattedDurationSeconds</span>
+            <button type="button" class="btn btn-primary btn-lg timer-start" onclick="@StartStop">&gt;</button>
+            <span class="timer-display">@timerDisplay</span>
         </h1>
     </div>
     <div class="form-horizontal">
@@ -56,11 +56,12 @@
 @functions {
     enum TimerState { stopped, running, paused };
 
-    string formattedDurationSeconds = string.Empty;
-    string formattedDuration = "25";
+    TimerState timerStatus = TimerState.stopped;
+    string buttonFace = "&gt;";
     TimeSpan durationMinutes = new TimeSpan(0, 25, 0);
     TimeSpan oneSecond = new TimeSpan(0, 0, 1);
     string timerDisplay = "25:00";
+    string formattedDuration = "25";
     System.Timers.Timer timer = new System.Timers.Timer(1000);
 
     void Min1() { UsePreset("1-minute-timer", 1); }
@@ -75,11 +76,41 @@
     void Min45() { UsePreset("45-minute-timer", 45); }
     void Min60() { UsePreset("1-hour-timer", 60); }
 
+    void UpdateButton(TimerState state)
+    {
+        timerStatus = state;
+        switch (timerStatus)
+        {
+            case TimerState.stopped:
+            case TimerState.paused:
+                buttonFace = "&gt;";
+                break;
+
+            case TimerState.running:
+                buttonFace = "||";
+                break;
+        }
+    }
+
+    string LTrimDuration(TimeSpan span)
+    {
+        string str = span.ToString();
+        int length = str.Length;
+        int i = 0;
+
+        for (i = 0; i < length - 4; i++)
+        {
+            if (str[i] != '0' && str[i] != ':')
+                break;
+        }
+
+        return str.Substring(i);
+    }
+
     void UsePreset(string url, int minutes)
     {
-        timerDisplay = minutes + ":00";
         durationMinutes = new TimeSpan(0, minutes, 0);
-        formattedDuration = minutes.ToString();
+        timerDisplay = LTrimDuration(durationMinutes);
         JSRuntime.Current.InvokeAsync<object>("history.pushState", "", "", url);
     }
 
@@ -90,9 +121,25 @@
 
     void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
     {
-        formattedDurationSeconds = durationMinutes.ToString();
         durationMinutes = durationMinutes.Subtract(oneSecond);
+        timerDisplay = LTrimDuration(durationMinutes);
+        JSRuntime.Current.InvokeAsync<object>("setTitle", timerDisplay);
+
+        if (durationMinutes.Seconds <= 0)
+        {
+            TimerExpired();
+        }
+
         this.StateHasChanged();
+    }
+
+    void TimerExpired()
+    {
+        //        body.css({ "background-color": "#001912", "color": "#009871" });
+        //        audio.play();
+        JSRuntime.Current.InvokeAsync<object>("playBell");
+        UpdateButton(TimerState.stopped);
+        timer.Stop();
     }
 
     protected override void OnInit()
