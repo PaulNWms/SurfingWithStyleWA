@@ -49,8 +49,8 @@
 </article>
 
 <audio class="bell" preload="auto">
-    <source src="~/Content/Audio/Bell.wav" type="audio/wav">
-    <source src="~/Content/Audio/Bell.mp3" type="audio/mp3">
+    <source src="audio/EndRoutine.wav" type="audio/wav">
+    <source src="audio/EndRoutine.mp3" type="audio/mp3">
 </audio>
 
 @functions {
@@ -125,7 +125,7 @@
         timerDisplay = LTrimDuration(durationMinutes);
         JSRuntime.Current.InvokeAsync<object>("setTitle", timerDisplay);
 
-        if (durationMinutes.Seconds <= 0)
+        if (durationMinutes.TotalSeconds <= 0)
         {
             TimerExpired();
         }
