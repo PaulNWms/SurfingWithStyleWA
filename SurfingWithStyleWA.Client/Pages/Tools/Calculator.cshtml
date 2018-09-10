@@ -1,13 +1,13 @@
 ﻿@page "/tools/calculator"
 
-<article class="narrow-article" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
+<article class="narrow-article calculator" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
     @*@{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}*@
     <meta itemprop="applicationCategory" content="Tool, Multimedia" />
     <meta itemprop="applicationSubCategory" content="Math" />
     <meta itemprop="operatingSystem" content="IIS/ASP.NET MVC" />
-    <h1 class="calculator-text" itemprop="name">Desktop Calculator</h1>
-    <h5 class="calculator-text">An Experiment in WebAssembly w/ ASP.NET Blazor</h5>
-    <table class="calculator">
+    <h1 class="text" itemprop="name">Desktop Calculator</h1>
+    <h5 class="text">An Experiment in WebAssembly w/ ASP.NET Blazor</h5>
+    <table class="device">
         <tr><td class="display" colspan="5"><input readonly bind="@display" /></td></tr>
         <tr>
             <td><button type="button" class="btn btn-default digit" onclick="@Backspace">←</button></td>
@@ -43,7 +43,7 @@
             <td><button type="button" class="btn btn-default binaryOp" onclick="@Add">+</button></td>
         </tr>
     </table>
-    <p class="calculator-text" itemprop="description"><b>Disclaimer:</b> This calculator is for demonstration purposes only.</p>
+    <p class="text" itemprop="description"><b>Disclaimer:</b> This calculator is for demonstration purposes only.</p>
 </article>
 
 

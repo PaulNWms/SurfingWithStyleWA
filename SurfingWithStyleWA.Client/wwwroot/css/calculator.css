@@ -1,36 +1,47 @@
-body {
-  font-family: 'Segoe UI', sans-serif;
-}
-span {
-  font-style: italic;
-}
-td {
-  padding: 0px 0px 0px 0px;
-}
-.btn {
-  width: 40px;
-  height: 40px;
-  margin: 5px;
-}
-.calculator-text {
-    text-align: center;
-}
 .calculator {
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  border: 2px solid black;
 }
-.display {
-  text-align: right;
-  font-family: monospace;
-  font-size: 16pt;
-  border: 2px solid black;
-}
-.zero {
-  width: 90px;
-}
-.equals {
-  height: 90px;
-}
+
+    .calculator body {
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .calculator span {
+        font-style: italic;
+    }
+
+    .calculator td {
+        padding: 0px 0px 0px 0px;
+    }
+
+    .calculator .device {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        border: 2px solid black;
+    }
+
+    .calculator .display {
+        text-align: right;
+        font-family: monospace;
+        font-size: 16pt;
+        border: 2px solid black;
+    }
+
+    .calculator .zero {
+        width: 90px;
+    }
+
+    .calculator .equals {
+        height: 90px;
+    }
+
+    .calculator .btn {
+        width: 40px;
+        height: 40px;
+        margin: 5px;
+    }
+
+    .calculator .text {
+        text-align: center;
+    }

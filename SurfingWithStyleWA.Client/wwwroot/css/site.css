@@ -121,6 +121,18 @@ app {
     text-align: center;
 }
 
+.timer {}
+
+    .timer .display {
+        font-size: 100px;
+    }
+
+    .timer .start {
+        height: 100px;
+        width: 100px;
+        font-size: xx-large;
+    }
+
 .kaypro10 {
     color: aquamarine;
     background-color: black;
