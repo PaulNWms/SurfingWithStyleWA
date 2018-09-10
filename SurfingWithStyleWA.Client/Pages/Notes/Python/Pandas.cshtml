@@ -42,6 +42,9 @@ df.duplicated()
 sum(df.duplicated())
 df.drop_duplicates(inplace=True)
 
+# find rows with nulls
+sum(df_08.isnull().any(axis=1))
+
 # convert text to datetime
 df['timestamp'] = pd.to_datetime(df['timestamp'])
 
@@ -82,4 +85,24 @@ df['acidity_levels'] = pd.cut(df['pH'], bin_edges, labels=bin_names)
 df_m = df[df['diagnosis'] == 'M']
 df_m = df.query('diagnosis == "M"')
 
+# get unique values in a column
+df_08.Fuel.unique()
+
+# drop columns from 2008 dataset
+df_08.drop(['Stnd', 'Underhood ID', 'FE Calc Appr', 'Unadj Cmb MPG'], axis=1, inplace=True)
+
+# rename Sales Area to Cert Region
+df_08.rename(index=str, columns={"Sales Area": "Cert Region"}, inplace=True)
+
+# replace spaces with underscores and lowercase labels for 2008 dataset
+df_08.rename(columns=lambda x: x.strip().lower().replace(" ", "_"), inplace=True)
+
+# confirm column labels for 2008 and 2018 datasets are identical
+df_08.columns == df_18.columns
+
+# make sure they're all identical like this
+(df_08.columns == df_18.columns).all()
+
+# drop rows with any null values
+df_08.dropna(inplace=True)
 </pre>
