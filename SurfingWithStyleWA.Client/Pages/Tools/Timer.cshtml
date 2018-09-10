@@ -88,7 +88,8 @@
     string RoundAndTrimDuration(TimeSpan span)
     {
         const double factor = 10000000;
-        long roundedTicks = (long)(Math.Round(Math.Max(span.Ticks, 0) / factor) * factor);
+        long boundedTicks = Math.Max(span.Ticks, 0);
+        long roundedTicks = (long)(Math.Round(boundedTicks / factor) * factor);
         TimeSpan roundedTimeSpan = new TimeSpan(roundedTicks);
         string str = roundedTimeSpan.ToString();
         int i = 0;
