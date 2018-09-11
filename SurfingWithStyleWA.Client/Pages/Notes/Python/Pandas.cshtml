@@ -105,4 +105,35 @@ df_08.columns == df_18.columns
 
 # drop rows with any null values
 df_08.dropna(inplace=True)
+
+# check values in a specific column
+df_08['cyl'].value_counts()
+
+# Extract int from strings in the 2008 cyl column
+df_08['cyl'] = df_08['cyl'].str.extract('(\d+)').astype(int)
+
+# merge datasets
+df_combined = df_08.merge(df_18, left_on='model_2008', right_on='model', how='inner')
+
+# Cookbook recipe: convert type of multiple columns
+mpg_columns = ['city_mpg', 'hwy_mpg', 'cmb_mpg']
+for c in mpg_columns:
+    df_18[c] = df_18[c].astype(float)
+    df_08[c] = df_08[c].astype(float)
+
+# Cookbook recipe: fix data with 2 entries in one field
+hb_08 = df_08[df_08['fuel'].str.contains('/')]
+df1 = hb_08.copy()  # data on first fuel type of each hybrid vehicle
+df2 = hb_08.copy()  # data on second fuel type of each hybrid vehicle
+# columns to split by "/"
+split_columns = ['fuel', 'air_pollution_score', 'city_mpg', 'hwy_mpg', 'cmb_mpg', 'greenhouse_gas_score']
+# apply split function to each column of each dataframe copy
+for c in split_columns:
+    df1[c] = df1[c].apply(lambda x: x.split("/")[0])
+    df2[c] = df2[c].apply(lambda x: x.split("/")[1])
+new_rows = df1.append(df2)
+# drop the original hybrid rows
+df_08.drop(hb_08.index, inplace=True)
+# add in our newly separated rows
+df_08 = df_08.append(new_rows, ignore_index=True)
 </pre>
