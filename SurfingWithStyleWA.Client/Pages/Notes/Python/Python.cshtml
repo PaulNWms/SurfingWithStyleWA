@@ -465,4 +465,10 @@ Magic keywords
 jupyter nbconvert --to html notebook.ipynb
 jupyter nbconvert notebook.ipynb --to slides
 jupyter nbconvert notebook.ipynb --to slides --post serve
+
+# Cookbook recipe: read in CSV into a list of dict
+import unicodecsv
+with open(enrollments_filename, 'rb') as f:
+    reader = unicodecsv.DictReader(f)
+    enrollments = list(reader)
 </pre>
