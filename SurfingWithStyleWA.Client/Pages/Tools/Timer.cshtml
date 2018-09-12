@@ -118,7 +118,7 @@
         timerDisplay = RoundAndTrimDuration(duration);
         JSRuntime.Current.InvokeAsync<object>("setTitle", timerDisplay);
 
-        if (duration.TotalSeconds <= 0)
+        if (timerDisplay == "0:00")
         {
             TimerExpired();
         }
@@ -140,8 +140,19 @@
         switch (timerStatus)
         {
             case TimerState.stopped:
+                try
+                {
+                    int minutes = int.Parse(formattedDuration);
+                    duration = new TimeSpan(0, minutes, 0);
+                }
+                catch
+                {
+                    duration = new TimeSpan(0, 25, 0);
+                }
+
                 targetTime = DateTime.Now + duration;
                 JSRuntime.Current.InvokeAsync<object>("uncolorBody");
+                timerDisplay = RoundAndTrimDuration(duration);
                 UpdateButton(TimerState.running);
                 timer.Start();
                 break;
