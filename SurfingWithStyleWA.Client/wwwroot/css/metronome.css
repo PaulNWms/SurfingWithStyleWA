@@ -1,0 +1,101 @@
+﻿.unpad {
+    padding: unset;
+}
+
+.tempo-slider-container {
+    width: 100%;
+    padding-top: 15px;
+    display: inline-block;
+}
+
+/* Use ID to override bootstrap */
+#tempo-slider {
+    display: inline;
+}
+
+.tempo-slider {
+    float: none;
+}
+
+.metronome {
+    width: 100px;
+    height: 450px;
+    margin: 0;
+    background-color: brown;
+}
+
+.pendulum-crossbar {
+    width: 100px;
+    position: absolute;
+    top: 330px;
+    text-align: center;
+}
+
+.pendulum-grandparent {
+    display: inline-block;
+}
+
+.pendulum-child {
+    width: 71px;
+    height: 420px;
+    background-image: url(/Content/Images/pendulum.png);
+    position: absolute;
+    left: -25px;
+    top: -320px;
+}
+
+.pendulum-parent {
+    width: 22px;
+    height: 22px;
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .metronome {
+        width: 50px;
+        height: 225px;
+    }
+
+    .pendulum-crossbar {
+        width: 50px;
+        top: 165px;
+    }
+
+    .pendulum-child {
+        width: 36px;
+        height: 210px;
+        background-size: contain;
+        left: -12px;
+        top: -160px;
+    }
+
+    .pendulum-parent {
+        width: 11px;
+        height: 11px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .metronome {
+        width: 75px;
+        height: 338px;
+    }
+
+    .pendulum-crossbar {
+        width: 75px;
+        top: 248px;
+    }
+
+    .pendulum-child {
+        width: 53px;
+        height: 315px;
+        background-size: contain;
+        left: -19px;
+        top: -240px;
+    }
+
+    .pendulum-parent {
+        width: 16px;
+        height: 16px;
+    }
+}
