@@ -9,7 +9,7 @@
     <div class="row">
         <div class="offset-2 col-8 jumbotron text-center">
             <div class="row">
-                <button class="offset-3 btn btn-primary btn-lg start" type="button"><span class="oi @buttonFace"></span></button>
+                <button class="offset-3 btn btn-primary btn-lg start" type="button" onclick="@StartMetronome"><span class="oi @buttonFace"></span></button>
                 <h1 class="offset-1 display"><span class="display">@tempo</span></h1>
             </div>
             <div class="row tempo-slider-container">
@@ -51,9 +51,42 @@
 </article>
 
 @functions {
+    enum TimerState { stopped, running, paused, continuing, settling };
+
+    TimerState timerStatus = TimerState.stopped;
     string buttonFace = "oi-media-play";
     int tempo = 120;
 
     void DecrementTempo() { tempo--; }
     void IncrementTempo() { tempo++; }
+
+    void StartMetronome()
+    {
+        switch (timerStatus)
+        {
+            case TimerState.stopped:
+                buttonFace = "oi-media-pause";
+                timerStatus = TimerState.running;
+                break;
+
+            case TimerState.continuing:
+                break;
+
+            case TimerState.settling:
+                break;
+
+            case TimerState.paused:
+                buttonFace = "oi-media-pause";
+                timerStatus = TimerState.running;
+                break;
+
+            case TimerState.running:
+                buttonFace = "oi-media-play";
+                timerStatus = TimerState.paused;
+                break;
+
+            default:
+                break;
+        }
+    }
 }
