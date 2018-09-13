@@ -5,24 +5,38 @@
 .tempo-slider-container {
     width: 100%;
     padding-top: 15px;
-    display: inline-block;
 }
 
 /* Use ID to override bootstrap */
-#tempo-slider {
+/*#tempo-slider {
     display: inline;
-}
+}*/
 
 .tempo-slider {
     float: none;
+    width: 100%;
+    vertical-align: middle;
 }
 
-.metronome {
+.metronome-object {
     width: 100px;
     height: 450px;
     margin: 0;
     background-color: brown;
 }
+
+.metronome {
+}
+
+    .metronome .display {
+        font-size: 80px;
+    }
+
+    .metronome .start {
+        height: 100px;
+        width: 100px;
+        font-size: xx-large;
+    }
 
 .pendulum-crossbar {
     width: 100px;

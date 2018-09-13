@@ -124,7 +124,7 @@ app {
 .timer {}
 
     .timer .display {
-        font-size: 100px;
+        font-size: 80px;
     }
 
     .timer .start {
