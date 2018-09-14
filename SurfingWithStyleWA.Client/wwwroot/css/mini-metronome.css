@@ -1,0 +1,68 @@
+﻿.mini-metronome {
+}
+
+    .mini-metronome .unpad {
+        padding: unset;
+    }
+
+    .mini-metronome .tempo-slider-container {
+        width: 100%;
+        padding-top: 15px;
+        display: inline-block;
+    }
+
+    .mini-metronome .metronome-object {
+        width: 50px;
+        height: 225px;
+        margin: 0;
+        background-color: brown;
+    }
+
+    .mini-metronome .pendulum-crossbar {
+        width: 50px;
+        top: 235px;
+        position: absolute;
+        text-align: center;
+    }
+
+    .mini-metronome .pendulum-grandparent {
+        display: inline-block;
+    }
+
+    .mini-metronome .pendulum-child {
+        width: 36px;
+        height: 210px;
+        background-image: url('../images/pendulum.png');
+        position: absolute;
+        background-size: contain;
+        left: -12px;
+        top: -160px;
+    }
+
+    .mini-metronome .pendulum-parent {
+        width: 11px;
+        height: 11px;
+        display: block;
+        transform: rotate(0deg) scale(1);
+        -webkit-transform-origin: 50% 50%;
+        transform-origin: 50% 50%;
+        animation-direction: alternate;
+    }
+
+    .mini-metronome .tempo {
+        width: 3em;
+        padding-left: 0.3em;
+        padding-right: 0.3em;
+    }
+
+    .mini-metronome .minutes {
+        width: 2em;
+        padding-left: 0.3em;
+        padding-right: 0.3em;
+    }
+
+    .mini-metronome .duration {
+        width: 3em;
+        padding-left: 0.3em;
+        padding-right: 0.3em;
+    }
