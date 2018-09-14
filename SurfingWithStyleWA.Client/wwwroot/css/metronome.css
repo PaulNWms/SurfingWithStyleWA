@@ -1,27 +1,27 @@
-﻿.unpad {
-    padding: unset;
+﻿.metronome {
 }
 
-.tempo-slider-container {
-    width: 100%;
-    padding-top: 15px;
-}
+    .metronome .unpad {
+        padding: unset;
+    }
 
-.tempo-slider {
-    float: none;
-    width: 100%;
-    vertical-align: middle;
-}
+    .metronome .tempo-slider-container {
+        width: 100%;
+        padding-top: 15px;
+    }
 
-.metronome-object {
-    width: 100px;
-    height: 450px;
-    margin: 0;
-    background-color: brown;
-}
+    .metronome .tempo-slider {
+        float: none;
+        width: 100%;
+        vertical-align: middle;
+    }
 
-.metronome {
-}
+    .metronome .metronome-object {
+        width: 100px;
+        height: 450px;
+        margin: 0;
+        background-color: brown;
+    }
 
     .metronome .display {
         font-size: 80px;
@@ -33,27 +33,37 @@
         font-size: xx-large;
     }
 
-.pendulum-crossbar {
-    width: 100px;
-    position: absolute;
-    top: 330px;
-    text-align: center;
-}
+    .metronome .pendulum-crossbar {
+        width: 100px;
+        position: absolute;
+        top: 330px;
+        text-align: center;
+    }
 
-.pendulum-grandparent {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-}
+    .metronome .pendulum-grandparent {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+    }
 
-.pendulum-child {
-    width: 71px;
-    height: 420px;
-    background-image: url('../images/pendulum.png');
-    position: absolute;
-    left: -25px;
-    top: -320px;
-}
+    .metronome .pendulum-child {
+        width: 71px;
+        height: 420px;
+        background-image: url('../images/pendulum.png');
+        position: absolute;
+        left: -25px;
+        top: -320px;
+    }
+
+    .metronome .pendulum-parent {
+        width: 20px;
+        height: 20px;
+        display: block;
+        transform: rotate(0deg) scale(1);
+        -webkit-transform-origin: 50% 50%;
+        transform-origin: 50% 50%;
+        animation-direction: alternate;
+    }
 
 @keyframes swing0 {
     0% {
@@ -79,16 +89,6 @@
     100% {
         transform: rotate(0deg);
     }
-}
-
-.pendulum-parent {
-    width: 20px;
-    height: 20px;
-    display: block;
-    transform: rotate(0deg) scale(1);
-    -webkit-transform-origin: 50% 50%;
-    transform-origin: 50% 50%;
-    animation-direction: alternate;
 }
 
 @media (max-width: 767px) {

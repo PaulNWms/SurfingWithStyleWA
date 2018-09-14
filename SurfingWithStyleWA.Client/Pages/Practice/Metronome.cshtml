@@ -35,7 +35,7 @@
             <div class="metronome-object">
                 <div class="pendulum-crossbar">
                     <div class="pendulum-grandparent">
-                        <div id="pendulum-parent" class="pendulum-parent">
+                        <div class="pendulum-parent">
                             <div class="pendulum-child"></div>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
 </article>
 
 @functions {
-    enum TimerState { Stopped, Running, Paused, Continuing, Settling };
+    enum TimerState { Stopped, Running, Paused };
 
     const int MIN_TEMPO = 20;
     const int MAX_TEMPO = 240;
@@ -73,7 +73,7 @@
         {
             _tempo = value;
             duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
-            IsRunning = IsRunning;
+            SetAnimation();
         }
     }
 
@@ -87,17 +87,7 @@
         set
         {
             _isRunning = value;
-            if (_isRunning)
-            {
-                if (animation == "swing0")
-                    animation = "swing1";
-                else
-                    animation = "swing0";
-            }
-            else
-            {
-                animation = "none";
-            }
+            SetAnimation();
         }
     }
 
@@ -113,6 +103,21 @@
     void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
     void IncrementTempo() { Tempo = Math.Min(Tempo + 1, MAX_TEMPO); }
 
+    void SetAnimation()
+    {
+        if (IsRunning)
+        {
+            if (animation == "swing0")
+                animation = "swing1";
+            else
+                animation = "swing0";
+        }
+        else
+        {
+            animation = "none";
+        }
+    }
+
     void StartMetronome()
     {
         switch (status)
@@ -121,12 +126,6 @@
                 buttonFace = "oi-media-pause";
                 status = TimerState.Running;
                 IsRunning = true;
-                break;
-
-            case TimerState.Continuing:
-                break;
-
-            case TimerState.Settling:
                 break;
 
             case TimerState.Paused:

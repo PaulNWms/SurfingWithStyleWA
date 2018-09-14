@@ -28,18 +28,18 @@
         border: 2px solid black;
     }
 
+    .calculator .btn {
+        width: 40px;
+        height: 40px;
+        margin: 5px;
+    }
+
     .calculator .zero {
         width: 90px;
     }
 
     .calculator .equals {
         height: 90px;
-    }
-
-    .calculator .btn {
-        width: 40px;
-        height: 40px;
-        margin: 5px;
     }
 
     .calculator .text {
