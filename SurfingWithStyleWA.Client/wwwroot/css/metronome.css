@@ -55,33 +55,19 @@
     top: -320px;
 }
 
-@-webkit-keyframes swing {
+@keyframes swing0 {
     0% {
-        -webkit-transform: rotate(40deg);
-    }
-
-    50% {
-        -webkit-transform: rotate(-40deg)
+        transform: rotate(-40deg);
     }
 
     100% {
-        -webkit-transform: rotate(40deg);
-    }
-}
-
-@-webkit-keyframes stop {
-    100% {
-        -webkit-transform: rotate(0deg);
-    }
-}
-
-@keyframes swing {
-    0% {
         transform: rotate(40deg);
     }
+}
 
-    50% {
-        transform: rotate(-40deg)
+@keyframes swing1 {
+    0% {
+        transform: rotate(-40deg);
     }
 
     100% {
@@ -95,7 +81,6 @@
     }
 }
 
-
 .pendulum-parent {
     width: 20px;
     height: 20px;
@@ -103,6 +88,7 @@
     transform: rotate(0deg) scale(1);
     -webkit-transform-origin: 50% 50%;
     transform-origin: 50% 50%;
+    animation-direction: alternate;
 }
 
 @media (max-width: 767px) {

@@ -2,11 +2,9 @@
 
 <style>
     .pendulum-parent {
-        -webkit-animation: @animation @duration ease-in-out forwards infinite;
-        animation: @animation @duration ease-in-out forwards infinite;
+        animation: @animation @duration ease-in-out alternate infinite;
     }
 </style>
-
 <article class="narrow-article metronome" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
     @*@{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}*@
     <meta itemprop="applicationCategory" content="Tool, Multimedia" />
@@ -62,10 +60,11 @@
 
     const int MIN_TEMPO = 20;
     const int MAX_TEMPO = 240;
-    TimerState timerStatus = TimerState.stopped;
+    TimerState status = TimerState.stopped;
     string buttonFace = "oi-media-play";
-    string animation = "stop";
-    string duration = "500ms";
+    string animation = "none";
+    string playState = "paused";
+    string duration = "1000ms";
 
     int _tempo = 120;
     int Tempo
@@ -78,6 +77,31 @@
         {
             _tempo = value;
             duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
+            IsRunning = IsRunning;
+        }
+    }
+
+    bool _isRunning = false;
+    bool IsRunning
+    {
+        get
+        {
+            return _isRunning;
+        }
+        set
+        {
+            _isRunning = value;
+            if (_isRunning)
+            {
+                if (animation == "swing0")
+                    animation = "swing1";
+                else
+                    animation = "swing0";
+            }
+            else
+            {
+                animation = "none";
+            }
         }
     }
 
@@ -86,12 +110,12 @@
 
     void StartMetronome()
     {
-        switch (timerStatus)
+        switch (status)
         {
             case TimerState.stopped:
                 buttonFace = "oi-media-pause";
-                timerStatus = TimerState.running;
-                animation = "swing";
+                status = TimerState.running;
+                IsRunning = true;
                 break;
 
             case TimerState.continuing:
@@ -102,14 +126,14 @@
 
             case TimerState.paused:
                 buttonFace = "oi-media-pause";
-                timerStatus = TimerState.running;
-                animation = "swing";
+                status = TimerState.running;
+                IsRunning = true;
                 break;
 
             case TimerState.running:
                 buttonFace = "oi-media-play";
-                timerStatus = TimerState.paused;
-                animation = "stop";
+                status = TimerState.paused;
+                IsRunning = false;
                 break;
 
             default:
