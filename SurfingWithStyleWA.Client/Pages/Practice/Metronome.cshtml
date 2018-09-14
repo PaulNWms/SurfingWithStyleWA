@@ -35,7 +35,7 @@
             <div class="metronome-object">
                 <div class="pendulum-crossbar">
                     <div class="pendulum-grandparent">
-                        <div class="pendulum-parent">
+                        <div id="pendulum-parent" class="pendulum-parent">
                             <div class="pendulum-child"></div>
                         </div>
                     </div>
@@ -45,26 +45,22 @@
     </div>
     <div class="row">
         <audio class="downbeat-click" preload="auto" hidden="hidden">
-            <source src="~/Content/Audio/downbeatClick.wav" type="audio/wav">
-            <source src="~/Content/Audio/downbeatClick.mp3" type="audio/mp3">
-        </audio>
-        <audio class="upbeat-click" preload="auto" hidden="hidden">
-            <source src="~/Content/Audio/upbeatClick.wav" type="audio/wav">
-            <source src="~/Content/Audio/upbeatClick.mp3" type="audio/mp3">
+            <source src="audio/downbeatClick.wav" type="audio/wav">
+            <source src="audio/downbeatClick.mp3" type="audio/mp3">
         </audio>
     </div>
 </article>
 
 @functions {
-    enum TimerState { stopped, running, paused, continuing, settling };
+    enum TimerState { Stopped, Running, Paused, Continuing, Settling };
 
     const int MIN_TEMPO = 20;
     const int MAX_TEMPO = 240;
-    TimerState status = TimerState.stopped;
+    TimerState status = TimerState.Stopped;
     string buttonFace = "oi-media-play";
     string animation = "none";
-    string playState = "paused";
-    string duration = "1000ms";
+    string duration = "500ms";
+    bool initialized;
 
     int _tempo = 120;
     int Tempo
@@ -105,6 +101,15 @@
         }
     }
 
+    protected override void OnAfterRender()
+    {
+        if (!initialized)
+        {
+            JSRuntime.Current.InvokeAsync<object>("registerListener");
+            initialized = true;
+        }
+    }
+
     void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
     void IncrementTempo() { Tempo = Math.Min(Tempo + 1, MAX_TEMPO); }
 
@@ -112,27 +117,27 @@
     {
         switch (status)
         {
-            case TimerState.stopped:
+            case TimerState.Stopped:
                 buttonFace = "oi-media-pause";
-                status = TimerState.running;
+                status = TimerState.Running;
                 IsRunning = true;
                 break;
 
-            case TimerState.continuing:
+            case TimerState.Continuing:
                 break;
 
-            case TimerState.settling:
+            case TimerState.Settling:
                 break;
 
-            case TimerState.paused:
+            case TimerState.Paused:
                 buttonFace = "oi-media-pause";
-                status = TimerState.running;
+                status = TimerState.Running;
                 IsRunning = true;
                 break;
 
-            case TimerState.running:
+            case TimerState.Running:
                 buttonFace = "oi-media-play";
-                status = TimerState.paused;
+                status = TimerState.Paused;
                 IsRunning = false;
                 break;
 

@@ -47,9 +47,9 @@
 </audio>
 
 @functions {
-    enum TimerState { stopped, running, paused };
+    enum TimerState { Stopped, Running, Paused };
 
-    TimerState timerStatus = TimerState.stopped;
+    TimerState timerStatus = TimerState.Stopped;
     TimeSpan duration = new TimeSpan(0, 25, 0);
     DateTime targetTime = DateTime.Now;
     string timerDisplay = "25:00";
@@ -74,12 +74,12 @@
         timerStatus = state;
         switch (timerStatus)
         {
-            case TimerState.stopped:
-            case TimerState.paused:
+            case TimerState.Stopped:
+            case TimerState.Paused:
                 buttonFace = "oi-media-play";
                 break;
 
-            case TimerState.running:
+            case TimerState.Running:
                 buttonFace = "oi-media-pause";
                 break;
         }
@@ -108,7 +108,7 @@
         duration = new TimeSpan(0, minutes, 0);
         formattedDuration = minutes.ToString();
         timerDisplay = RoundAndTrimDuration(duration);
-        UpdateButton(TimerState.stopped);
+        UpdateButton(TimerState.Stopped);
         timer.Stop();
     }
 
@@ -130,8 +130,8 @@
     {
         targetTime = DateTime.Now;
         JSRuntime.Current.InvokeAsync<object>("colorBody");
-        JSRuntime.Current.InvokeAsync<object>("playBell");
-        UpdateButton(TimerState.stopped);
+        JSRuntime.Current.InvokeAsync<object>("playAudio");
+        UpdateButton(TimerState.Stopped);
         timer.Stop();
     }
 
@@ -139,7 +139,7 @@
     {
         switch (timerStatus)
         {
-            case TimerState.stopped:
+            case TimerState.Stopped:
                 try
                 {
                     int minutes = int.Parse(formattedDuration);
@@ -153,18 +153,18 @@
                 targetTime = DateTime.Now + duration;
                 JSRuntime.Current.InvokeAsync<object>("uncolorBody");
                 timerDisplay = RoundAndTrimDuration(duration);
-                UpdateButton(TimerState.running);
+                UpdateButton(TimerState.Running);
                 timer.Start();
                 break;
 
-            case TimerState.running:
-                UpdateButton(TimerState.paused);
+            case TimerState.Running:
+                UpdateButton(TimerState.Paused);
                 timer.Stop();
                 break;
 
-            case TimerState.paused:
+            case TimerState.Paused:
                 targetTime = DateTime.Now + duration;
-                UpdateButton(TimerState.running);
+                UpdateButton(TimerState.Running);
                 timer.Start();
                 break;
         }
