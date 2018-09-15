@@ -156,6 +156,7 @@
         schedule = new Schedule(uri);
         url2 = schedule.ToUrl();
         exerciseMarkup = schedule.ToHtml();
+        this.StateHasChanged();
     }
 
     protected override void OnAfterRender()
@@ -165,6 +166,8 @@
         if (!initialized)
         {
             JSRuntime.Current.InvokeAsync<object>("registerListener");
+            string newRow = string.Format(Schedule.HTML_TEMPLATE, 120, "2:00", string.Empty);
+            JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", newRow);
             initialized = true;
         }
     }
@@ -360,7 +363,7 @@
 
         const string URL_TEMPLATE = "{0}?r={1}&s={2}&b={3}&t={4}&d={5}&e={6}";
 
-        const string HTML_TEMPLATE = @"                        <tr>
+        public const string HTML_TEMPLATE = @"                        <tr>
                     <td>
                         <button type='button' class='btn btn-primary delete-form-row' style='margin-top:0.2em;margin-right:0.2em'><span class='oi oi-x'></span></button>
                     </td>
@@ -375,7 +378,7 @@
                         <input type='text' style='margin-top:0.2em;margin-right:0.2em' class='form-control exercise' id='exercise' placeholder='Exercise' value='{2}' />
                     </td>
                     <td>
-                        <button type='button' class='btn btn-primary add-form-row' style='margin-top:0.2em'><span class='oi oi-plus'></span></button>
+                        <button type='button' class='btn btn-primary add-form-row' style='margin-top:0.2em' onclick='@AddRow'><span class='oi oi-plus'></span></button>
                     </td>
                 </tr>";
     }
