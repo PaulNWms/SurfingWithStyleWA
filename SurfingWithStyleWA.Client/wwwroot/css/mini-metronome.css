@@ -18,6 +18,16 @@
         background-color: brown;
     }
 
+    .mini-metronome .display {
+        font-size: 80px;
+    }
+
+    .mini-metronome .start {
+        height: 100px;
+        width: 100px;
+        font-size: xx-large;
+    }
+
     .mini-metronome .pendulum-crossbar {
         width: 50px;
         top: 235px;
