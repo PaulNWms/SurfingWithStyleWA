@@ -60,16 +60,16 @@
         </table>
         <div class="row form-group offset-2 col-7">
             <label for="Rest">Rest between exercises (sec.): </label>
-            <input name="Rest" class="form-control digit-filter rest" id="rest" type="text" value="@rest"
+            <input name="Rest" class="form-control digit-filter rest" id="rest" type="text" value="@schedule.Rest"
                    style="width:3em;margin-top:0.2em;padding-left:0.3em;padding-right:0.3em;">
         </div>
         <div class="row form-group offset-2 col-7">
             <label for="StartRoutineWithRest">Start routine with a rest: </label>
-            <input name="StartRoutineWithRest" class="start-with-rest" id="StartRoutineWithRest" type="checkbox" bind="@startWithRest" />
+            <input name="StartRoutineWithRest" class="start-with-rest" id="StartRoutineWithRest" type="checkbox" bind="@schedule.StartWithRest" />
         </div>
         <div class="row form-group offset-2 col-7">
             <label for="EndExerciseWithBell">End each exercise with a bell: </label>
-            <input name="EndExerciseWithBell" class="end-with-bell" id="EndExerciseWithBell" type="checkbox" bind="@endWithBell" />
+            <input name="EndExerciseWithBell" class="end-with-bell" id="EndExerciseWithBell" type="checkbox" bind="@schedule.EndWithBell" />
         </div>
         <div class="row offset-2 col-7">
             <div class="form-group">
@@ -113,12 +113,8 @@
     string animation = "none";
     string duration = "500ms";
     bool initialized;
-    int rest;
-    bool startWithRest;
-    bool endWithBell;
     Schedule schedule;
     string exerciseMarkup;
-    Uri uri;
     string url;
     string url2;
 
@@ -155,10 +151,10 @@
     {
         base.OnInit();
 
-        uri = new Uri(UriHelper.GetAbsoluteUri());
+        Uri uri = new Uri(UriHelper.GetAbsoluteUri());
         url = uri.PathAndQuery;
-        schedule = new Schedule(uri, out rest, out startWithRest, out endWithBell);
-        url2 = schedule.ToUrl(uri, rest, startWithRest, endWithBell);
+        schedule = new Schedule(uri);
+        url2 = schedule.ToUrl();
         exerciseMarkup = schedule.ToHtml();
     }
 
@@ -225,14 +221,20 @@
 
     class Schedule
     {
+        private Uri uri;
+        public int Rest;
+        public bool StartWithRest;
+        public bool EndWithBell;
+
         private List<Exercise> exercises = new List<Exercise>();
 
-        public Schedule(Uri uri, out int rest, out bool startWithRest, out bool endWithBell)
+        public Schedule(Uri uri)
         {
-            var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
-            rest = 5;
-            startWithRest = true;
-            endWithBell = true;
+            this.uri = uri;
+            var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(this.uri.Query);
+            this.Rest = 5;
+            this.StartWithRest = true;
+            this.EndWithBell = true;
             int[] tempos = null;
             TimeSpan[] durations = null;
             string[] exes = null;
@@ -244,14 +246,17 @@
                     switch (key)
                     {
                         case "r":
-                            int.TryParse(query["r"].ToString(), out rest);
+                            int.TryParse(query["r"].ToString(), out this.Rest);
                             break;
+
                         case "s":
-                            bool.TryParse(query["s"].ToString(), out startWithRest);
+                            bool.TryParse(query["s"].ToString(), out this.StartWithRest);
                             break;
+
                         case "b":
-                            bool.TryParse(query["b"].ToString(), out endWithBell);
+                            bool.TryParse(query["b"].ToString(), out this.EndWithBell);
                             break;
+
                         case "t":
                             {
                                 string[] strs = query["t"].ToString().Split('-');
@@ -274,6 +279,7 @@
                                 tempos = ts.ToArray();
                             }
                             break;
+
                         case "d":
                             {
                                 string[] strs = query["d"].ToString().Split('-');
@@ -296,6 +302,7 @@
                                 durations = durs.ToArray();
                             }
                             break;
+
                         case "e":
                             exes = query["e"].ToString().Split('-');
                             break;
@@ -313,7 +320,7 @@
             }
         }
 
-        public string ToUrl(Uri uri, int rest, bool startWithRest, bool endWithBell)
+        public string ToUrl()
         {
             // r=5&s=true&b=true&t=120-69&d=120-60&e=Analyzer%20Single%20Stroke%20Roll-lkjh
             List<int> tempos = new List<int>(exercises.Count);
@@ -331,9 +338,9 @@
             string ds = string.Join("-", durations.Select(d => (int)d.TotalSeconds));
             string es = string.Join("-", descriptions.Select(e => Uri.EscapeUriString(e)));
             return String.Format(URL_TEMPLATE, uri.AbsolutePath,
-                rest,
-                startWithRest.ToString().ToLower(),
-                endWithBell.ToString().ToLower(),
+                this.Rest,
+                this.StartWithRest.ToString().ToLower(),
+                this.EndWithBell.ToString().ToLower(),
                 ts, ds, es);
         }
 
