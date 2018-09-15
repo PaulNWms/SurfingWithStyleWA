@@ -17,7 +17,7 @@
                 <button class="offset-3 btn btn-primary btn-lg start" type="button" onclick="@StartMetronome"><span class="oi @buttonFace"></span></button>
                 <h1 class="offset-1 display"><span class="display">@Tempo</span></h1>
             </div>
-            <br/>
+            <br />
             <div class="row">
                 <h2 class="col-3">
                     <span class="timer-display">0:00</span>
@@ -49,46 +49,23 @@
                     <tr><th></th><th>Tempo</th><th>Time</th><th>Exercise</th><th></th></tr>
                 </thead>
                 <tbody class="schedule">
-                    @*@for (int i = 0; i < Model.Rows.Count(); i++)
-                        {
-                            <tr>
-                                <td>
-                                    <button type="button" class="btn btn-primary delete-form-row" style="margin-top:0.2em;margin-right:0.2em"><span class="glyphicon glyphicon-remove"></span></button>
-                                </td>
-                                <td>
-                                    @Html.TextBoxFor(m => m.Rows[i].Tempo[0], new { @style = "width:3em;margin-top:0.2em;margin-right:0.2em;padding-left:0.3em;padding-right:0.3em", @class = "form-control digit-filter tempo-0", @placeholder = "Tempo", @autocomplete = "off" })
-                                </td>
-                                <td>
-                                    <input type="text" style="width:3.5em;margin-top:0.2em;margin-right:0.2em;padding-left:0.5em;padding-right:0.5em" class="form-control time-filter midpoint-0" id="midpoint-0" placeholder="Duration" autocomplete="off" value="0:00" />
-                                    @Html.HiddenFor(m => m.Rows[i].Seconds[0], new { @class = "midpoint-0-sec" })
-                                </td>
-                                <td>
-                                    @Html.TextBoxFor(m => m.Rows[i].Exercise, new { @style = "margin-top:0.2em;margin-right:0.2em", @class = "form-control exercise", @placeholder = "Exercise" })
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-primary add-form-row" style="margin-top:0.2em"><span class="glyphicon glyphicon-plus"></span></button>
-                                </td>
-                            </tr>
-                        }*@
+                    @((MarkupString)exerciseMarkup)
                 </tbody>
             </table>
-            <div class="row">
-                <div class="form-group offset-1 col-10">
-                    @*@Html.LabelFor(m => m.Rest)
-                        @Html.TextBoxFor(m => m.Rest, new { @style = "width:3em;margin-top:0.2em;padding-left=0.3em;padding-right=0.3em;", @class = "form-control digit-filter rest", @id = "rest", @placeholder = "5", @autocomplete = "off" })*@
-                </div>
+            <div class="row form-group offset-2 col-8">
+                <label for="Rest">Rest between exercises (sec.): </label>
+                <input name="Rest" class="form-control digit-filter rest" id="rest" type="text" value="@rest"
+                       style="width:3em;margin-top:0.2em;padding-left:0.3em;padding-right:0.3em;">
             </div>
-            <div class="row">
-                <div class="form-group offset-1 col-10">
-                    @*@Html.LabelFor(m => m.StartRoutineWithRest)
-                        @Html.CheckBoxFor(m => m.StartRoutineWithRest, new { @class = "start-with-rest" })*@
-                </div>
+            <div class="row form-group offset-2 col-8">
+                <label for="StartRoutineWithRest">Start routine with a rest: </label>
+                <input name="StartRoutineWithRest" class="start-with-rest" id="StartRoutineWithRest" type="checkbox"
+                       checked="checked" value="@startWithRest">
             </div>
-            <div class="row">
-                <div class="form-group offset-1 col-10">
-                    @*@Html.LabelFor(m => m.EndExerciseWithBell)
-                        @Html.CheckBoxFor(m => m.EndExerciseWithBell, new { @class = "end-with-bell" })*@
-                </div>
+            <div class="row form-group offset-2 col-8">
+                <label for="EndExerciseWithBell">End each exercise with a bell: </label>
+                <input name="EndExerciseWithBell" class="end-with-bell" id="EndExerciseWithBell" type="checkbox"
+                       checked="checked" value="@endWithBell">
             </div>
             <div class="row offset-1 col-10">
                 <div class="form-group">
@@ -124,6 +101,11 @@
     string animation = "none";
     string duration = "500ms";
     bool initialized;
+    int rest = 5;
+    bool startWithRest = true;
+    bool endWithBell = true;
+    List<Schedule> exercises = new List<Schedule>();
+    string exerciseMarkup;
 
     int _tempo = 120;
     int Tempo
@@ -154,8 +136,25 @@
         }
     }
 
+    protected override void OnInit()
+    {
+        base.OnInit();
+
+        exercises.Add(new Schedule());
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+        foreach (var exercise in exercises)
+        {
+            sb.AppendLine(exercise.ToString());
+        }
+
+        exerciseMarkup = sb.ToString();
+    }
+
     protected override void OnAfterRender()
     {
+        base.OnAfterRender();
+
         if (!initialized)
         {
             JSRuntime.Current.InvokeAsync<object>("registerListener");
@@ -210,6 +209,26 @@
 
     class Schedule
     {
-
+        public override string ToString()
+        {
+            return @"                        <tr>
+                            <td>
+                                <button type='button' class='btn btn-primary delete-form-row' style='margin-top:0.2em;margin-right:0.2em'><span class='oi oi-x'></span></button>
+                            </td>
+                            <td>
+                                <input type='text' style='width:3em;margin-top:0.2em;margin-right:0.2em;padding-left:0.3em;padding-right:0.3em' class='form-control digit-filter tempo tempo-0' id='tempo-0' placeholder='Tempo' autocomplete='off' value='120' />
+                            </td> 
+                            <td>
+                                <input type='text' style='width:3.5em;margin-top:0.2em;margin-right:0.2em;padding-left:0.5em;padding-right:0.5em' class='form-control time-filter midpoint-0' id='midpoint-0' placeholder='Duration' autocomplete='off' value='2:00' />
+                                <input type='hidden'class='midpoint-0-sec' />
+                            </td> 
+                            <td>
+                                <input type='text' style='margin-top:0.2em;margin-right:0.2em' class='form-control exercise' id='exercise' placeholder='Exercise'/>
+                            </td>
+                            <td>
+                                <button type='button' class='btn btn-primary add-form-row' style='margin-top:0.2em'><span class='oi oi-plus'></span></button>
+                            </td>
+                        </tr>";
+        }
     }
 }
