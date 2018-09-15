@@ -81,6 +81,11 @@
                 href="@url"
             </div>
         </div>
+        <div class="row offset-2 col-7">
+            <div class="form-group">
+                href="@url2"
+            </div>
+        </div>
     </div>
     <div class="row">
         <audio class="downbeat-click" preload="auto" hidden="hidden">
@@ -115,6 +120,7 @@
     string exerciseMarkup;
     Uri uri;
     string url;
+    string url2;
 
     int _tempo = 120;
     int Tempo
@@ -151,10 +157,9 @@
 
         uri = new Uri(UriHelper.GetAbsoluteUri());
         url = uri.PathAndQuery;
-        int r = rest;
-        schedule = new Schedule(uri, out r, out startWithRest, out endWithBell);
-        rest = r;
-        JSRuntime.Current.InvokeAsync<object>("alert", rest);
+        schedule = new Schedule(uri, out rest, out startWithRest, out endWithBell);
+        url2 = schedule.ToUrl(uri, rest, startWithRest, endWithBell);
+        exerciseMarkup = schedule.ToHtml();
     }
 
     protected override void OnAfterRender()
@@ -228,70 +233,150 @@
             rest = 5;
             startWithRest = true;
             endWithBell = true;
+            int[] tempos = null;
+            TimeSpan[] durations = null;
+            string[] exes = null;
 
-            foreach (var key in query.Keys)
+            if (query.ContainsKey("r"))
             {
-                switch (key)
+                foreach (var key in query.Keys)
                 {
-                    case "r":
-                        int.TryParse(query["r"].ToString(), out rest);
-                        break;
-                    case "s":
-                        bool.TryParse(query["s"].ToString(), out startWithRest);
-                        break;
-                    case "b":
-                        bool.TryParse(query["b"].ToString(), out endWithBell);
-                        break;
+                    switch (key)
+                    {
+                        case "r":
+                            int.TryParse(query["r"].ToString(), out rest);
+                            break;
+                        case "s":
+                            bool.TryParse(query["s"].ToString(), out startWithRest);
+                            break;
+                        case "b":
+                            bool.TryParse(query["b"].ToString(), out endWithBell);
+                            break;
+                        case "t":
+                            {
+                                string[] strs = query["t"].ToString().Split('-');
+                                List<int> ts = new List<int>(strs.Length);
+
+                                foreach (string str in strs)
+                                {
+                                    int tempo;
+
+                                    if (int.TryParse(str, out tempo))
+                                    {
+                                        ts.Add(tempo);
+                                    }
+                                    else
+                                    {
+                                        ts.Add(120);
+                                    }
+                                }
+
+                                tempos = ts.ToArray();
+                            }
+                            break;
+                        case "d":
+                            {
+                                string[] strs = query["d"].ToString().Split('-');
+                                List<TimeSpan> durs = new List<TimeSpan>(strs.Length);
+
+                                foreach (string str in strs)
+                                {
+                                    int sec;
+
+                                    if (int.TryParse(str, out sec))
+                                    {
+                                        durs.Add(new TimeSpan(0, 0, sec));
+                                    }
+                                    else
+                                    {
+                                        durs.Add(new TimeSpan(0, 0, 120));
+                                    }
+                                }
+
+                                durations = durs.ToArray();
+                            }
+                            break;
+                        case "e":
+                            exes = query["e"].ToString().Split('-');
+                            break;
+                    }
                 }
+
+                for (int i = 0; i < tempos.Length; i++)
+                {
+                    this.exercises.Add(new Exercise() { Tempo = tempos[i], Duration = durations[i], Description = exes[i] });
+                }
+            }
+            else
+            {
+                this.exercises.Add(new Exercise() { Tempo = 120, Duration = new TimeSpan(0, 2, 0), Description = string.Empty });
             }
         }
 
-        public string ToUrl(int rest, bool startWithRest, bool endWithBell)
+        public string ToUrl(Uri uri, int rest, bool startWithRest, bool endWithBell)
         {
             // r=5&s=true&b=true&t=120-69&d=120-60&e=Analyzer%20Single%20Stroke%20Roll-lkjh
-            string parameters = String.Format(URL_TEMPLATE,
-                rest, startWithRest, endWithBell, "T", "D", "E");
-            return parameters;
+            List<int> tempos = new List<int>(exercises.Count);
+            List<TimeSpan> durations = new List<TimeSpan>(exercises.Count);
+            List<string> descriptions = new List<string>(exercises.Count);
+
+            foreach (var exercise in exercises)
+            {
+                tempos.Add(exercise.Tempo);
+                durations.Add(exercise.Duration);
+                descriptions.Add(exercise.Description);
+            }
+
+            string ts = string.Join("-", tempos);
+            string ds = string.Join("-", durations.Select(d => (int)d.TotalSeconds));
+            string es = string.Join("-", descriptions.Select(e => Uri.EscapeUriString(e)));
+            return String.Format(URL_TEMPLATE, uri.AbsolutePath,
+                rest,
+                startWithRest.ToString().ToLower(),
+                endWithBell.ToString().ToLower(),
+                ts, ds, es);
         }
 
         public string ToHtml()
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
-
             foreach (var exercise in exercises)
             {
-                sb.AppendLine(string.Format(HTML_TEMPLATE, "T", "D", "E"));
+                sb.AppendLine(string.Format(HTML_TEMPLATE,
+                    exercise.Tempo,
+                    exercise.Duration.ToString(@"m\:ss"),
+                    exercise.Description));
             }
 
             return sb.ToString();
         }
 
-        const string URL_TEMPLATE = "r={0}&s={1}&b={2}&t={3}&d={4}&e={5}";
+        const string URL_TEMPLATE = "{0}?r={1}&s={2}&b={3}&t={4}&d={5}&e={6}";
 
         const string HTML_TEMPLATE = @"                        <tr>
-                            <td>
-                                <button type='button' class='btn btn-primary delete-form-row' style='margin-top:0.2em;margin-right:0.2em'><span class='oi oi-x'></span></button>
-                            </td>
-                            <td>
-                                <input type='text' style='width:3em;margin-top:0.2em;margin-right:0.2em;padding-left:0.3em;padding-right:0.3em' class='form-control digit-filter tempo tempo-0' id='tempo-0' placeholder='Tempo' autocomplete='off' value='120' />
-                            </td>
-                            <td>
-                                <input type='text' style='width:3.5em;margin-top:0.2em;margin-right:0.2em;padding-left:0.5em;padding-right:0.5em' class='form-control time-filter midpoint-0' id='midpoint-0' placeholder='Duration' autocomplete='off' value='2:00' />
-                                <input type='hidden'class='midpoint-0-sec' />
-                            </td>
-                            <td>
-                                <input type='text' style='margin-top:0.2em;margin-right:0.2em' class='form-control exercise' id='exercise' placeholder='Exercise'/>
-                            </td>
-                            <td>
-                                <button type='button' class='btn btn-primary add-form-row' style='margin-top:0.2em'><span class='oi oi-plus'></span></button>
-                            </td>
-                        </tr>";
+                    <td>
+                        <button type='button' class='btn btn-primary delete-form-row' style='margin-top:0.2em;margin-right:0.2em'><span class='oi oi-x'></span></button>
+                    </td>
+                    <td>
+                        <input type='text' style='width:3em;margin-top:0.2em;margin-right:0.2em;padding-left:0.3em;padding-right:0.3em' class='form-control digit-filter tempo tempo-0' id='tempo-0' placeholder='Tempo' autocomplete='off' value='{0}' />
+                    </td>
+                    <td>
+                        <input type='text' style='width:3.5em;margin-top:0.2em;margin-right:0.2em;padding-left:0.5em;padding-right:0.5em' class='form-control time-filter midpoint-0' id='midpoint-0' placeholder='Duration' autocomplete='off' value='{1}' />
+                        <input type='hidden'class='midpoint-0-sec' />
+                    </td>
+                    <td>
+                        <input type='text' style='margin-top:0.2em;margin-right:0.2em' class='form-control exercise' id='exercise' placeholder='Exercise' value='{2}' />
+                    </td>
+                    <td>
+                        <button type='button' class='btn btn-primary add-form-row' style='margin-top:0.2em'><span class='oi oi-plus'></span></button>
+                    </td>
+                </tr>";
     }
 
     struct Exercise
     {
-        int tempo;
-        TimeSpan duration;
-        string exercise;
+        public int Tempo;
+        public TimeSpan Duration;
+        public string Description;
     }
 }
