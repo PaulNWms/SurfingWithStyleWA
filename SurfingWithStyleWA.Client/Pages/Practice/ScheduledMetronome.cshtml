@@ -40,40 +40,43 @@
         </div>
     </div>
     <div class="row">
-        <h3>Schedule:</h3>
+        <h3 class="offset-2">Schedule:</h3>
     </div>
     <div class="row">
-        <form class="form-inline" method="post">
-            <table>
-                <thead>
-                    <tr><th></th><th>Tempo</th><th>Time</th><th>Exercise</th><th></th></tr>
-                </thead>
-                <tbody class="schedule">
-                    @((MarkupString)exerciseMarkup)
-                </tbody>
-            </table>
-            <div class="row form-group offset-2 col-8">
-                <label for="Rest">Rest between exercises (sec.): </label>
-                <input name="Rest" class="form-control digit-filter rest" id="rest" type="text" value="@rest"
-                       style="width:3em;margin-top:0.2em;padding-left:0.3em;padding-right:0.3em;">
+        <table class="table offset-2 col-7">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Tempo</th>
+                    <th>Time</th>
+                    <th>Exercise</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="schedule">
+                @((MarkupString)exerciseMarkup)
+            </tbody>
+        </table>
+        <div class="row form-group offset-2 col-7">
+            <label for="Rest">Rest between exercises (sec.): </label>
+            <input name="Rest" class="form-control digit-filter rest" id="rest" type="text" value="@rest"
+                   style="width:3em;margin-top:0.2em;padding-left:0.3em;padding-right:0.3em;">
+        </div>
+        <div class="row form-group offset-2 col-7">
+            <label for="StartRoutineWithRest">Start routine with a rest: </label>
+            <input name="StartRoutineWithRest" class="start-with-rest" id="StartRoutineWithRest" type="checkbox"
+                   checked="checked" value="@startWithRest">
+        </div>
+        <div class="row form-group offset-2 col-7">
+            <label for="EndExerciseWithBell">End each exercise with a bell: </label>
+            <input name="EndExerciseWithBell" class="end-with-bell" id="EndExerciseWithBell" type="checkbox"
+                   checked="checked" value="@endWithBell">
+        </div>
+        <div class="row offset-2 col-7">
+            <div class="form-group">
+                <a href="practice/metronome" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Create Link</a>
             </div>
-            <div class="row form-group offset-2 col-8">
-                <label for="StartRoutineWithRest">Start routine with a rest: </label>
-                <input name="StartRoutineWithRest" class="start-with-rest" id="StartRoutineWithRest" type="checkbox"
-                       checked="checked" value="@startWithRest">
-            </div>
-            <div class="row form-group offset-2 col-8">
-                <label for="EndExerciseWithBell">End each exercise with a bell: </label>
-                <input name="EndExerciseWithBell" class="end-with-bell" id="EndExerciseWithBell" type="checkbox"
-                       checked="checked" value="@endWithBell">
-            </div>
-            <div class="row offset-1 col-10">
-                <div class="form-group">
-                    <button type="submit" class="btn btn-default" style="margin-top:0.2em;margin-right:0.2em">Create Link</button>
-                </div>
-            </div>
-            <input type="hidden" name="query" class="query" id="query" />
-        </form>
+        </div>
     </div>
     <div class="row">
         <audio class="downbeat-click" preload="auto" hidden="hidden">
@@ -92,143 +95,143 @@
 </article>
 
 @functions {
-    enum TimerState { Stopped, Running, Paused };
+enum TimerState { Stopped, Running, Paused };
 
-    const int MIN_TEMPO = 20;
-    const int MAX_TEMPO = 240;
-    TimerState status = TimerState.Stopped;
-    string buttonFace = "oi-media-play";
-    string animation = "none";
-    string duration = "500ms";
-    bool initialized;
-    int rest = 5;
-    bool startWithRest = true;
-    bool endWithBell = true;
-    List<Schedule> exercises = new List<Schedule>();
-    string exerciseMarkup;
+const int MIN_TEMPO = 20;
+const int MAX_TEMPO = 240;
+TimerState status = TimerState.Stopped;
+string buttonFace = "oi-media-play";
+string animation = "none";
+string duration = "500ms";
+bool initialized;
+int rest = 5;
+bool startWithRest = true;
+bool endWithBell = true;
+List<Schedule> exercises = new List<Schedule>();
+string exerciseMarkup;
 
-    int _tempo = 120;
-    int Tempo
+int _tempo = 120;
+int Tempo
+{
+    get
     {
-        get
-        {
-            return _tempo;
-        }
-        set
-        {
-            _tempo = value;
-            duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
-            SetAnimation();
-        }
+        return _tempo;
+    }
+    set
+    {
+        _tempo = value;
+        duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
+        SetAnimation();
+    }
+}
+
+bool _isRunning = false;
+bool IsRunning
+{
+    get
+    {
+        return _isRunning;
+    }
+    set
+    {
+        _isRunning = value;
+        SetAnimation();
+    }
+}
+
+protected override void OnInit()
+{
+    base.OnInit();
+
+    exercises.Add(new Schedule());
+    System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+    foreach (var exercise in exercises)
+    {
+        sb.AppendLine(exercise.ToString());
     }
 
-    bool _isRunning = false;
-    bool IsRunning
+    exerciseMarkup = sb.ToString();
+}
+
+protected override void OnAfterRender()
+{
+    base.OnAfterRender();
+
+    if (!initialized)
     {
-        get
-        {
-            return _isRunning;
-        }
-        set
-        {
-            _isRunning = value;
-            SetAnimation();
-        }
+        JSRuntime.Current.InvokeAsync<object>("registerListener");
+        initialized = true;
     }
+}
 
-    protected override void OnInit()
+void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
+void IncrementTempo() { Tempo = Math.Min(Tempo + 1, MAX_TEMPO); }
+
+void SetAnimation()
+{
+    if (IsRunning)
     {
-        base.OnInit();
-
-        exercises.Add(new Schedule());
-        System.Text.StringBuilder sb = new System.Text.StringBuilder();
-
-        foreach (var exercise in exercises)
-        {
-            sb.AppendLine(exercise.ToString());
-        }
-
-        exerciseMarkup = sb.ToString();
-    }
-
-    protected override void OnAfterRender()
-    {
-        base.OnAfterRender();
-
-        if (!initialized)
-        {
-            JSRuntime.Current.InvokeAsync<object>("registerListener");
-            initialized = true;
-        }
-    }
-
-    void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
-    void IncrementTempo() { Tempo = Math.Min(Tempo + 1, MAX_TEMPO); }
-
-    void SetAnimation()
-    {
-        if (IsRunning)
-        {
-            if (animation == "swing0")
-                animation = "swing1";
-            else
-                animation = "swing0";
-        }
+        if (animation == "swing0")
+            animation = "swing1";
         else
-        {
-            animation = "none";
-        }
+            animation = "swing0";
     }
-
-    void StartMetronome()
+    else
     {
-        switch (status)
-        {
-            case TimerState.Stopped:
-                buttonFace = "oi-media-pause";
-                status = TimerState.Running;
-                IsRunning = true;
-                break;
-
-            case TimerState.Paused:
-                buttonFace = "oi-media-pause";
-                status = TimerState.Running;
-                IsRunning = true;
-                break;
-
-            case TimerState.Running:
-                buttonFace = "oi-media-play";
-                status = TimerState.Paused;
-                IsRunning = false;
-                break;
-
-            default:
-                break;
-        }
+        animation = "none";
     }
+}
 
-    class Schedule
+void StartMetronome()
+{
+    switch (status)
     {
-        public override string ToString()
-        {
-            return @"                        <tr>
-                            <td>
-                                <button type='button' class='btn btn-primary delete-form-row' style='margin-top:0.2em;margin-right:0.2em'><span class='oi oi-x'></span></button>
-                            </td>
-                            <td>
-                                <input type='text' style='width:3em;margin-top:0.2em;margin-right:0.2em;padding-left:0.3em;padding-right:0.3em' class='form-control digit-filter tempo tempo-0' id='tempo-0' placeholder='Tempo' autocomplete='off' value='120' />
-                            </td> 
-                            <td>
-                                <input type='text' style='width:3.5em;margin-top:0.2em;margin-right:0.2em;padding-left:0.5em;padding-right:0.5em' class='form-control time-filter midpoint-0' id='midpoint-0' placeholder='Duration' autocomplete='off' value='2:00' />
-                                <input type='hidden'class='midpoint-0-sec' />
-                            </td> 
-                            <td>
-                                <input type='text' style='margin-top:0.2em;margin-right:0.2em' class='form-control exercise' id='exercise' placeholder='Exercise'/>
-                            </td>
-                            <td>
-                                <button type='button' class='btn btn-primary add-form-row' style='margin-top:0.2em'><span class='oi oi-plus'></span></button>
-                            </td>
-                        </tr>";
-        }
+        case TimerState.Stopped:
+            buttonFace = "oi-media-pause";
+            status = TimerState.Running;
+            IsRunning = true;
+            break;
+
+        case TimerState.Paused:
+            buttonFace = "oi-media-pause";
+            status = TimerState.Running;
+            IsRunning = true;
+            break;
+
+        case TimerState.Running:
+            buttonFace = "oi-media-play";
+            status = TimerState.Paused;
+            IsRunning = false;
+            break;
+
+        default:
+            break;
     }
+}
+
+class Schedule
+{
+    public override string ToString()
+    {
+        return @"                        <tr>
+            <td>
+                <button type='button' class='btn btn-primary delete-form-row' style='margin-top:0.2em;margin-right:0.2em'><span class='oi oi-x'></span></button>
+            </td>
+            <td>
+                <input type='text' style='width:3em;margin-top:0.2em;margin-right:0.2em;padding-left:0.3em;padding-right:0.3em' class='form-control digit-filter tempo tempo-0' id='tempo-0' placeholder='Tempo' autocomplete='off' value='120' />
+            </td>
+            <td>
+                <input type='text' style='width:3.5em;margin-top:0.2em;margin-right:0.2em;padding-left:0.5em;padding-right:0.5em' class='form-control time-filter midpoint-0' id='midpoint-0' placeholder='Duration' autocomplete='off' value='2:00' />
+                <input type='hidden'class='midpoint-0-sec' />
+            </td>
+            <td>
+                <input type='text' style='margin-top:0.2em;margin-right:0.2em' class='form-control exercise' id='exercise' placeholder='Exercise'/>
+            </td>
+            <td>
+                <button type='button' class='btn btn-primary add-form-row' style='margin-top:0.2em'><span class='oi oi-plus'></span></button>
+            </td>
+        </tr>";
+    }
+}
 }
