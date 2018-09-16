@@ -111,7 +111,6 @@
         eggTimer.Initialize(schedule, metronome);
         metronome.Initialize(eggTimer);
         schedule.ExerciseMarkup = schedule.ToHtml();
-        schedule.timeline = schedule.ToTimeline();
         EggTimer.StateHasChanged =  this.StateHasChanged;
     }
 
@@ -283,18 +282,26 @@
             switch (status)
             {
                 case TimerState.Stopped:
-                    if (timeline.Count == 0)
+                    try
                     {
-                        this.timeline = this.ToTimeline();
-
-                        if (timeline.Count == 0)
+                        if (timeline == null || timeline.Count == 0)
                         {
-                            return;
-                        }
-                    }
+                            await ParseControls();
+                            this.timeline = this.ToTimeline();
 
-                    this.status = TimerState.StartNext;
-                    Update();
+                            if (timeline.Count == 0)
+                            {
+                                return;
+                            }
+                        }
+
+                        this.status = TimerState.StartNext;
+                        Update();
+                    }
+                    catch (Exception e)
+                    {
+                        await JSRuntime.Current.InvokeAsync<object>("alert", e.Message + e.StackTrace);
+                    }
                     break;
 
                 case TimerState.StartNext:
