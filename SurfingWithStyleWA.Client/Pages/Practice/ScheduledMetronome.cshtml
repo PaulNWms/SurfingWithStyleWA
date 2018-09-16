@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-9 jumbotron text-center">
             <div class="row">
-                <button class="offset-3 btn btn-primary btn-lg start" type="button" onclick="@StartMetronome"><span class="oi @buttonFace"></span></button>
+                <button class="offset-3 btn btn-primary btn-lg start" type="button" onclick="@StartMetronome"><span class="oi @Timer.buttonFace"></span></button>
                 <h1 class="offset-1 display"><span class="display">@Tempo</span></h1>
             </div>
             <br />
@@ -73,20 +73,9 @@
         </div>
         <div class="row offset-2 col-7">
             <div class="form-group">
-                @*<a href="@url" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Create Link</a>*@
-                <button class="btn btn-primary btn-lg active" onclick="@CreateLink">Create Link</button>
+                 <button class="btn btn-primary btn-lg active" onclick="@CreateLink">Create Link</button>
             </div>
         </div>
-        @*<div class="row offset-2 col-7">
-            <div class="form-group">
-                href="@url"
-            </div>
-        </div>
-        <div class="row offset-2 col-7">
-            <div class="form-group">
-                href="@url2"
-            </div>
-        </div>*@
     </div>
     <div class="row">
         <audio class="downbeat-click" preload="auto" hidden="hidden">
@@ -105,19 +94,15 @@
 </article>
 
 @functions {
-    enum TimerState { Stopped, Running, Paused };
+    enum TimerState { Stopped, Running, Paused, Continuing, Settling };
 
     const int MIN_TEMPO = 20;
     const int MAX_TEMPO = 240;
-    TimerState status = TimerState.Stopped;
-    string buttonFace = "oi-media-play";
     string animation = "none";
     string duration = "500ms";
     bool initialized;
     Schedule schedule;
     string exerciseMarkup;
-    //string url;
-    //string url2;
 
     int _tempo = 120;
     int Tempo
@@ -205,23 +190,23 @@
 
     void StartMetronome()
     {
-        switch (status)
+        switch (Timer.status)
         {
             case TimerState.Stopped:
-                buttonFace = "oi-media-pause";
-                status = TimerState.Running;
+                Timer.buttonFace = "oi-media-pause";
+                Timer.status = TimerState.Running;
                 IsRunning = true;
                 break;
 
             case TimerState.Paused:
-                buttonFace = "oi-media-pause";
-                status = TimerState.Running;
+                Timer.buttonFace = "oi-media-pause";
+                Timer.status = TimerState.Running;
                 IsRunning = true;
                 break;
 
             case TimerState.Running:
-                buttonFace = "oi-media-play";
-                status = TimerState.Paused;
+                Timer.buttonFace = "oi-media-play";
+                Timer.status = TimerState.Paused;
                 IsRunning = false;
                 break;
 
@@ -235,10 +220,83 @@
         //TODO: timer.Elapsed -= OnTimer;
     }
 
+    class Timer
+    {
+        public static TimerState status = TimerState.Stopped;
+        public static string buttonFace = "oi-media-play";
+
+        private TimeSpan duration = new TimeSpan(0, 25, 0);
+        DateTime targetTime = DateTime.Now;
+        string timerDisplay = "25:00";
+        System.Timers.Timer timer = new System.Timers.Timer(1000);
+
+        public Timer()
+        {
+
+        }
+
+        void UpdateButton(TimerState state)
+        {
+            status = state;
+            switch (status)
+            {
+                case TimerState.Stopped:
+                case TimerState.Paused:
+                    buttonFace = "oi-media-play";
+                    break;
+
+                case TimerState.Running:
+                    buttonFace = "oi-media-pause";
+                    break;
+            }
+        }
+
+        private string RoundAndTrimDuration(TimeSpan span)
+        {
+            const double factor = 10000000;
+            long boundedTicks = Math.Max(span.Ticks, 0);
+            long roundedTicks = (long)(Math.Round(boundedTicks / factor) * factor);
+            TimeSpan roundedTimeSpan = new TimeSpan(roundedTicks);
+            string str = roundedTimeSpan.ToString();
+            int i = 0;
+
+            for (i = 0; i < str.Length - 4; i++)
+            {
+                if (str[i] != '0' && str[i] != ':')
+                    break;
+            }
+
+            return str.Substring(i);
+        }
+
+        void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            duration = targetTime - e.SignalTime;
+            timerDisplay = RoundAndTrimDuration(duration);
+            JSRuntime.Current.InvokeAsync<object>("setTitle", timerDisplay);
+
+            if (timerDisplay == "0:00")
+            {
+                TimerExpired();
+            }
+
+            // TODO:this.StateHasChanged();
+        }
+
+        void TimerExpired()
+        {
+            targetTime = DateTime.Now;
+            JSRuntime.Current.InvokeAsync<object>("colorBody");
+            JSRuntime.Current.InvokeAsync<object>("playAudio");
+            UpdateButton(TimerState.Stopped);
+            timer.Stop();
+        }
+    }
+
     class Schedule
     {
         private Uri uri;
-        public int Rest;
+        public TimeSpan Rest;
         public bool StartWithRest;
         public bool EndWithBell;
 
@@ -247,7 +305,7 @@
         public Schedule(Uri uri)
         {
             this.uri = uri;
-            this.Rest = 5;
+            this.Rest = new TimeSpan(0, 0, 5);
             this.StartWithRest = true;
             this.EndWithBell = true;
             ParseUrl();
@@ -311,7 +369,13 @@
                     switch (key)
                     {
                         case "r":
-                            int.TryParse(query["r"].ToString(), out this.Rest);
+                            {
+                                int rest;
+                                if (int.TryParse(query["r"].ToString(), out rest))
+                                {
+                                    this.Rest = new TimeSpan(0, 0, rest);
+                                }
+                            }
                             break;
 
                         case "s":
@@ -383,6 +447,29 @@
             {
                 this.exercises.Add(new Exercise() { Tempo = 120, Duration = new TimeSpan(0, 2, 0), Description = string.Empty });
             }
+        }
+
+        private List<Exercise> ToTimeline()
+        {
+            List<Exercise> timeline = new List<Exercise>();
+            var restStep = new Exercise() { Tempo = 0, Duration = this.Rest, Description = "Resting..." };
+
+            if (exercises.Count > 0 && this.Rest.Ticks > 0 && this.StartWithRest)
+            {
+                timeline.Add(restStep);
+            }
+
+            for (var i = 0; i < exercises.Count; i++)
+            {
+                timeline.Add(exercises[i]);
+
+                if (i < exercises.Count - 1 && this.Rest.Ticks > 0)
+                {
+                    timeline.Add(restStep);
+                }
+            }
+
+            return timeline;
         }
 
         public string ToUrl()
