@@ -22,6 +22,7 @@
         function registerListener(selector) {
             var element = $(".pendulum-parent");
             var audio = $(selector)[0];
+            element.on("animationstart", function () { audio.play(); });
             element.on("animationiteration", function () { audio.play(); });
         }
         function registerFormRowListener(html) {
