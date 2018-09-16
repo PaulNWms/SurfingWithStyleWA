@@ -348,6 +348,8 @@
                 }
 
                 metronome.IsRunning = false;
+                eggTimer.IsRunning = false;
+                status = TimerState.Stopped;
                 JSRuntime.Current.InvokeAsync<object>("colorBody");
                 this.ExerciseDisplay = "Done!";
             }
