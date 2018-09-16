@@ -17,11 +17,11 @@
     <script>
         function colorBody() { $("body").css({ "background-color": "#001912", "color": "#009871" }); }
         function uncolorBody() { $("body").css({ "background-color": "", "color": "" }); }
-        function playAudio() { $("audio")[0].play(); }
+        function playAudio(selector) { $(selector)[0].play(); }
         function setTitle(title) { document.title = title; }
-        function registerListener() {
+        function registerListener(selector) {
             var element = $(".pendulum-parent");
-            var audio = $("audio")[0];
+            var audio = $(selector)[0];
             element.on("animationiteration", function () { audio.play(); });
         }
         function registerFormRowListener(html) {

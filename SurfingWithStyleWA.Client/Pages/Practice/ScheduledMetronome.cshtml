@@ -78,15 +78,15 @@
         </div>
     </div>
     <div class="row">
-        <audio class="downbeat-click" preload="auto" hidden="hidden">
+        <audio class="audio-click" preload="auto" hidden="hidden">
             <source src="audio/downbeatClick.wav" type="audio/wav">
             <source src="audio/downbeatClick.mp3" type="audio/mp3">
         </audio>
-        <audio class="end-exercise-bell" preload="auto">
+        <audio class="audio-end-exercise" preload="auto">
             <source src="audio/EndExercise.wav" type="audio/wav">
             <source src="audio/EndExercise.mp3" type="audio/mp3">
         </audio>
-        <audio class="end-routine-bell" preload="auto">
+        <audio class="audio-end-routine" preload="auto">
             <source src="audio/EndRoutine.wav" type="audio/wav">
             <source src="audio/EndRoutine.mp3" type="audio/mp3">
         </audio>
@@ -124,7 +124,7 @@
 
         if (!initialized)
         {
-            JSRuntime.Current.InvokeAsync<object>("registerListener");
+            JSRuntime.Current.InvokeAsync<object>("registerListener", ".audio-click");
             string newRow = string.Format(Schedule.HTML_TEMPLATE, 120, "2:00", string.Empty);
             JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", newRow);
             initialized = true;
@@ -136,11 +136,11 @@
         public string buttonFace = "oi-media-play";
         public static Action StateHasChanged;
 
-        private TimeSpan duration = new TimeSpan(0, 25, 0);
+        private TimeSpan duration = new TimeSpan(0, 2, 0);
         private Schedule schedule;
         private Metronome metronome;
-        public DateTime targetTime = DateTime.Now;
-        public string timerDisplay = "25:00";
+        //        public DateTime targetTime = DateTime.Now;
+        public string timerDisplay = "2:00";
         System.Timers.Timer timer = new System.Timers.Timer(1000);
 
         private bool _isRunning = false;
@@ -205,7 +205,7 @@
 
         public void Start(TimeSpan duration)
         {
-            this.targetTime = DateTime.Now + duration;
+            //this.targetTime = DateTime.Now + duration;
             JSRuntime.Current.InvokeAsync<object>("uncolorBody");
             timerDisplay = RoundAndTrimDuration(duration);
             UpdateButton(TimerState.Running);
@@ -214,7 +214,7 @@
 
         void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
         {
-            duration = targetTime - e.SignalTime;
+            //TimeSpan dur = targetTime - e.SignalTime;
             timerDisplay = RoundAndTrimDuration(duration);
             JSRuntime.Current.InvokeAsync<object>("setTitle", timerDisplay);
 
@@ -241,9 +241,9 @@
 
         public void TimerExpired()
         {
-            targetTime = DateTime.Now;
+            //targetTime = DateTime.Now;
             JSRuntime.Current.InvokeAsync<object>("colorBody");
-            JSRuntime.Current.InvokeAsync<object>("playAudio");
+            JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-exercise");
             UpdateButton(TimerState.Stopped);
             timer.Stop();
         }
@@ -305,6 +305,7 @@
             switch (status)
             {
                 case TimerState.Stopped:
+                    await JSRuntime.Current.InvokeAsync<object>("console.log", "TimerState.Stopped");
                     if (timeline.Count == 0)
                     {
                         this.timeline = this.ToTimeline();
@@ -320,6 +321,7 @@
                     break;
 
                 case TimerState.Continuing:
+                    await JSRuntime.Current.InvokeAsync<object>("console.log", "TimerState.Continuing");
                     this.LastStep = this.CurrentStep;
                     this.CurrentStep = timeline[0];
                     timeline.RemoveAt(0);
@@ -339,13 +341,16 @@
                     break;
 
                 case TimerState.Settling:
+                    await JSRuntime.Current.InvokeAsync<object>("console.log", "TimerState.Settling");
                     this.status = TimerState.Running;
                     break;
 
                 case TimerState.Paused:
+                    await JSRuntime.Current.InvokeAsync<object>("console.log", "TimerState.Paused");
                     break;
 
                 case TimerState.Running:
+                    await JSRuntime.Current.InvokeAsync<object>("console.log", "TimerState.Running");
                     break;
             }
         }
@@ -356,7 +361,7 @@
             {
                 if (this.EndWithBell && (eggTimer.IsRunning || timeline[0].Tempo == 0))
                 {
-                    JSRuntime.Current.InvokeAsync<object>("playAudio");
+                    JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-exercise");
                 }
 
                 status = TimerState.Continuing;

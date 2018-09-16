@@ -44,7 +44,7 @@
         </div>
     </div>
     <div class="row">
-        <audio class="downbeat-click" preload="auto" hidden="hidden">
+        <audio class="audio-click" preload="auto" hidden="hidden">
             <source src="audio/downbeatClick.wav" type="audio/wav">
             <source src="audio/downbeatClick.mp3" type="audio/mp3">
         </audio>
@@ -95,7 +95,7 @@
     {
         if (!initialized)
         {
-            JSRuntime.Current.InvokeAsync<object>("registerListener");
+            JSRuntime.Current.InvokeAsync<object>("registerListener", ".audio-click");
             initialized = true;
         }
     }

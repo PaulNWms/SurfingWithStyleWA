@@ -41,7 +41,7 @@
     </div>
 </article>
 
-<audio class="bell" preload="auto">
+<audio class="audio-bell" preload="auto">
     <source src="audio/EndRoutine.wav" type="audio/wav">
     <source src="audio/EndRoutine.mp3" type="audio/mp3">
 </audio>
@@ -130,7 +130,7 @@
     {
         targetTime = DateTime.Now;
         JSRuntime.Current.InvokeAsync<object>("colorBody");
-        JSRuntime.Current.InvokeAsync<object>("playAudio");
+        JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-bell");
         UpdateButton(TimerState.Stopped);
         timer.Stop();
     }
