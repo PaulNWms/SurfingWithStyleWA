@@ -16,7 +16,7 @@
         <div class="col-9 jumbotron text-center">
             <div class="row">
                 <button class="offset-3 btn btn-primary btn-lg start" type="button" onclick="@schedule.OnStartPause"><span class="oi @eggTimer.ButtonFace"></span></button>
-                <h1 class="offset-1 display"><span class="display">@metronome.Tempo</span></h1>
+                <h1 class="offset-1 display"><span class="display">@metronome.TempoDisplay</span></h1>
             </div>
             <br />
             <div class="row">
@@ -325,7 +325,7 @@
         {
             if (timeline.Count > 0)
             {
-                if (this.EndWithBell && (eggTimer.IsRunning || timeline[0].Tempo == 0))
+                if (this.EndWithBell && CurrentStep.Tempo != -1)
                 {
                     JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-exercise");
                 }
@@ -335,9 +335,13 @@
             }
             else
             {
+                if (this.EndWithBell)
+                {
+                    JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-routine");
+                }
+
+                metronome.IsRunning = false;
                 JSRuntime.Current.InvokeAsync<object>("colorBody");
-                JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-exercise");
-                JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-routine");
                 this.ExerciseDisplay = "Done!";
             }
         }
@@ -483,7 +487,7 @@
         public List<Exercise> ToTimeline()
         {
             List<Exercise> timeline = new List<Exercise>();
-            var restStep = new Exercise() { Tempo = 0, Duration = this.Rest, Description = "Resting..." };
+            var restStep = new Exercise() { Tempo = -1, Duration = this.Rest, Description = "Resting..." };
 
             if (exercises.Count > 0 && this.Rest.Ticks > 0 && this.StartWithRest)
             {
@@ -591,6 +595,14 @@
                     Duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
 
                 SetAnimation();
+            }
+        }
+
+        public string TempoDisplay
+        {
+            get
+            {
+                return (_tempo >= 0) ? _tempo.ToString() : "";
             }
         }
 
