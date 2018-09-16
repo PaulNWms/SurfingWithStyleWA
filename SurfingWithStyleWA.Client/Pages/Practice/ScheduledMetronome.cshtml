@@ -60,7 +60,7 @@
         </table>
         <div class="row form-group offset-2 col-7">
             <label for="Rest">Rest between exercises (sec.): </label>
-            <input name="Rest" class="form-control digit-filter rest" id="rest" type="text" value="@schedule.Rest"
+            <input name="Rest" class="form-control digit-filter rest" id="rest" type="text" value="@schedule.RestDisplay"
                    style="width:3em;margin-top:0.2em;padding-left:0.3em;padding-right:0.3em;">
         </div>
         <div class="row form-group offset-2 col-7">
@@ -228,7 +228,6 @@
     {
         private enum TimerState { Stopped, Running, Paused, StartNext, Settling };
 
-        public TimeSpan Rest;
         public bool StartWithRest;
         public bool EndWithBell;
         public string ExerciseMarkup;
@@ -243,10 +242,35 @@
         private Metronome metronome;
         private List<Exercise> exercises;
 
+        private TimeSpan rest;
+        public string RestDisplay
+        {
+            get { return ((int)rest.TotalSeconds).ToString(); }
+            set
+            {
+                var regex = new System.Text.RegularExpressions.Regex(@"(\d+):(\d\d)");
+                int minutes;
+                int seconds;
+
+                System.Text.RegularExpressions.Match match = regex.Match(value);
+
+                if (match.Success)
+                {
+                    minutes = int.Parse(match.Groups[1].Value);
+                    seconds = int.Parse(match.Groups[2].Value);
+                    rest = new TimeSpan(0, minutes, seconds);
+                }
+                else if (int.TryParse(value, out seconds))
+                {
+                    rest = new TimeSpan(0, 0, seconds);
+                }
+            }
+        }
+
         public Schedule(Uri uri)
         {
             this.uri = uri;
-            this.Rest = new TimeSpan(0, 0, 5);
+            this.rest = new TimeSpan(0, 0, 5);
             this.StartWithRest = true;
             this.EndWithBell = true;
             ParseUrl();
@@ -417,7 +441,7 @@
                                 int rest;
                                 if (int.TryParse(query["r"].ToString(), out rest))
                                 {
-                                    this.Rest = new TimeSpan(0, 0, rest);
+                                    this.rest = new TimeSpan(0, 0, rest);
                                 }
                             }
                             break;
@@ -496,9 +520,9 @@
         public List<Exercise> ToTimeline()
         {
             List<Exercise> timeline = new List<Exercise>();
-            var restStep = new Exercise() { Tempo = -1, Duration = this.Rest, Description = "Resting..." };
+            var restStep = new Exercise() { Tempo = -1, Duration = this.rest, Description = "Resting..." };
 
-            if (exercises.Count > 0 && this.Rest.Ticks > 0 && this.StartWithRest)
+            if (exercises.Count > 0 && this.rest.Ticks > 0 && this.StartWithRest)
             {
                 timeline.Add(restStep);
             }
@@ -507,7 +531,7 @@
             {
                 timeline.Add(exercises[i]);
 
-                if (i < exercises.Count - 1 && this.Rest.Ticks > 0)
+                if (i < exercises.Count - 1 && this.rest.Ticks > 0)
                 {
                     timeline.Add(restStep);
                 }
@@ -533,7 +557,7 @@
             string ds = string.Join("-", durations.Select(d => (int)d.TotalSeconds));
             string es = string.Join("-", descriptions.Select(e => Uri.EscapeUriString(e)));
             return String.Format(URL_TEMPLATE, uri.AbsolutePath,
-                this.Rest,
+                this.RestDisplay,
                 this.StartWithRest.ToString().ToLower(),
                 this.EndWithBell.ToString().ToLower(),
                 ts, ds, es);
