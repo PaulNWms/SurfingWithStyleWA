@@ -21,6 +21,22 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>http://surfingwithstyle.com/practice/metronome/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/practice/scheduledmetronome/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/practice/presets/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/practice/help/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>http://surfingwithstyle.com/notes/ms/dotnet/</loc>
     <changefreq>monthly</changefreq>
   </url>
