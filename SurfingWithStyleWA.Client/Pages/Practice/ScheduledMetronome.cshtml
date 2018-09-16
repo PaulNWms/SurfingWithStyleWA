@@ -111,7 +111,7 @@
         eggTimer.Initialize(schedule, metronome);
         metronome.Initialize(eggTimer);
         schedule.ExerciseMarkup = schedule.ToHtml();
-        EggTimer.StateHasChanged =  this.StateHasChanged;
+        EggTimer.StateHasChanged = this.StateHasChanged;
     }
 
     protected override void OnAfterRender()
@@ -243,29 +243,7 @@
         private List<Exercise> exercises;
 
         private TimeSpan rest;
-        public string RestDisplay
-        {
-            get { return ((int)rest.TotalSeconds).ToString(); }
-            set
-            {
-                var regex = new System.Text.RegularExpressions.Regex(@"(\d+):(\d\d)");
-                int minutes;
-                int seconds;
-
-                System.Text.RegularExpressions.Match match = regex.Match(value);
-
-                if (match.Success)
-                {
-                    minutes = int.Parse(match.Groups[1].Value);
-                    seconds = int.Parse(match.Groups[2].Value);
-                    rest = new TimeSpan(0, minutes, seconds);
-                }
-                else if (int.TryParse(value, out seconds))
-                {
-                    rest = new TimeSpan(0, 0, seconds);
-                }
-            }
-        }
+        public string RestDisplay;
 
         public Schedule(Uri uri)
         {
@@ -382,8 +360,12 @@
         public async Task ParseControls()
         {
             var regex = new System.Text.RegularExpressions.Regex(@"(\d+):(\d\d)");
+            int minutes;
+            int seconds;
+            System.Text.RegularExpressions.Match match;
             exercises = new List<Exercise>();
-            List<List<string>> raw = await JSRuntime.Current.InvokeAsync<List<List<string>>>("getExerciselValues");
+            List<List<string>> raw = await JSRuntime.Current.InvokeAsync<List<List<string>>>("getExerciseValues");
+            string rawRest = await JSRuntime.Current.InvokeAsync<string>("getRestValue");
 
             if (raw[0].Count != raw[1].Count || raw[1].Count != raw[2].Count)
             {
@@ -393,13 +375,11 @@
             for (int i = 0; i < raw[0].Count; i++)
             {
                 int tempo;
-                int minutes;
-                int seconds;
                 TimeSpan duration;
 
                 if (int.TryParse(raw[0][i], out tempo))
                 {
-                    System.Text.RegularExpressions.Match match = regex.Match(raw[1][i]);
+                    match = regex.Match(raw[1][i]);
 
                     if (match.Success)
                     {
@@ -420,6 +400,23 @@
 
                 exercises.Add(new Exercise() { Tempo = tempo, Duration = duration, Description = raw[2][i] });
             }
+
+            match = regex.Match(rawRest);
+
+            if (match.Success)
+            {
+                minutes = int.Parse(match.Groups[1].Value);
+                seconds = int.Parse(match.Groups[2].Value);
+                rest = new TimeSpan(0, minutes, seconds);
+            }
+            else if (int.TryParse(rawRest, out seconds))
+            {
+                rest = new TimeSpan(0, 0, seconds);
+            }
+            else
+            {
+                await JSRuntime.Current.InvokeAsync<object>("alert", "what?  " + rawRest);
+            }
         }
 
         private void ParseUrl()
@@ -437,13 +434,7 @@
                     switch (key)
                     {
                         case "r":
-                            {
-                                int rest;
-                                if (int.TryParse(query["r"].ToString(), out rest))
-                                {
-                                    this.rest = new TimeSpan(0, 0, rest);
-                                }
-                            }
+                            this.RestDisplay = query["r"].ToString();
                             break;
 
                         case "s":
@@ -520,6 +511,7 @@
         public List<Exercise> ToTimeline()
         {
             List<Exercise> timeline = new List<Exercise>();
+            JSRuntime.Current.InvokeAsync<object>("alert", this.rest.TotalSeconds);
             var restStep = new Exercise() { Tempo = -1, Duration = this.rest, Description = "Resting..." };
 
             if (exercises.Count > 0 && this.rest.Ticks > 0 && this.StartWithRest)
@@ -557,7 +549,7 @@
             string ds = string.Join("-", durations.Select(d => (int)d.TotalSeconds));
             string es = string.Join("-", descriptions.Select(e => Uri.EscapeUriString(e)));
             return String.Format(URL_TEMPLATE, uri.AbsolutePath,
-                this.RestDisplay,
+                ((int)this.rest.TotalSeconds).ToString(),
                 this.StartWithRest.ToString().ToLower(),
                 this.EndWithBell.ToString().ToLower(),
                 ts, ds, es);

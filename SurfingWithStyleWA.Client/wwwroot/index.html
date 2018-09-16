@@ -40,7 +40,7 @@
                 }
             });
         }
-        function getExerciselValues() {
+        function getExerciseValues() {
             var tempos = [];
             var durations = [];
             var exercises = [];
@@ -48,6 +48,9 @@
             $(".midpoint-0").each(function () { durations.push($(this).val()); });
             $(".exercise").each(function () { exercises.push($(this).val()); });
             return [tempos, durations, exercises];
+        }
+        function getRestValue() {
+            return $(".rest").val();
         }
     </script>
 
