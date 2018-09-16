@@ -3,7 +3,7 @@
 
 <style>
     .pendulum-parent {
-        animation: @animation @duration ease-in-out alternate infinite;
+        animation: @metronome.animation @metronome.duration ease-in-out alternate infinite;
     }
 </style>
 <article class="narrow-article mini-metronome" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
@@ -15,13 +15,13 @@
     <div class="row">
         <div class="col-9 jumbotron text-center">
             <div class="row">
-                <button class="offset-3 btn btn-primary btn-lg start" type="button" onclick="@StartMetronome"><span class="oi @Timer.buttonFace"></span></button>
-                <h1 class="offset-1 display"><span class="display">@Tempo</span></h1>
+                <button class="offset-3 btn btn-primary btn-lg start" type="button" onclick="@eggTimer.OnStartPause"><span class="oi @eggTimer.buttonFace"></span></button>
+                <h1 class="offset-1 display"><span class="display">@metronome.Tempo</span></h1>
             </div>
             <br />
             <div class="row">
                 <h2 class="col-3">
-                    <span class="timer-display">0:00</span>
+                    <span class="timer-display">@eggTimer.timerDisplay</span>
                 </h2>
                 <h2 class="col-9">
                     <span class="exercise-display"></span>
@@ -55,7 +55,7 @@
                 </tr>
             </thead>
             <tbody class="schedule">
-                @((MarkupString)exerciseMarkup)
+                @((MarkupString)schedule.ExerciseMarkup)
             </tbody>
         </table>
         <div class="row form-group offset-2 col-7">
@@ -73,7 +73,7 @@
         </div>
         <div class="row offset-2 col-7">
             <div class="form-group">
-                 <button class="btn btn-primary btn-lg active" onclick="@CreateLink">Create Link</button>
+                 <button class="btn btn-primary btn-lg active" onclick="@schedule.CreateLink">Create Link</button>
             </div>
         </div>
     </div>
@@ -96,42 +96,10 @@
 @functions {
     enum TimerState { Stopped, Running, Paused, Continuing, Settling };
 
-    const int MIN_TEMPO = 20;
-    const int MAX_TEMPO = 240;
-    string animation = "none";
-    string duration = "500ms";
     bool initialized;
     Schedule schedule;
-    string exerciseMarkup;
-
-    int _tempo = 120;
-    int Tempo
-    {
-        get
-        {
-            return _tempo;
-        }
-        set
-        {
-            _tempo = value;
-            duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
-            SetAnimation();
-        }
-    }
-
-    bool _isRunning = false;
-    bool IsRunning
-    {
-        get
-        {
-            return _isRunning;
-        }
-        set
-        {
-            _isRunning = value;
-            SetAnimation();
-        }
-    }
+    Metronome metronome;
+    EggTimer eggTimer;
 
     protected override void OnInit()
     {
@@ -139,7 +107,12 @@
 
         Uri uri = new Uri(UriHelper.GetAbsoluteUri());
         schedule = new Schedule(uri);
-        exerciseMarkup = schedule.ToHtml();
+        eggTimer = new EggTimer();
+        metronome = new Metronome();
+        eggTimer.Initialize(metronome);
+        metronome.Initialize(eggTimer);
+        schedule.ExerciseMarkup = schedule.ToHtml();
+        EggTimer.StateHasChanged = this.StateHasChanged;
         this.StateHasChanged();
     }
 
@@ -156,83 +129,36 @@
         }
     }
 
-    public async void CreateLink()
+    class EggTimer
     {
-        try
-        {
-            await schedule.ParseControls();
-            string url = schedule.ToUrl();
-            await JSRuntime.Current.InvokeAsync<object>("window.open", url);
-        }
-        catch (Exception e)
-        {
-            await JSRuntime.Current.InvokeAsync<object>("alert", e.Message + e.StackTrace);
-        }
-    }
-
-    void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
-    void IncrementTempo() { Tempo = Math.Min(Tempo + 1, MAX_TEMPO); }
-
-    void SetAnimation()
-    {
-        if (IsRunning)
-        {
-            if (animation == "swing0")
-                animation = "swing1";
-            else
-                animation = "swing0";
-        }
-        else
-        {
-            animation = "none";
-        }
-    }
-
-    void StartMetronome()
-    {
-        switch (Timer.status)
-        {
-            case TimerState.Stopped:
-                Timer.buttonFace = "oi-media-pause";
-                Timer.status = TimerState.Running;
-                IsRunning = true;
-                break;
-
-            case TimerState.Paused:
-                Timer.buttonFace = "oi-media-pause";
-                Timer.status = TimerState.Running;
-                IsRunning = true;
-                break;
-
-            case TimerState.Running:
-                Timer.buttonFace = "oi-media-play";
-                Timer.status = TimerState.Paused;
-                IsRunning = false;
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    public void Dispose()
-    {
-        //TODO: timer.Elapsed -= OnTimer;
-    }
-
-    class Timer
-    {
-        public static TimerState status = TimerState.Stopped;
-        public static string buttonFace = "oi-media-play";
+        static TimerState status = TimerState.Stopped;
+        public string buttonFace = "oi-media-play";
+        public static Action StateHasChanged;
 
         private TimeSpan duration = new TimeSpan(0, 25, 0);
+        private Metronome metronome;
         DateTime targetTime = DateTime.Now;
-        string timerDisplay = "25:00";
+        public string timerDisplay = "25:00";
         System.Timers.Timer timer = new System.Timers.Timer(1000);
 
-        public Timer()
+        private bool _isRunning = false;
+        public bool IsRunning
         {
+            get
+            {
+                return _isRunning;
+            }
+            set
+            {
+                _isRunning = value;
+                metronome.SetAnimation();
+            }
+        }
 
+        public void Initialize(Metronome metronome)
+        {
+            this.metronome = metronome;
+            timer.Elapsed += OnTimer;
         }
 
         void UpdateButton(TimerState state)
@@ -269,6 +195,60 @@
             return str.Substring(i);
         }
 
+        public void StartButton()
+        {
+            IsRunning = !IsRunning;
+        }
+
+        void StartMetronome()
+        {
+            switch (EggTimer.status)
+            {
+                case TimerState.Stopped:
+                    EggTimer.status = TimerState.Running;
+                    IsRunning = true;
+                    break;
+
+                case TimerState.Paused:
+                    EggTimer.status = TimerState.Running;
+                    IsRunning = true;
+                    break;
+
+                case TimerState.Running:
+                    EggTimer.status = TimerState.Paused;
+                    IsRunning = false;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        public void OnStartPause()
+        {
+            switch (status)
+            {
+                case TimerState.Stopped:
+                    targetTime = DateTime.Now + duration;
+                    JSRuntime.Current.InvokeAsync<object>("uncolorBody");
+                    timerDisplay = RoundAndTrimDuration(duration);
+                    UpdateButton(TimerState.Running);
+                    timer.Start();
+                    break;
+
+                case TimerState.Running:
+                    UpdateButton(TimerState.Paused);
+                    timer.Stop();
+                    break;
+
+                case TimerState.Paused:
+                    targetTime = DateTime.Now + duration;
+                    UpdateButton(TimerState.Running);
+                    timer.Start();
+                    break;
+            }
+        }
+
         void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
         {
             duration = targetTime - e.SignalTime;
@@ -280,7 +260,7 @@
                 TimerExpired();
             }
 
-            // TODO:this.StateHasChanged();
+            EggTimer.StateHasChanged();
         }
 
         void TimerExpired()
@@ -291,15 +271,21 @@
             UpdateButton(TimerState.Stopped);
             timer.Stop();
         }
+
+        public void Dispose()
+        {
+            timer.Elapsed -= OnTimer;
+        }
     }
 
     class Schedule
     {
-        private Uri uri;
         public TimeSpan Rest;
         public bool StartWithRest;
         public bool EndWithBell;
+        public string ExerciseMarkup;
 
+        private Uri uri;
         private List<Exercise> exercises;
 
         public Schedule(Uri uri)
@@ -310,6 +296,21 @@
             this.EndWithBell = true;
             ParseUrl();
         }
+
+        public async void CreateLink()
+        {
+            try
+            {
+                await ParseControls();
+                string url = ToUrl();
+                await JSRuntime.Current.InvokeAsync<object>("window.open", url);
+            }
+            catch (Exception e)
+            {
+                await JSRuntime.Current.InvokeAsync<object>("alert", e.Message + e.StackTrace);
+            }
+        }
+
 
         public async Task ParseControls()
         {
@@ -529,6 +530,56 @@
                         <button type='button' class='btn btn-primary add-form-row' style='margin-top:0.2em' onclick='@AddRow'><span class='oi oi-plus'></span></button>
                     </td>
                 </tr>";
+    }
+
+    class Metronome
+    {
+        const int MIN_TEMPO = 20;
+        const int MAX_TEMPO = 240;
+
+        public  string animation = "none";
+        public  string duration = "500ms";
+        private EggTimer eggTimer;
+
+        private int _tempo = 120;
+        public int Tempo
+        {
+            get
+            {
+                return _tempo;
+            }
+            set
+            {
+                _tempo = value;
+                duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
+                SetAnimation();
+            }
+        }
+
+        public void Initialize(EggTimer eggTimer)
+        {
+            this.eggTimer = eggTimer;
+        }
+
+        void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
+        void IncrementTempo() { Tempo = Math.Min(Tempo + 1, MAX_TEMPO); }
+
+        public void SetAnimation()
+        {
+            if (eggTimer.IsRunning)
+            {
+                eggTimer.buttonFace = "oi-media-pause";
+                if (animation == "swing0")
+                    animation = "swing1";
+                else
+                    animation = "swing0";
+            }
+            else
+            {
+                eggTimer.buttonFace = "oi-media-play";
+                animation = "none";
+            }
+        }
     }
 
     struct Exercise
