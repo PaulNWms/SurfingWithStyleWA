@@ -73,10 +73,11 @@
         </div>
         <div class="row offset-2 col-7">
             <div class="form-group">
-                <a href="@url" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Create Link</a>
+                @*<a href="@url" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Create Link</a>*@
+                <button class="btn btn-primary btn-lg active" onclick="@CreateLink">Create Link</button>
             </div>
         </div>
-        <div class="row offset-2 col-7">
+        @*<div class="row offset-2 col-7">
             <div class="form-group">
                 href="@url"
             </div>
@@ -85,7 +86,7 @@
             <div class="form-group">
                 href="@url2"
             </div>
-        </div>
+        </div>*@
     </div>
     <div class="row">
         <audio class="downbeat-click" preload="auto" hidden="hidden">
@@ -115,8 +116,8 @@
     bool initialized;
     Schedule schedule;
     string exerciseMarkup;
-    string url;
-    string url2;
+    //string url;
+    //string url2;
 
     int _tempo = 120;
     int Tempo
@@ -152,9 +153,7 @@
         base.OnInit();
 
         Uri uri = new Uri(UriHelper.GetAbsoluteUri());
-        url = uri.PathAndQuery;
         schedule = new Schedule(uri);
-        url2 = schedule.ToUrl();
         exerciseMarkup = schedule.ToHtml();
         this.StateHasChanged();
     }
@@ -169,6 +168,20 @@
             string newRow = string.Format(Schedule.HTML_TEMPLATE, 120, "2:00", string.Empty);
             JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", newRow);
             initialized = true;
+        }
+    }
+
+    public async void CreateLink()
+    {
+        try
+        {
+            await schedule.ParseControls();
+            string url = schedule.ToUrl();
+            await JSRuntime.Current.InvokeAsync<object>("window.open", url);
+        }
+        catch (Exception e)
+        {
+            await JSRuntime.Current.InvokeAsync<object>("alert", e.Message + e.StackTrace);
         }
     }
 
@@ -229,18 +242,67 @@
         public bool StartWithRest;
         public bool EndWithBell;
 
-        private List<Exercise> exercises = new List<Exercise>();
+        private List<Exercise> exercises;
 
         public Schedule(Uri uri)
         {
             this.uri = uri;
-            var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(this.uri.Query);
             this.Rest = 5;
             this.StartWithRest = true;
             this.EndWithBell = true;
+            ParseUrl();
+        }
+
+        public async Task ParseControls()
+        {
+            var regex = new System.Text.RegularExpressions.Regex(@"(\d+):(\d\d)");
+            exercises = new List<Exercise>();
+            List<List<string>> raw = await JSRuntime.Current.InvokeAsync<List<List<string>>>("getExerciselValues");
+
+            if (raw[0].Count != raw[1].Count || raw[1].Count != raw[2].Count)
+            {
+                throw new DataMisalignedException(string.Format("Lists are different lengths: {0} {1} {2}", raw[0].Count, raw[1].Count, raw[3].Count));
+            }
+
+            for (int i = 0; i < raw[0].Count; i++)
+            {
+                int tempo;
+                int minutes;
+                int seconds;
+                TimeSpan duration;
+
+                if (int.TryParse(raw[0][i], out tempo))
+                {
+                    System.Text.RegularExpressions.Match match = regex.Match(raw[1][i]);
+
+                    if (match.Success)
+                    {
+                        minutes = int.Parse(match.Groups[1].Value);
+                        seconds = int.Parse(match.Groups[2].Value);
+                        duration = new TimeSpan(0, minutes, seconds);
+                    }
+                    else if (int.TryParse(raw[1][i], out seconds))
+                    {
+                        duration = new TimeSpan(0, 0, seconds);
+                    }
+                }
+
+                if (duration.Ticks == 0)
+                {
+                    throw new ArgumentException(string.Format("Invalid time format: {0}", raw[1][i]));
+                }
+
+                exercises.Add(new Exercise() { Tempo = tempo, Duration = duration, Description = raw[2][i] });
+            }
+        }
+
+        private void ParseUrl()
+        {
+            var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(this.uri.Query);
             int[] tempos = null;
             TimeSpan[] durations = null;
             string[] exes = null;
+            exercises = new List<Exercise>();
 
             if (query.ContainsKey("r"))
             {
@@ -325,7 +387,6 @@
 
         public string ToUrl()
         {
-            // r=5&s=true&b=true&t=120-69&d=120-60&e=Analyzer%20Single%20Stroke%20Roll-lkjh
             List<int> tempos = new List<int>(exercises.Count);
             List<TimeSpan> durations = new List<TimeSpan>(exercises.Count);
             List<string> descriptions = new List<string>(exercises.Count);

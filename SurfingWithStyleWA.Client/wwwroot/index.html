@@ -39,6 +39,15 @@
                 }
             });
         }
+        function getExerciselValues() {
+            var tempos = [];
+            var durations = [];
+            var exercises = [];
+            $(".tempo-0").each(function () { tempos.push($(this).val()); });
+            $(".midpoint-0").each(function () { durations.push($(this).val()); });
+            $(".exercise").each(function () { exercises.push($(this).val()); });
+            return [tempos, durations, exercises];
+        }
     </script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
