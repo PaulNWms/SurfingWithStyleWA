@@ -24,7 +24,7 @@
                     <span class="timer-display">@eggTimer.timerDisplay</span>
                 </h2>
                 <h2 class="col-9">
-                    <span class="exercise-display"></span>
+                    <span class="exercise-display">@schedule.ExerciseDisplay</span>
                 </h2>
             </div>
         </div>
@@ -109,9 +109,11 @@
         schedule = new Schedule(uri);
         eggTimer = new EggTimer();
         metronome = new Metronome();
-        eggTimer.Initialize(metronome);
+        schedule.Initialize(eggTimer, metronome);
+        eggTimer.Initialize(schedule, metronome);
         metronome.Initialize(eggTimer);
         schedule.ExerciseMarkup = schedule.ToHtml();
+        schedule.timeline = schedule.ToTimeline();
         EggTimer.StateHasChanged = this.StateHasChanged;
         this.StateHasChanged();
     }
@@ -131,13 +133,13 @@
 
     class EggTimer
     {
-        static TimerState status = TimerState.Stopped;
         public string buttonFace = "oi-media-play";
         public static Action StateHasChanged;
 
         private TimeSpan duration = new TimeSpan(0, 25, 0);
+        private Schedule schedule;
         private Metronome metronome;
-        DateTime targetTime = DateTime.Now;
+        public DateTime targetTime = DateTime.Now;
         public string timerDisplay = "25:00";
         System.Timers.Timer timer = new System.Timers.Timer(1000);
 
@@ -155,16 +157,17 @@
             }
         }
 
-        public void Initialize(Metronome metronome)
+        public void Initialize(Schedule schedule, Metronome metronome)
         {
+            this.schedule = schedule;
             this.metronome = metronome;
             timer.Elapsed += OnTimer;
         }
 
         void UpdateButton(TimerState state)
         {
-            status = state;
-            switch (status)
+            schedule.status = state;
+            switch (schedule.status)
             {
                 case TimerState.Stopped:
                 case TimerState.Paused:
@@ -195,58 +198,18 @@
             return str.Substring(i);
         }
 
-        public void StartButton()
+        public void OnStartPause()
         {
             IsRunning = !IsRunning;
         }
 
-        void StartMetronome()
+        public void Start(TimeSpan duration)
         {
-            switch (EggTimer.status)
-            {
-                case TimerState.Stopped:
-                    EggTimer.status = TimerState.Running;
-                    IsRunning = true;
-                    break;
-
-                case TimerState.Paused:
-                    EggTimer.status = TimerState.Running;
-                    IsRunning = true;
-                    break;
-
-                case TimerState.Running:
-                    EggTimer.status = TimerState.Paused;
-                    IsRunning = false;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        public void OnStartPause()
-        {
-            switch (status)
-            {
-                case TimerState.Stopped:
-                    targetTime = DateTime.Now + duration;
-                    JSRuntime.Current.InvokeAsync<object>("uncolorBody");
-                    timerDisplay = RoundAndTrimDuration(duration);
-                    UpdateButton(TimerState.Running);
-                    timer.Start();
-                    break;
-
-                case TimerState.Running:
-                    UpdateButton(TimerState.Paused);
-                    timer.Stop();
-                    break;
-
-                case TimerState.Paused:
-                    targetTime = DateTime.Now + duration;
-                    UpdateButton(TimerState.Running);
-                    timer.Start();
-                    break;
-            }
+            this.targetTime = DateTime.Now + duration;
+            JSRuntime.Current.InvokeAsync<object>("uncolorBody");
+            timerDisplay = RoundAndTrimDuration(duration);
+            UpdateButton(TimerState.Running);
+            timer.Start();
         }
 
         void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
@@ -255,15 +218,28 @@
             timerDisplay = RoundAndTrimDuration(duration);
             JSRuntime.Current.InvokeAsync<object>("setTitle", timerDisplay);
 
-            if (timerDisplay == "0:00")
+            if (timerDisplay != "0:00")
+            {
+                if (schedule.status == TimerState.Settling)
+                {
+                    schedule.StartMetronome();
+                }
+            }
+            else if (schedule.timeline.Count == 0)
             {
                 TimerExpired();
+                schedule.LineComplete();
+            }
+            else
+            {
+                schedule.status = TimerState.Continuing;
+                schedule.StartMetronome();
             }
 
             EggTimer.StateHasChanged();
         }
 
-        void TimerExpired()
+        public void TimerExpired()
         {
             targetTime = DateTime.Now;
             JSRuntime.Current.InvokeAsync<object>("colorBody");
@@ -284,8 +260,15 @@
         public bool StartWithRest;
         public bool EndWithBell;
         public string ExerciseMarkup;
+        public List<Exercise> timeline;
+        public  TimerState status = TimerState.Stopped;
+        public Exercise CurrentStep;
+        public Exercise LastStep;
+        public string ExerciseDisplay;
 
         private Uri uri;
+        private EggTimer eggTimer;
+        private Metronome metronome;
         private List<Exercise> exercises;
 
         public Schedule(Uri uri)
@@ -295,6 +278,12 @@
             this.StartWithRest = true;
             this.EndWithBell = true;
             ParseUrl();
+        }
+
+        public void Initialize(EggTimer eggTimer, Metronome metronome)
+        {
+            this.eggTimer = eggTimer;
+            this.metronome = metronome;
         }
 
         public async void CreateLink()
@@ -311,6 +300,76 @@
             }
         }
 
+        public async void StartMetronome()
+        {
+            switch (status)
+            {
+                case TimerState.Stopped:
+                    if (timeline.Count == 0)
+                    {
+                        this.timeline = this.ToTimeline();
+
+                        if (timeline.Count == 0)
+                        {
+                            return;
+                        }
+                    }
+
+                    this.status = TimerState.Continuing;
+                    this.StartMetronome();
+                    break;
+
+                case TimerState.Continuing:
+                    this.LastStep = this.CurrentStep;
+                    this.CurrentStep = timeline[0];
+                    timeline.RemoveAt(0);
+
+                    this.ExerciseDisplay = this.CurrentStep.Description;
+                    this.metronome.Tempo = this.CurrentStep.Tempo;
+                    this.eggTimer.Start(this.CurrentStep.Duration);
+
+                    if (eggTimer.IsRunning)
+                    {
+                        this.status = TimerState.Running;
+                    }
+                    else
+                    {
+                        this.status = TimerState.Settling;
+                    }
+                    break;
+
+                case TimerState.Settling:
+                    this.status = TimerState.Running;
+                    break;
+
+                case TimerState.Paused:
+                    break;
+
+                case TimerState.Running:
+                    break;
+            }
+        }
+
+        public void LineComplete()
+        {
+            if (timeline.Count > 0)
+            {
+                if (this.EndWithBell && (eggTimer.IsRunning || timeline[0].Tempo == 0))
+                {
+                    JSRuntime.Current.InvokeAsync<object>("playAudio");
+                }
+
+                status = TimerState.Continuing;
+                this.StartMetronome();
+            }
+            else
+            {
+                eggTimer.TimerExpired();
+                this.ExerciseDisplay = "Done!";
+            }
+
+            eggTimer.IsRunning = false;
+        }
 
         public async Task ParseControls()
         {
@@ -450,7 +509,7 @@
             }
         }
 
-        private List<Exercise> ToTimeline()
+        public List<Exercise> ToTimeline()
         {
             List<Exercise> timeline = new List<Exercise>();
             var restStep = new Exercise() { Tempo = 0, Duration = this.Rest, Description = "Resting..." };
