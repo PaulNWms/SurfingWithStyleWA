@@ -227,7 +227,7 @@
 
     class Schedule
     {
-        private enum TimerState { Stopped, Running, Paused, Continuing, Settling };
+        private enum TimerState { Stopped, Running, Paused, StartNext, Settling };
 
         public TimeSpan Rest;
         public bool StartWithRest;
@@ -293,11 +293,11 @@
                         }
                     }
 
-                    this.status = TimerState.Continuing;
+                    this.status = TimerState.StartNext;
                     Update();
                     break;
 
-                case TimerState.Continuing:
+                case TimerState.StartNext:
                     this.LastStep = this.CurrentStep;
                     this.CurrentStep = timeline[0];
                     timeline.RemoveAt(0);
@@ -330,7 +330,7 @@
                     JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-exercise");
                 }
 
-                status = TimerState.Continuing;
+                status = TimerState.StartNext;
                 Update();
             }
             else
@@ -582,8 +582,11 @@
             {
                 _tempo = value;
 
-                if (_tempo == 0)
+                if (_tempo < MIN_TEMPO)
+                {
+                    IsRunning = false;
                     Duration = "0s";
+                }
                 else
                     Duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
 
@@ -601,6 +604,12 @@
             set
             {
                 _isRunning = value;
+
+                if (Tempo < MIN_TEMPO)
+                {
+                    _isRunning = false;
+                }
+
                 SetAnimation();
             }
         }
