@@ -19,4 +19,22 @@ housing["income_cat"].value_counts()
 
 # Translates slice objects to concatenation along the first axis.
 example_images = np.r_[X[:12000:600], X[13000:30600:600], X[30600:60000:590]]
+
+# Vectorized operations
++, -, *, /, ** (exponentiation) work on 2 arrays of the same length, or an array and a scalar
+If a is an array and b is a scalar, both a ** b and b ** a will work.
+&amp; (and), | (or), ~ (not) logical operators work on binary arrays
+&amp; (and), | (or), ~ (not) bitwise operators work on integer arrays (less commonly used)
+&gt;, &gt;=, &lt;, &lt;=, ==, != comparison operators result in an array of boolean
+
+# Index arrays
+a = np.array([1, 2, 3, 4])
+b = np.array([True, True, False, False])
+a[b] == [1, 2]
+
+# += operates in-place while + does not
+
+# Modifying an array slice modifies the original array (different from native python arrays!)
+# A NumPy array slice is a view on the original array
+
 </pre>

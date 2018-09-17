@@ -136,4 +136,19 @@ new_rows = df1.append(df2)
 df_08.drop(hb_08.index, inplace=True)
 # add in our newly separated rows
 df_08 = df_08.append(new_rows, ignore_index=True)
+
+# A Pandas series is like a numpy array with extra functionality, esp. index
+
+# get item by position
+employment[i]
+employment.iloc[i]
+
+# get item by index
+employment.loc[i]
+
+# remove NaNs from a series
+s.dropna()
+
+# replace NaNs with a value
+s.fillna(0)
 </pre>
