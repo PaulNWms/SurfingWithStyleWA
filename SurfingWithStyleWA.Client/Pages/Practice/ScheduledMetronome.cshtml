@@ -511,7 +511,6 @@
         public List<Exercise> ToTimeline()
         {
             List<Exercise> timeline = new List<Exercise>();
-            JSRuntime.Current.InvokeAsync<object>("alert", this.rest.TotalSeconds);
             var restStep = new Exercise() { Tempo = -1, Duration = this.rest, Description = "Resting..." };
 
             if (exercises.Count > 0 && this.rest.Ticks > 0 && this.StartWithRest)
