@@ -581,20 +581,19 @@
 
         public const string HTML_TEMPLATE = @"                        <tr>
                     <td>
-                        <button type='button' class='btn btn-primary delete-form-row' style='margin-top:0.2em;margin-right:0.2em'><span class='oi oi-x'></span></button>
+                        <button type='button' class='btn btn-primary delete-schedule-row'><span class='oi oi-x'></span></button>
                     </td>
                     <td>
-                        <input type='text' style='width:3em;margin-top:0.2em;margin-right:0.2em;padding-left:0.3em;padding-right:0.3em' class='form-control digit-filter tempo tempo-0' id='tempo-0' placeholder='Tempo' autocomplete='off' value='{0}' />
+                        <input type='text' class='form-control digit-filter tempo tempo-0' placeholder='Tempo' autocomplete='off' value='{0}' />
                     </td>
                     <td>
-                        <input type='text' style='width:3.5em;margin-top:0.2em;margin-right:0.2em;padding-left:0.5em;padding-right:0.5em' class='form-control time-filter midpoint-0' id='midpoint-0' placeholder='Duration' autocomplete='off' value='{1}' />
-                        <input type='hidden'class='midpoint-0-sec' />
+                        <input type='text' class='form-control time-filter midpoint midpoint-0' placeholder='Duration' autocomplete='off' value='{1}' />
                     </td>
                     <td>
-                        <input type='text' style='margin-top:0.2em;margin-right:0.2em' class='form-control exercise' id='exercise' placeholder='Exercise' value='{2}' />
+                        <input type='text' class='form-control exercise' placeholder='Exercise' value='{2}' />
                     </td>
                     <td>
-                        <button type='button' class='btn btn-primary add-form-row' style='margin-top:0.2em' onclick='@AddRow'><span class='oi oi-plus'></span></button>
+                        <button type='button' class='btn btn-primary add-schedule-row' onclick='@AddRow'><span class='oi oi-plus'></span></button>
                     </td>
                 </tr>";
     }

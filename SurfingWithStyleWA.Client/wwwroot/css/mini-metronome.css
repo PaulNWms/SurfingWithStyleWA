@@ -59,10 +59,34 @@
         animation-direction: alternate;
     }
 
+    .mini-metronome .delete-schedule-row {
+        margin-top: 0.2em;
+        margin-right: 0.2em
+    }
+
     .mini-metronome .tempo {
         width: 3em;
+        margin-top: 0.2em;
+        margin-right: 0.2em;
         padding-left: 0.3em;
-        padding-right: 0.3em;
+        padding-right: 0.3em
+    }
+
+    .mini-metronome .midpoint {
+        width: 3.5em;
+        margin-top: 0.2em;
+        margin-right: 0.2em;
+        padding-left: 0.5em;
+        padding-right: 0.5em
+    }
+
+    .mini-metronome .exercise {
+        margin-top: 0.2em;
+        margin-right: 0.2em
+    }
+
+    .mini-metronome .add-schedule-row {
+        margin-top: 0.2em
     }
 
     .mini-metronome .minutes {
@@ -75,4 +99,5 @@
         width: 3em;
         padding-left: 0.3em;
         padding-right: 0.3em;
+        width:3.5em;margin-top:0.2em;margin-right:0.2em;padding-left:0.5em;padding-right:0.5em
     }

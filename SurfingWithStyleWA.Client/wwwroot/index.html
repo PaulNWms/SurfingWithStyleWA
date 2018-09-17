@@ -26,14 +26,14 @@
             element.on("animationiteration", function () { audio.play(); });
         }
         function registerFormRowListener(html) {
-            $(".add-form-row").off("click");
-            $(".delete-form-row").off("click");
-            $(".add-form-row").click(function () {
+            $(".add-schedule-row").off("click");
+            $(".delete-schedule-row").off("click");
+            $(".add-schedule-row").click(function () {
                 $(this).parent().parent().after(html);
                 registerFormRowListener(html);
                 $(this).parent().parent().next().children().children(".tempo").focus();
             });
-            $(".delete-form-row").click(function () {
+            $(".delete-schedule-row").click(function () {
                 var row = $(this).parent().parent();
                 if (row.siblings().length > 0) {
                     row.remove();
