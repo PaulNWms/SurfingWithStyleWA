@@ -1,0 +1,42 @@
+﻿@page "/tools/whats-my-ip"
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor
+
+<article class="narrow-article timer" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
+    @*@{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}*@
+    <meta itemprop="applicationCategory" content="Tool" />
+    <meta itemprop="applicationSubCategory" content="Network" />
+    <meta itemprop="operatingSystem" content="IIS/ASP.NET Core Blazor" />
+    <h1 itemprop="headline">IP Address: @ip</h1>
+    <br />
+    <h3>Request Headers:</h3>
+</article>
+
+@functions {
+    string ip;
+    List<string> headers;
+    bool initialized = false;
+
+    protected override void OnInit()
+    {
+        base.OnInit();
+    }
+
+    protected override void OnAfterRender()
+    {
+        base.OnAfterRender();
+
+        if (!initialized)
+        {
+            var httpContext = httpContextAccessor.HttpContext;
+            if (httpContext == null)
+            {
+                JSRuntime.Current.InvokeAsync<object>("alert");
+            }
+            //ip = httpContext.ToString();
+            //var connection = httpContext.Connection;
+
+
+            initialized = true;
+        }
+    }
+}

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Blazor.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace SurfingWithStyleWA.Client
@@ -7,6 +8,7 @@ namespace SurfingWithStyleWA.Client
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         public void Configure(IBlazorApplicationBuilder app)
