@@ -17,7 +17,7 @@
         <div class="form-group row">
             <label class="col-md-2 col-form-label" for="FormattedDuration">Duration</label>
             <div class="col-md-2">
-                <input class="form-control duration-minutes" id="FormattedDuration" type="text" value="@formattedDuration" />
+                <input class="form-control duration-minutes" id="FormattedDuration" type="text" bind="@formattedDuration" />
             </div>
         </div>
         <div class="row">
@@ -48,136 +48,154 @@
 </audio>
 
 @functions {
-enum TimerState { Stopped, Running, Paused };
+    enum TimerState { Stopped, Running, Paused };
 
-TimerState timerStatus = TimerState.Stopped;
-TimeSpan duration = new TimeSpan(0, 25, 0);
-DateTime targetTime = DateTime.Now;
-string timerDisplay = "25:00";
-string formattedDuration = "25";
-System.Timers.Timer timer = new System.Timers.Timer(1000);
-string buttonFace = "oi-media-play";
+    TimerState timerStatus = TimerState.Stopped;
+    TimeSpan duration = new TimeSpan(0, 25, 0);
+    DateTime targetTime = DateTime.Now;
+    string timerDisplay = "25:00";
+    string formattedDuration = "25";
+    string oldFormattedDuration = string.Empty;
+    System.Timers.Timer timer = new System.Timers.Timer(1000);
+    string buttonFace = "oi-media-play";
 
-void Min1() { UsePreset("1-minute-timer", 1); }
-void Min2() { UsePreset("2-minute-timer", 2); }
-void Min3() { UsePreset("egg-timer", 3); }
-void Min5() { UsePreset("5-minute-timer", 5); }
-void Min10() { UsePreset("10-minute-timer", 10); }
-void Min15() { UsePreset("15-minute-timer", 15); }
-void Min20() { UsePreset("20-minute-timer", 20); }
-void Min25() { UsePreset("tomato-timer", 25); }
-void Min30() { UsePreset("30-minute-timer", 30); }
-void Min45() { UsePreset("45-minute-timer", 45); }
-void Min60() { UsePreset("1-hour-timer", 60); }
+    void Min1() { UsePreset("1-minute-timer", 1); }
+    void Min2() { UsePreset("2-minute-timer", 2); }
+    void Min3() { UsePreset("egg-timer", 3); }
+    void Min5() { UsePreset("5-minute-timer", 5); }
+    void Min10() { UsePreset("10-minute-timer", 10); }
+    void Min15() { UsePreset("15-minute-timer", 15); }
+    void Min20() { UsePreset("20-minute-timer", 20); }
+    void Min25() { UsePreset("tomato-timer", 25); }
+    void Min30() { UsePreset("30-minute-timer", 30); }
+    void Min45() { UsePreset("45-minute-timer", 45); }
+    void Min60() { UsePreset("1-hour-timer", 60); }
 
-void UpdateButton(TimerState state)
-{
-    timerStatus = state;
-    switch (timerStatus)
+    void UpdateButton(TimerState state)
     {
-        case TimerState.Stopped:
-        case TimerState.Paused:
-            buttonFace = "oi-media-play";
-            break;
+        timerStatus = state;
+        switch (timerStatus)
+        {
+            case TimerState.Stopped:
+            case TimerState.Paused:
+                buttonFace = "oi-media-play";
+                break;
 
-        case TimerState.Running:
-            buttonFace = "oi-media-pause";
-            break;
-    }
-}
-
-string RoundAndTrimDuration(TimeSpan span)
-{
-    const double factor = 10000000;
-    long boundedTicks = Math.Max(span.Ticks, 0);
-    long roundedTicks = (long)(Math.Round(boundedTicks / factor) * factor);
-    TimeSpan roundedTimeSpan = new TimeSpan(roundedTicks);
-    string str = roundedTimeSpan.ToString();
-    int i = 0;
-
-    for (i = 0; i < str.Length - 4; i++)
-    {
-        if (str[i] != '0' && str[i] != ':')
-            break;
+            case TimerState.Running:
+                buttonFace = "oi-media-pause";
+                break;
+        }
     }
 
-    return str.Substring(i);
-}
-
-void UsePreset(string url, int minutes)
-{
-    duration = new TimeSpan(0, minutes, 0);
-    formattedDuration = minutes.ToString();
-    timerDisplay = RoundAndTrimDuration(duration);
-    UpdateButton(TimerState.Stopped);
-    timer.Stop();
-}
-
-void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
-{
-    duration = targetTime - e.SignalTime;
-    timerDisplay = RoundAndTrimDuration(duration);
-    JSRuntime.Current.InvokeAsync<object>("setTitle", timerDisplay);
-
-    if (timerDisplay == "0:00")
+    string RoundAndTrimDuration(TimeSpan span)
     {
-        TimerExpired();
+        const double factor = 10000000;
+        long boundedTicks = Math.Max(span.Ticks, 0);
+        long roundedTicks = (long)(Math.Round(boundedTicks / factor) * factor);
+        TimeSpan roundedTimeSpan = new TimeSpan(roundedTicks);
+        string str = roundedTimeSpan.ToString();
+        int i = 0;
+
+        for (i = 0; i < str.Length - 4; i++)
+        {
+            if (str[i] != '0' && str[i] != ':')
+                break;
+        }
+
+        return str.Substring(i);
     }
 
-    this.StateHasChanged();
-}
-
-void TimerExpired()
-{
-    targetTime = DateTime.Now;
-    JSRuntime.Current.InvokeAsync<object>("colorBody");
-    JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-bell");
-    UpdateButton(TimerState.Stopped);
-    timer.Stop();
-}
-
-void OnStartPause()
-{
-    switch (timerStatus)
+    void UsePreset(string url, int minutes)
     {
-        case TimerState.Stopped:
-            try
-            {
-                int minutes = int.Parse(formattedDuration);
-                duration = new TimeSpan(0, minutes, 0);
-            }
-            catch
-            {
-                duration = new TimeSpan(0, 25, 0);
-            }
-
-            targetTime = DateTime.Now + duration;
-            JSRuntime.Current.InvokeAsync<object>("uncolorBody");
-            timerDisplay = RoundAndTrimDuration(duration);
-            UpdateButton(TimerState.Running);
-            timer.Start();
-            break;
-
-        case TimerState.Running:
-            UpdateButton(TimerState.Paused);
-            timer.Stop();
-            break;
-
-        case TimerState.Paused:
-            targetTime = DateTime.Now + duration;
-            UpdateButton(TimerState.Running);
-            timer.Start();
-            break;
+        duration = new TimeSpan(0, minutes, 0);
+        formattedDuration = minutes.ToString();
+        timerDisplay = RoundAndTrimDuration(duration);
+        UpdateButton(TimerState.Stopped);
+        timer.Stop();
     }
-}
 
-protected override void OnInit()
-{
-    timer.Elapsed += OnTimer;
-}
+    void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
+    {
+        duration = targetTime - e.SignalTime;
+        timerDisplay = RoundAndTrimDuration(duration);
+        JSRuntime.Current.InvokeAsync<object>("setTitle", timerDisplay);
 
-public void Dispose()
-{
-    timer.Elapsed -= OnTimer;
-}
+        if (timerDisplay == "0:00")
+        {
+            TimerExpired();
+        }
+
+        this.StateHasChanged();
+    }
+
+    void TimerExpired()
+    {
+        targetTime = DateTime.Now;
+        JSRuntime.Current.InvokeAsync<object>("colorBody");
+        JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-bell");
+        UpdateButton(TimerState.Stopped);
+        timer.Stop();
+    }
+
+    void OnStartPause()
+    {
+        switch (timerStatus)
+        {
+            case TimerState.Stopped:
+                {
+                    System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"(\d+):(\d\d)");
+                    System.Text.RegularExpressions.Match match = regex.Match(formattedDuration);
+                    int hours;
+                    int minutes;
+
+                    if (match.Success)
+                    {
+                        hours = int.Parse(match.Groups[1].Value);
+                        minutes = int.Parse(match.Groups[2].Value);
+                        duration = new TimeSpan(hours, minutes, 0);
+                    }
+                    else if (int.TryParse(formattedDuration, out minutes))
+                    {
+                        duration = new TimeSpan(0, minutes, 0);
+                    }
+
+                    targetTime = DateTime.Now + duration;
+                    JSRuntime.Current.InvokeAsync<object>("uncolorBody");
+                    timerDisplay = RoundAndTrimDuration(duration);
+                    UpdateButton(TimerState.Running);
+                    timer.Start();
+                }
+                break;
+
+            case TimerState.Running:
+                UpdateButton(TimerState.Paused);
+                timer.Stop();
+                break;
+
+            case TimerState.Paused:
+                if (formattedDuration.Equals(oldFormattedDuration))
+                {
+                    targetTime = DateTime.Now + duration;
+                    UpdateButton(TimerState.Running);
+                    timer.Start();
+                }
+                else
+                {
+                    oldFormattedDuration = formattedDuration;
+                    timerStatus = TimerState.Stopped;
+                    OnStartPause();
+                }
+                break;
+        }
+    }
+
+    protected override void OnInit()
+    {
+        timer.Elapsed += OnTimer;
+    }
+
+    public void Dispose()
+    {
+        timer.Elapsed -= OnTimer;
+    }
 }
