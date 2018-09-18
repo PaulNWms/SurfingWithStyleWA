@@ -94,492 +94,501 @@
 </article>
 
 @functions {
-bool initialized;
-Schedule schedule;
-Metronome metronome;
-EggTimer eggTimer;
+        bool initialized;
+        Schedule schedule;
+        Metronome metronome;
+        EggTimer eggTimer;
 
-protected override void OnInit()
-{
-    base.OnInit();
-
-    Uri uri = new Uri(UriHelper.GetAbsoluteUri());
-    schedule = new Schedule(uri);
-    eggTimer = new EggTimer();
-    metronome = new Metronome();
-    schedule.Initialize(eggTimer, metronome);
-    eggTimer.Initialize(schedule, metronome);
-    metronome.Initialize(eggTimer);
-    schedule.ExerciseMarkup = schedule.ToHtml();
-    EggTimer.StateHasChanged = this.StateHasChanged;
-}
-
-protected override void OnAfterRender()
-{
-    base.OnAfterRender();
-
-    if (!initialized)
+    protected override void OnInit()
     {
-        JSRuntime.Current.InvokeAsync<object>("registerListener", ".audio-click");
-        string newRow = string.Format(Schedule.HTML_TEMPLATE, 120, "2:00", string.Empty);
-        JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", newRow);
-        initialized = true;
+        base.OnInit();
+
+        Uri uri = new Uri(UriHelper.GetAbsoluteUri());
+        schedule = new Schedule(uri);
+        eggTimer = new EggTimer();
+        metronome = new Metronome();
+        schedule.Initialize(eggTimer, metronome);
+        eggTimer.Initialize(schedule, metronome);
+        metronome.Initialize(eggTimer);
+        schedule.ExerciseMarkup = schedule.ToHtml();
+        EggTimer.StateHasChanged = this.StateHasChanged;
     }
-}
 
-class EggTimer
-{
-    public static Action StateHasChanged;
-    public string ButtonFace = "oi-media-play";
-
-    public TimeSpan duration = new TimeSpan(0, 2, 0);
-    private Schedule schedule;
-    private Metronome metronome;
-    public DateTime targetTime = DateTime.Now;
-    public string TimerDisplay = "2:00";
-    System.Timers.Timer timer = new System.Timers.Timer(1000);
-
-    private bool _isRunning = false;
-    public bool IsRunning
+    protected override void OnAfterRender()
     {
-        get
-        {
-            return _isRunning;
-        }
-        set
-        {
-            _isRunning = value;
+        base.OnAfterRender();
 
-            if (_isRunning)
+        if (!initialized)
+        {
+            JSRuntime.Current.InvokeAsync<object>("registerListener", ".audio-click");
+            string newRow = string.Format(Schedule.HTML_TEMPLATE, 120, "2:00", string.Empty);
+            JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", newRow);
+            initialized = true;
+        }
+    }
+
+    class EggTimer
+    {
+        public static Action StateHasChanged;
+        public string ButtonFace = "oi-media-play";
+
+        public TimeSpan duration = new TimeSpan(0, 2, 0);
+        private Schedule schedule;
+        private Metronome metronome;
+        public DateTime targetTime = DateTime.Now;
+        public string TimerDisplay = "2:00";
+        System.Timers.Timer timer = new System.Timers.Timer(1000);
+
+        private bool _isRunning = false;
+        public bool IsRunning
+        {
+            get
             {
-                this.ButtonFace = "oi-media-pause";
-                Start();
+                return _isRunning;
             }
-            else
+            set
             {
-                this.ButtonFace = "oi-media-play";
-                timer.Stop();
-            }
-        }
-    }
+                _isRunning = value;
 
-    public void Initialize(Schedule schedule, Metronome metronome)
-    {
-        this.schedule = schedule;
-        this.metronome = metronome;
-        timer.Elapsed += OnTimer;
-    }
-
-    private string RoundAndTrimDuration(TimeSpan span)
-    {
-        const double factor = 10000000;
-        long boundedTicks = Math.Max(span.Ticks, 0);
-        long roundedTicks = (long)(Math.Round(boundedTicks / factor) * factor);
-        TimeSpan roundedTimeSpan = new TimeSpan(roundedTicks);
-        string str = roundedTimeSpan.ToString();
-        int i = 0;
-
-        for (i = 0; i < str.Length - 4; i++)
-        {
-            if (str[i] != '0' && str[i] != ':')
-                break;
-        }
-
-        return str.Substring(i);
-    }
-
-    private void Start()
-    {
-        this.targetTime = DateTime.Now + duration;
-        JSRuntime.Current.InvokeAsync<object>("uncolorBody");
-        this.TimerDisplay = RoundAndTrimDuration(duration);
-        timer.Start();
-    }
-
-    void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
-    {
-        duration = targetTime - e.SignalTime;
-        this.TimerDisplay = RoundAndTrimDuration(duration);
-        JSRuntime.Current.InvokeAsync<object>("setTitle", this.TimerDisplay);
-        schedule.Update();
-
-        if (this.TimerDisplay == "0:00")
-        {
-            TimerExpired();
-        }
-
-        EggTimer.StateHasChanged();
-    }
-
-    public void TimerExpired()
-    {
-        targetTime = DateTime.Now;
-        timer.Stop();
-        schedule.LineCompleted();
-    }
-
-    public void Dispose()
-    {
-        timer.Elapsed -= OnTimer;
-    }
-}
-
-class Schedule
-{
-    private enum TimerState { Stopped, Running, Paused, StartNext, Settling };
-    private System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"(\d+):(\d\d)");
-    private System.Text.RegularExpressions.Match match;
-
-    public bool StartWithRest;
-    public bool EndWithBell;
-    public string ExerciseMarkup;
-    public List<Exercise> timeline;
-    public Exercise CurrentStep;
-    public Exercise LastStep;
-    public string ExerciseDisplay;
-
-    private TimerState status = TimerState.Stopped;
-    private Uri uri;
-    private EggTimer eggTimer;
-    private Metronome metronome;
-    private List<Exercise> exercises;
-
-    private TimeSpan rest;
-    public string RestDisplay
-    {
-        get
-        {
-            return ((int)rest.TotalSeconds).ToString();
-        }
-        set
-        {
-            match = regex.Match(value);
-            int seconds;
-
-            if (match.Success)
-            {
-                int minutes = int.Parse(match.Groups[1].Value);
-                seconds = int.Parse(match.Groups[2].Value);
-                rest = new TimeSpan(0, minutes, seconds);
-            }
-            else if (int.TryParse(value, out seconds))
-            {
-                rest = new TimeSpan(0, 0, seconds);
-            }
-            else
-            {
-                JSRuntime.Current.InvokeAsync<object>("alert", "what?  " + value);
-            }
-        }
-
-    }
-
-    public Schedule(Uri uri)
-    {
-        this.uri = uri;
-        this.rest = new TimeSpan(0, 0, 5);
-        this.StartWithRest = true;
-        this.EndWithBell = true;
-        ParseUrl();
-    }
-
-    public void Initialize(EggTimer eggTimer, Metronome metronome)
-    {
-        this.eggTimer = eggTimer;
-        this.metronome = metronome;
-    }
-
-    public void OnStartPause()
-    {
-        Update();
-    }
-
-    public async void CreateLink()
-    {
-        try
-        {
-            await ParseControls();
-            string url = ToUrl();
-            await JSRuntime.Current.InvokeAsync<object>("window.open", url);
-        }
-        catch (Exception e)
-        {
-            await JSRuntime.Current.InvokeAsync<object>("alert", e.Message + e.StackTrace);
-        }
-    }
-
-    public async void Update()
-    {
-        switch (status)
-        {
-            case TimerState.Stopped:
-                try
+                if (_isRunning)
                 {
-                    if (timeline == null || timeline.Count == 0)
-                    {
-                        await ParseControls();
-                        this.timeline = this.ToTimeline();
-
-                        if (timeline.Count == 0)
-                        {
-                            return;
-                        }
-                    }
-
-                    this.status = TimerState.StartNext;
-                    Update();
+                    this.ButtonFace = "oi-media-pause";
+                    Start();
                 }
-                catch (Exception e)
+                else
                 {
-                    await JSRuntime.Current.InvokeAsync<object>("alert", e.Message + e.StackTrace);
+                    this.ButtonFace = "oi-media-play";
+                    timer.Stop();
                 }
-                break;
+            }
+        }
 
-            case TimerState.StartNext:
-                this.LastStep = this.CurrentStep;
-                this.CurrentStep = timeline[0];
-                timeline.RemoveAt(0);
-                this.ExerciseDisplay = this.CurrentStep.Description;
-                this.metronome.Tempo = this.CurrentStep.Tempo;
-                this.eggTimer.duration = this.CurrentStep.Duration;
-                this.eggTimer.IsRunning = true;
-                this.metronome.IsRunning = true;
-                this.status = TimerState.Running;
-                break;
+        public void Initialize(Schedule schedule, Metronome metronome)
+        {
+            this.schedule = schedule;
+            this.metronome = metronome;
+            timer.Elapsed += OnTimer;
+        }
 
-            case TimerState.Settling:
-                this.status = TimerState.Running;
-                break;
+        private string RoundAndTrimDuration(TimeSpan span)
+        {
+            const double factor = 10000000;
+            long boundedTicks = Math.Max(span.Ticks, 0);
+            long roundedTicks = (long)(Math.Round(boundedTicks / factor) * factor);
+            TimeSpan roundedTimeSpan = new TimeSpan(roundedTicks);
+            string str = roundedTimeSpan.ToString();
+            int i = 0;
 
-            case TimerState.Paused:
-                break;
+            for (i = 0; i < str.Length - 4; i++)
+            {
+                if (str[i] != '0' && str[i] != ':')
+                    break;
+            }
 
-            case TimerState.Running:
-                break;
+            return str.Substring(i);
+        }
+
+        private void Start()
+        {
+            this.targetTime = DateTime.Now + duration;
+            JSRuntime.Current.InvokeAsync<object>("uncolorBody");
+            this.TimerDisplay = RoundAndTrimDuration(duration);
+            timer.Start();
+        }
+
+        void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
+        {
+            duration = targetTime - e.SignalTime;
+            this.TimerDisplay = RoundAndTrimDuration(duration);
+            JSRuntime.Current.InvokeAsync<object>("setTitle", this.TimerDisplay);
+            schedule.Update();
+
+            if (this.TimerDisplay == "0:00")
+            {
+                TimerExpired();
+            }
+
+            EggTimer.StateHasChanged();
+        }
+
+        public void TimerExpired()
+        {
+            targetTime = DateTime.Now;
+            timer.Stop();
+            schedule.LineCompleted();
+        }
+
+        public void Dispose()
+        {
+            timer.Elapsed -= OnTimer;
         }
     }
 
-    public void LineCompleted()
+    class Schedule
     {
-        if (timeline.Count > 0)
+        private enum TimerState { Stopped, Running, Paused, StartNext, Settling };
+        private System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"(\d+):(\d\d)");
+        private System.Text.RegularExpressions.Match match;
+
+        public bool StartWithRest;
+        public bool EndWithBell;
+        public string ExerciseMarkup;
+        public List<Exercise> timeline;
+        public Exercise CurrentStep;
+        public Exercise LastStep;
+        public string ExerciseDisplay;
+
+        private TimerState status = TimerState.Stopped;
+        private Uri uri;
+        private EggTimer eggTimer;
+        private Metronome metronome;
+        private List<Exercise> exercises;
+
+        private TimeSpan rest;
+        public string RestDisplay
         {
-            if (this.EndWithBell && CurrentStep.Tempo != -1)
+            get
             {
-                JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-exercise");
+                return ((int)rest.TotalSeconds).ToString();
             }
-
-            status = TimerState.StartNext;
-            Update();
-        }
-        else
-        {
-            if (this.EndWithBell)
+            set
             {
-                JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-routine");
-            }
-
-            metronome.IsRunning = false;
-            eggTimer.IsRunning = false;
-            status = TimerState.Stopped;
-            JSRuntime.Current.InvokeAsync<object>("colorBody");
-            this.ExerciseDisplay = "Done!";
-        }
-    }
-
-    public async Task ParseControls()
-    {
-        int minutes;
-        int seconds;
-        exercises = new List<Exercise>();
-        List<List<string>> raw = await JSRuntime.Current.InvokeAsync<List<List<string>>>("getExerciseValues");
-
-        if (raw[0].Count != raw[1].Count || raw[1].Count != raw[2].Count)
-        {
-            throw new DataMisalignedException(string.Format("Lists are different lengths: {0} {1} {2}", raw[0].Count, raw[1].Count, raw[3].Count));
-        }
-
-        for (int i = 0; i < raw[0].Count; i++)
-        {
-            int tempo;
-            TimeSpan duration;
-
-            if (int.TryParse(raw[0][i], out tempo))
-            {
-                match = regex.Match(raw[1][i]);
+                match = regex.Match(value);
+                int seconds;
 
                 if (match.Success)
                 {
-                    minutes = int.Parse(match.Groups[1].Value);
+                    int minutes = int.Parse(match.Groups[1].Value);
                     seconds = int.Parse(match.Groups[2].Value);
-                    duration = new TimeSpan(0, minutes, seconds);
+                    rest = new TimeSpan(0, minutes, seconds);
                 }
-                else if (int.TryParse(raw[1][i], out seconds))
+                else if (int.TryParse(value, out seconds))
                 {
-                    duration = new TimeSpan(0, 0, seconds);
+                    rest = new TimeSpan(0, 0, seconds);
                 }
-            }
-
-            if (duration.Ticks == 0)
-            {
-                throw new ArgumentException(string.Format("Invalid time format: {0}", raw[1][i]));
-            }
-
-            exercises.Add(new Exercise() { Tempo = tempo, Duration = duration, Description = raw[2][i] });
-        }
-    }
-
-    private void ParseUrl()
-    {
-        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(this.uri.Query);
-        int[] tempos = null;
-        TimeSpan[] durations = null;
-        string[] exes = null;
-        exercises = new List<Exercise>();
-
-        if (query.ContainsKey("r"))
-        {
-            foreach (var key in query.Keys)
-            {
-                switch (key)
+                else
                 {
-                    case "r":
-                        this.RestDisplay = query["r"].ToString();
-                        break;
-
-                    case "s":
-                        bool.TryParse(query["s"].ToString(), out this.StartWithRest);
-                        break;
-
-                    case "b":
-                        bool.TryParse(query["b"].ToString(), out this.EndWithBell);
-                        break;
-
-                    case "t":
-                        {
-                            string[] strs = query["t"].ToString().Split('-');
-                            List<int> ts = new List<int>(strs.Length);
-
-                            foreach (string str in strs)
-                            {
-                                int tempo;
-
-                                if (int.TryParse(str, out tempo))
-                                {
-                                    ts.Add(tempo);
-                                }
-                                else
-                                {
-                                    ts.Add(120);
-                                }
-                            }
-
-                            tempos = ts.ToArray();
-                        }
-                        break;
-
-                    case "d":
-                        {
-                            string[] strs = query["d"].ToString().Split('-');
-                            List<TimeSpan> durs = new List<TimeSpan>(strs.Length);
-
-                            foreach (string str in strs)
-                            {
-                                int sec;
-
-                                if (int.TryParse(str, out sec))
-                                {
-                                    durs.Add(new TimeSpan(0, 0, sec));
-                                }
-                                else
-                                {
-                                    durs.Add(new TimeSpan(0, 0, 120));
-                                }
-                            }
-
-                            durations = durs.ToArray();
-                        }
-                        break;
-
-                    case "e":
-                        exes = query["e"].ToString().Split('-');
-                        break;
+                    JSRuntime.Current.InvokeAsync<object>("alert", "what?  " + value);
                 }
             }
 
-            for (int i = 0; i < tempos.Length; i++)
+        }
+
+        public Schedule(Uri uri)
+        {
+            this.uri = uri;
+            this.rest = new TimeSpan(0, 0, 5);
+            this.StartWithRest = true;
+            this.EndWithBell = true;
+            ParseUrl();
+        }
+
+        public void Initialize(EggTimer eggTimer, Metronome metronome)
+        {
+            this.eggTimer = eggTimer;
+            this.metronome = metronome;
+        }
+
+        public void OnStartPause()
+        {
+            Update();
+        }
+
+        public async void CreateLink()
+        {
+            try
             {
-                this.exercises.Add(new Exercise() { Tempo = tempos[i], Duration = durations[i], Description = exes[i] });
+                await ParseControls();
+                string url = ToUrl();
+                await JSRuntime.Current.InvokeAsync<object>("window.open", url);
+            }
+            catch (Exception e)
+            {
+                await JSRuntime.Current.InvokeAsync<object>("alert", e.Message + e.StackTrace);
             }
         }
-        else
+
+        public async void Update()
         {
-            this.exercises.Add(new Exercise() { Tempo = 120, Duration = new TimeSpan(0, 2, 0), Description = string.Empty });
+            switch (status)
+            {
+                case TimerState.Stopped:
+                    try
+                    {
+                        if (timeline == null || timeline.Count == 0)
+                        {
+                            await ParseControls();
+                            this.timeline = this.ToTimeline();
+
+                            if (timeline.Count == 0)
+                            {
+                                return;
+                            }
+                        }
+
+                        this.status = TimerState.StartNext;
+                        Update();
+                    }
+                    catch (Exception e)
+                    {
+                        await JSRuntime.Current.InvokeAsync<object>("alert", e.Message + e.StackTrace);
+                    }
+                    break;
+
+                case TimerState.StartNext:
+                    this.LastStep = this.CurrentStep;
+                    this.CurrentStep = timeline[0];
+                    timeline.RemoveAt(0);
+                    this.ExerciseDisplay = this.CurrentStep.Description;
+                    this.metronome.Tempo = this.CurrentStep.Tempo;
+                    this.eggTimer.duration = this.CurrentStep.Duration;
+                    this.eggTimer.IsRunning = true;
+                    this.metronome.IsRunning = true;
+                    this.status = TimerState.Running;
+                    break;
+
+                case TimerState.Settling:
+                    this.status = TimerState.Running;
+                    break;
+
+                case TimerState.Paused:
+                    break;
+
+                case TimerState.Running:
+                    break;
+            }
         }
-    }
 
-    public List<Exercise> ToTimeline()
-    {
-        List<Exercise> timeline = new List<Exercise>();
-        var restStep = new Exercise() { Tempo = -1, Duration = this.rest, Description = "Resting..." };
-
-        if (exercises.Count > 0 && this.rest.Ticks > 0 && this.StartWithRest)
+        public void LineCompleted()
         {
-            timeline.Add(restStep);
+            if (timeline.Count > 0)
+            {
+                if (this.EndWithBell && CurrentStep.Tempo != -1)
+                {
+                    JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-exercise");
+                }
+
+                status = TimerState.StartNext;
+                Update();
+            }
+            else
+            {
+                if (this.EndWithBell)
+                {
+                    JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-routine");
+                }
+
+                metronome.IsRunning = false;
+                eggTimer.IsRunning = false;
+                status = TimerState.Stopped;
+                JSRuntime.Current.InvokeAsync<object>("colorBody");
+                this.ExerciseDisplay = "Done!";
+            }
         }
 
-        for (var i = 0; i < exercises.Count; i++)
+        public async Task ParseControls()
         {
-            timeline.Add(exercises[i]);
+            int minutes;
+            int seconds;
+            exercises = new List<Exercise>();
+            List<List<string>> raw = await JSRuntime.Current.InvokeAsync<List<List<string>>>("getExerciseValues");
 
-            if (i < exercises.Count - 1 && this.rest.Ticks > 0)
+            if (raw[0].Count != raw[1].Count || raw[1].Count != raw[2].Count)
+            {
+                throw new DataMisalignedException(string.Format("Lists are different lengths: {0} {1} {2}", raw[0].Count, raw[1].Count, raw[3].Count));
+            }
+
+            for (int i = 0; i < raw[0].Count; i++)
+            {
+                int tempo;
+                TimeSpan duration;
+
+                if (int.TryParse(raw[0][i], out tempo))
+                {
+                    match = regex.Match(raw[1][i]);
+
+                    if (match.Success)
+                    {
+                        minutes = int.Parse(match.Groups[1].Value);
+                        seconds = int.Parse(match.Groups[2].Value);
+                        duration = new TimeSpan(0, minutes, seconds);
+                    }
+                    else if (int.TryParse(raw[1][i], out seconds))
+                    {
+                        duration = new TimeSpan(0, 0, seconds);
+                    }
+                }
+
+                if (duration.Ticks == 0)
+                {
+                    throw new ArgumentException(string.Format("Invalid time format: {0}", raw[1][i]));
+                }
+
+                exercises.Add(new Exercise() { Tempo = tempo, Duration = duration, Description = raw[2][i] });
+            }
+        }
+
+        private void ParseUrl()
+        {
+            var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(this.uri.Query);
+            int[] tempos = null;
+            TimeSpan[] durations = null;
+            string[] exes = null;
+            exercises = new List<Exercise>();
+
+            if (query.ContainsKey("r"))
+            {
+                foreach (var key in query.Keys)
+                {
+                    switch (key)
+                    {
+                        case "r":
+                            this.RestDisplay = query["r"].ToString();
+                            break;
+
+                        case "s":
+                            bool.TryParse(query["s"].ToString(), out this.StartWithRest);
+                            break;
+
+                        case "b":
+                            bool.TryParse(query["b"].ToString(), out this.EndWithBell);
+                            break;
+
+                        case "t":
+                            {
+                                string[] strs = query["t"].ToString().Split('-');
+                                List<int> ts = new List<int>(strs.Length);
+
+                                foreach (string str in strs)
+                                {
+                                    int tempo;
+
+                                    if (int.TryParse(str, out tempo))
+                                    {
+                                        ts.Add(tempo);
+                                    }
+                                    else
+                                    {
+                                        ts.Add(120);
+                                    }
+                                }
+
+                                tempos = ts.ToArray();
+                            }
+                            break;
+
+                        case "d":
+                            {
+                                string[] strs = query["d"].ToString().Split('-');
+                                List<TimeSpan> durs = new List<TimeSpan>(strs.Length);
+
+                                foreach (string str in strs)
+                                {
+                                    int sec;
+
+                                    if (int.TryParse(str, out sec))
+                                    {
+                                        durs.Add(new TimeSpan(0, 0, sec));
+                                    }
+                                    else
+                                    {
+                                        durs.Add(new TimeSpan(0, 0, 120));
+                                    }
+                                }
+
+                                durations = durs.ToArray();
+                            }
+                            break;
+
+                        case "e":
+                            exes = query["e"].ToString().Split('-');
+
+                            for (int i = 0; i < exes.Length; i++)
+                            {
+                                exes[i] = exes[i].Replace("%26", "&");
+                                exes[i] = exes[i].Replace("%2D", "-");
+                            }
+                            break;
+                    }
+                }
+
+                for (int i = 0; i < tempos.Length; i++)
+                {
+                    this.exercises.Add(new Exercise() { Tempo = tempos[i], Duration = durations[i], Description = exes[i] });
+                }
+            }
+            else
+            {
+                this.exercises.Add(new Exercise() { Tempo = 120, Duration = new TimeSpan(0, 2, 0), Description = string.Empty });
+            }
+        }
+
+        public List<Exercise> ToTimeline()
+        {
+            List<Exercise> timeline = new List<Exercise>();
+            var restStep = new Exercise() { Tempo = -1, Duration = this.rest, Description = "Resting..." };
+
+            if (exercises.Count > 0 && this.rest.Ticks > 0 && this.StartWithRest)
             {
                 timeline.Add(restStep);
             }
+
+            for (var i = 0; i < exercises.Count; i++)
+            {
+                timeline.Add(exercises[i]);
+
+                if (i < exercises.Count - 1 && this.rest.Ticks > 0)
+                {
+                    timeline.Add(restStep);
+                }
+            }
+
+            return timeline;
         }
 
-        return timeline;
-    }
-
-    public string ToUrl()
-    {
-        List<int> tempos = new List<int>(exercises.Count);
-        List<TimeSpan> durations = new List<TimeSpan>(exercises.Count);
-        List<string> descriptions = new List<string>(exercises.Count);
-
-        foreach (var exercise in exercises)
+        public string ToUrl()
         {
-            tempos.Add(exercise.Tempo);
-            durations.Add(exercise.Duration);
-            descriptions.Add(exercise.Description);
+            List<int> tempos = new List<int>(exercises.Count);
+            List<TimeSpan> durations = new List<TimeSpan>(exercises.Count);
+            List<string> descriptions = new List<string>(exercises.Count);
+
+            foreach (var exercise in exercises)
+            {
+                tempos.Add(exercise.Tempo);
+                durations.Add(exercise.Duration);
+                descriptions.Add(exercise.Description);
+            }
+
+            string ts = string.Join("-", tempos);
+            string ds = string.Join("-", durations.Select(d => (int)d.TotalSeconds));
+            string es = string.Join("-", descriptions.Select(e =>
+                Uri.EscapeUriString(e.Replace("&", "%26").Replace("-", "%2D"))
+            ));
+
+            return String.Format(URL_TEMPLATE, uri.AbsolutePath,
+                ((int)this.rest.TotalSeconds).ToString(),
+                this.StartWithRest.ToString().ToLower(),
+                this.EndWithBell.ToString().ToLower(),
+                ts, ds, es);
         }
 
-        string ts = string.Join("-", tempos);
-        string ds = string.Join("-", durations.Select(d => (int)d.TotalSeconds));
-        string es = string.Join("-", descriptions.Select(e => Uri.EscapeUriString(e)));
-        return String.Format(URL_TEMPLATE, uri.AbsolutePath,
-            ((int)this.rest.TotalSeconds).ToString(),
-            this.StartWithRest.ToString().ToLower(),
-            this.EndWithBell.ToString().ToLower(),
-            ts, ds, es);
-    }
-
-    public string ToHtml()
-    {
-        System.Text.StringBuilder sb = new System.Text.StringBuilder();
-        foreach (var exercise in exercises)
+        public string ToHtml()
         {
-            sb.AppendLine(string.Format(HTML_TEMPLATE,
-                exercise.Tempo,
-                exercise.Duration.ToString(@"m\:ss"),
-                exercise.Description));
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            foreach (var exercise in exercises)
+            {
+                sb.AppendLine(string.Format(HTML_TEMPLATE,
+                    exercise.Tempo,
+                    exercise.Duration.ToString(@"m\:ss"),
+                    exercise.Description));
+            }
+
+            return sb.ToString();
         }
 
-        return sb.ToString();
-    }
+        const string URL_TEMPLATE = "{0}?r={1}&s={2}&b={3}&t={4}&d={5}&e={6}";
 
-    const string URL_TEMPLATE = "{0}?r={1}&s={2}&b={3}&t={4}&d={5}&e={6}";
-
-    public const string HTML_TEMPLATE = @"                        <tr>
+        public const string HTML_TEMPLATE = @"                        <tr>
             <td>
                 <button type='button' class='btn btn-primary delete-schedule-row'><span class='oi oi-x'></span></button>
             </td>
@@ -596,96 +605,96 @@ class Schedule
                 <button type='button' class='btn btn-primary add-schedule-row' onclick='@AddRow'><span class='oi oi-plus'></span></button>
             </td>
         </tr>";
-}
+    }
 
-class Metronome
-{
-    const int MIN_TEMPO = 20;
-    const int MAX_TEMPO = 240;
-
-    public string Animation = "none";
-    public string Duration = "500ms";
-    private EggTimer eggTimer;
-
-    private int _tempo = 120;
-    public int Tempo
+    class Metronome
     {
-        get
-        {
-            return _tempo;
-        }
-        set
-        {
-            _tempo = value;
+        const int MIN_TEMPO = 20;
+        const int MAX_TEMPO = 240;
 
-            if (_tempo < MIN_TEMPO)
+        public string Animation = "none";
+        public string Duration = "500ms";
+        private EggTimer eggTimer;
+
+        private int _tempo = 120;
+        public int Tempo
+        {
+            get
             {
-                IsRunning = false;
-                Duration = "0s";
+                return _tempo;
+            }
+            set
+            {
+                _tempo = value;
+
+                if (_tempo < MIN_TEMPO)
+                {
+                    IsRunning = false;
+                    Duration = "0s";
+                }
+                else
+                    Duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
+
+                SetAnimation();
+            }
+        }
+
+        public string TempoDisplay
+        {
+            get
+            {
+                return (_tempo >= 0) ? _tempo.ToString() : "";
+            }
+        }
+
+        private bool _isRunning = false;
+        public bool IsRunning
+        {
+            get
+            {
+                return _isRunning;
+            }
+            set
+            {
+                _isRunning = value;
+
+                if (Tempo < MIN_TEMPO)
+                {
+                    _isRunning = false;
+                }
+
+                SetAnimation();
+            }
+        }
+
+        public void Initialize(EggTimer eggTimer)
+        {
+            this.eggTimer = eggTimer;
+        }
+
+        void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
+        void IncrementTempo() { Tempo = Math.Min(Tempo + 1, MAX_TEMPO); }
+
+        public void SetAnimation()
+        {
+            if (this.IsRunning)
+            {
+                if (Animation == "swing0")
+                    Animation = "swing1";
+                else
+                    Animation = "swing0";
             }
             else
-                Duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
-
-            SetAnimation();
-        }
-    }
-
-    public string TempoDisplay
-    {
-        get
-        {
-            return (_tempo >= 0) ? _tempo.ToString() : "";
-        }
-    }
-
-    private bool _isRunning = false;
-    public bool IsRunning
-    {
-        get
-        {
-            return _isRunning;
-        }
-        set
-        {
-            _isRunning = value;
-
-            if (Tempo < MIN_TEMPO)
             {
-                _isRunning = false;
+                Animation = "none";
             }
-
-            SetAnimation();
         }
     }
 
-    public void Initialize(EggTimer eggTimer)
+    struct Exercise
     {
-        this.eggTimer = eggTimer;
+        public int Tempo;
+        public TimeSpan Duration;
+        public string Description;
     }
-
-    void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
-    void IncrementTempo() { Tempo = Math.Min(Tempo + 1, MAX_TEMPO); }
-
-    public void SetAnimation()
-    {
-        if (this.IsRunning)
-        {
-            if (Animation == "swing0")
-                Animation = "swing1";
-            else
-                Animation = "swing0";
-        }
-        else
-        {
-            Animation = "none";
-        }
-    }
-}
-
-struct Exercise
-{
-    public int Tempo;
-    public TimeSpan Duration;
-    public string Description;
-}
 }
