@@ -62,20 +62,20 @@
         transform: rotate(0deg) scale(1);
         -webkit-transform-origin: 50% 50%;
         transform-origin: 50% 50%;
-        animation-direction: alternate;
+        animation: none 0ms ease-in-out alternate infinite;
     }
 
-@keyframes swing0 {
+@keyframes start {
     0% {
-        transform: rotate(-40deg);
+        transform: rotate(0deg);
     }
 
     100% {
-        transform: rotate(40deg);
+        transform: rotate(-40deg);
     }
 }
 
-@keyframes swing1 {
+@keyframes swing {
     0% {
         transform: rotate(-40deg);
     }

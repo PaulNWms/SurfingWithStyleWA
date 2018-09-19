@@ -1,10 +1,5 @@
 ﻿@page "/practice/metronome"
 
-<style>
-    .pendulum-parent {
-        animation: @animation @duration ease-in-out alternate infinite;
-    }
-</style>
 <article class="narrow-article metronome" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
     @*@{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}*@
     <meta itemprop="applicationCategory" content="Tool, Multimedia" />
@@ -35,7 +30,7 @@
             <div class="metronome-object">
                 <div class="pendulum-crossbar">
                     <div class="pendulum-grandparent">
-                        <div class="pendulum-parent">
+                        <div class="pendulum-parent" style="animation-name: @animation; animation-duration: @duration;">
                             <div class="pendulum-child"></div>
                         </div>
                     </div>
@@ -107,10 +102,7 @@
     {
         if (IsRunning)
         {
-            if (animation == "swing0")
-                animation = "swing1";
-            else
-                animation = "swing0";
+            animation = "start";
         }
         else
         {

@@ -23,7 +23,10 @@
             var element = $(".pendulum-parent");
             var audio = $(selector)[0];
             element.on("animationstart", function () { audio.play(); });
-            element.on("animationiteration", function () { audio.play(); });
+            element.on("animationiteration", function () {
+                audio.play();
+                element.css("animation-name", "swing");
+            });
         }
         function registerFormRowListener(html) {
             $(".add-schedule-row").off("click");

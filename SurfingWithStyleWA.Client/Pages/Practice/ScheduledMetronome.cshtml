@@ -1,11 +1,6 @@
 ﻿@page "/practice/scheduled-metronome"
 @inject Microsoft.AspNetCore.Blazor.Services.IUriHelper UriHelper
 
-<style>
-    .pendulum-parent {
-        animation: @metronome.Animation @metronome.Duration ease-in-out alternate infinite;
-    }
-</style>
 <article class="narrow-article mini-metronome" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
     @*@{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}*@
     <meta itemprop="applicationCategory" content="Tool, Multimedia" />
@@ -32,7 +27,7 @@
             <div class="metronome-object">
                 <div class="pendulum-crossbar">
                     <div class="pendulum-grandparent">
-                        <div class="pendulum-parent">
+                        <div class="pendulum-parent" style="animation-name: @metronome.Animation; animation-duration: @metronome.Duration;">
                             <div class="pendulum-child"></div>
                         </div>
                     </div>
@@ -94,10 +89,10 @@
 </article>
 
 @functions {
-        bool initialized;
-        Schedule schedule;
-        Metronome metronome;
-        EggTimer eggTimer;
+    bool initialized;
+    Schedule schedule;
+    Metronome metronome;
+    EggTimer eggTimer;
 
     protected override void OnInit()
     {
@@ -677,12 +672,9 @@
 
         public void SetAnimation()
         {
-            if (this.IsRunning)
+            if (IsRunning)
             {
-                if (Animation == "swing0")
-                    Animation = "swing1";
-                else
-                    Animation = "swing0";
+                Animation = "start";
             }
             else
             {
