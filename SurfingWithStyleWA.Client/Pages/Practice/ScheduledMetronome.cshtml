@@ -127,12 +127,12 @@
     {
         public static Action StateHasChanged;
         public string ButtonFace = "oi-media-play";
+        public TimeSpan Duration = new TimeSpan(0, 2, 0);
+        public DateTime TargetTime = DateTime.Now;
+        public string TimerDisplay = "2:00";
 
-        public TimeSpan duration = new TimeSpan(0, 2, 0);
         private Schedule schedule;
         private Metronome metronome;
-        public DateTime targetTime = DateTime.Now;
-        public string TimerDisplay = "2:00";
         System.Timers.Timer timer = new System.Timers.Timer(1000);
 
         private bool _isRunning = false;
@@ -186,16 +186,16 @@
 
         private void Start()
         {
-            this.targetTime = DateTime.Now + duration;
+            this.TargetTime = DateTime.Now + this.Duration;
             JSRuntime.Current.InvokeAsync<object>("uncolorBody");
-            this.TimerDisplay = RoundAndTrimDuration(duration);
+            this.TimerDisplay = RoundAndTrimDuration(this.Duration);
             timer.Start();
         }
 
         void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
         {
-            duration = targetTime - e.SignalTime;
-            this.TimerDisplay = RoundAndTrimDuration(duration);
+            this.Duration = this.TargetTime - e.SignalTime;
+            this.TimerDisplay = RoundAndTrimDuration(this.Duration);
             JSRuntime.Current.InvokeAsync<object>("setTitle", this.TimerDisplay);
             schedule.Update();
 
@@ -209,7 +209,7 @@
 
         public void TimerExpired()
         {
-            targetTime = DateTime.Now;
+            this.TargetTime = DateTime.Now;
             timer.Stop();
             schedule.LineCompleted();
         }
@@ -337,9 +337,9 @@
                     timeline.RemoveAt(0);
                     this.ExerciseDisplay = this.CurrentStep.Description;
                     this.metronome.Tempo = this.CurrentStep.Tempo;
-                    this.eggTimer.duration = this.CurrentStep.Duration;
+                    this.metronome.IsRunning = this.metronome.Tempo >= Metronome.MIN_TEMPO;
+                    this.eggTimer.Duration = this.CurrentStep.Duration;
                     this.eggTimer.IsRunning = true;
-                    this.metronome.IsRunning = true;
                     this.status = TimerState.Running;
                     break;
 
@@ -606,8 +606,8 @@
 
     class Metronome
     {
-        const int MIN_TEMPO = 20;
-        const int MAX_TEMPO = 240;
+        public const int MIN_TEMPO = 20;
+        public const int MAX_TEMPO = 240;
 
         public static Action StateHasChanged;
 
@@ -674,7 +674,7 @@
         void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
         void IncrementTempo() { Tempo = Math.Min(Tempo + 1, MAX_TEMPO); }
 
-        public async void SetAnimation()
+        public void SetAnimation()
         {
             if (IsRunning)
             {
@@ -687,10 +687,7 @@
 
             // Stability hack
             Metronome.StateHasChanged();
-            string js = string.Format("$('.pendulum-parent').css('{0}', '{1}')", "animation-name", Animation);
-            await JSRuntime.Current.InvokeAsync<object>(js);
-            js = string.Format("$('.pendulum-parent').css('{0}', '{1}')", "animation-duration", Duration);
-            await JSRuntime.Current.InvokeAsync<object>(js);
+            JSRuntime.Current.InvokeAsync<object>("setAnimationDuration", this.Animation, this.Duration);
         }
     }
 

@@ -19,6 +19,11 @@
         function uncolorBody() { $("body").css({ "background-color": "", "color": "" }); }
         function playAudio(selector) { $(selector)[0].play(); }
         function setTitle(title) { document.title = title; }
+        function setAnimationDuration(animation, duration) {
+            var element = $(".pendulum-parent");
+            element.css("animation-name", animation);
+            element.css("animation-duration", duration);
+        }
         function registerListener(selector) {
             var element = $(".pendulum-parent");
             var audio = $(selector)[0];
