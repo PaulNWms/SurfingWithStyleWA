@@ -107,6 +107,7 @@
         metronome.Initialize(eggTimer);
         schedule.ExerciseMarkup = schedule.ToHtml();
         EggTimer.StateHasChanged = this.StateHasChanged;
+        Metronome.StateHasChanged = this.StateHasChanged;
     }
 
     protected override void OnAfterRender()
@@ -607,6 +608,8 @@
         const int MIN_TEMPO = 20;
         const int MAX_TEMPO = 240;
 
+        public static Action StateHasChanged;
+
         public string Animation = "none";
         public string Duration = "500ms";
         private EggTimer eggTimer;
@@ -680,6 +683,8 @@
             {
                 Animation = "none";
             }
+
+            Metronome.StateHasChanged();
         }
     }
 
