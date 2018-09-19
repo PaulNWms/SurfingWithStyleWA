@@ -684,10 +684,6 @@
             {
                 Animation = "none";
             }
-
-            // Stability hack
-            Metronome.StateHasChanged();
-            JSRuntime.Current.InvokeAsync<object>("setAnimationDuration", this.Animation, this.Duration);
         }
     }
 

@@ -19,18 +19,15 @@
         function uncolorBody() { $("body").css({ "background-color": "", "color": "" }); }
         function playAudio(selector) { $(selector)[0].play(); }
         function setTitle(title) { document.title = title; }
-        function setAnimationDuration(animation, duration) {
-            var element = $(".pendulum-parent");
-            element.css("animation-name", animation);
-            element.css("animation-duration", duration);
-        }
         function registerListener(selector) {
             var element = $(".pendulum-parent");
             var audio = $(selector)[0];
             element.on("animationstart", function () { audio.play(); });
             element.on("animationiteration", function () {
                 audio.play();
-                element.css("animation-name", "swing");
+                if (element.css("animation-name") === "start") {
+                    element.css("animation-name", "swing");
+                }
             });
         }
         function registerFormRowListener(html) {
