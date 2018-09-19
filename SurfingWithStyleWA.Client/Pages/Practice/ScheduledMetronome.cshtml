@@ -374,6 +374,7 @@
                     JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-routine");
                 }
 
+                metronome.Tempo = 0;
                 metronome.IsRunning = false;
                 eggTimer.IsRunning = false;
                 status = TimerState.Stopped;
@@ -611,7 +612,7 @@
         public static Action StateHasChanged;
 
         public string Animation = "none";
-        public string Duration = "500ms";
+        public string Duration = "0s";
         private EggTimer eggTimer;
 
         private int _tempo = 120;
@@ -673,7 +674,7 @@
         void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
         void IncrementTempo() { Tempo = Math.Min(Tempo + 1, MAX_TEMPO); }
 
-        public void SetAnimation()
+        public async void SetAnimation()
         {
             if (IsRunning)
             {
@@ -684,7 +685,12 @@
                 Animation = "none";
             }
 
+            // Stability hack
             Metronome.StateHasChanged();
+            string js = string.Format("$('.pendulum-parent').css('{0}', '{1}')", "animation-name", Animation);
+            await JSRuntime.Current.InvokeAsync<object>(js);
+            js = string.Format("$('.pendulum-parent').css('{0}', '{1}')", "animation-duration", Duration);
+            await JSRuntime.Current.InvokeAsync<object>(js);
         }
     }
 
