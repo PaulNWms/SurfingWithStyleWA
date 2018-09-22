@@ -97,6 +97,10 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>http://surfingwithstyle.com/notes/sql/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>http://surfingwithstyle.com/notes/life/food/"/</loc>
     <changefreq>monthly</changefreq>
   </url>
