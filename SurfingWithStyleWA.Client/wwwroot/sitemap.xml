@@ -12,11 +12,7 @@
     <loc>http://surfingwithstyle.com/tools/timer/</loc>
     <changefreq>monthly</changefreq>
   </url>
-  <url>
-    <loc>http://surfingwithstyle.com/tools/whats-my-ip/</loc>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
+   <url>
     <loc>http://surfingwithstyle.com/tools/calculator/</loc>
     <changefreq>monthly</changefreq>
   </url>
@@ -54,10 +50,6 @@
   </url>
   <url>
     <loc>http://surfingwithstyle.com/notes/ms/powershell/</loc>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>http://surfingwithstyle.com/notes/web/typescript/"/</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
@@ -101,7 +93,7 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>http://surfingwithstyle.com/notes/life/food/"/</loc>
+    <loc>http://surfingwithstyle.com/notes/other/food/"/</loc>
     <changefreq>monthly</changefreq>
   </url>
 </urlset>
