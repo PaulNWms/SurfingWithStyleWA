@@ -30,7 +30,7 @@
             <div class="metronome-object">
                 <div class="pendulum-crossbar">
                     <div class="pendulum-grandparent">
-                        <div class="pendulum-parent" style="animation-name: @animation; animation-duration: @duration;">
+                        <div class="pendulum-parent" style="animation-name: @animation; animation-duration: @duration; animation-play-state: @playState;">
                             <div class="pendulum-child"></div>
                         </div>
                     </div>
@@ -47,14 +47,15 @@
 </article>
 
 @functions {
-    enum TimerState { Stopped, Running, Paused };
+    enum TimerState { Running, Paused };
 
     const int MIN_TEMPO = 20;
     const int MAX_TEMPO = 240;
-    TimerState status = TimerState.Stopped;
+    TimerState status = TimerState.Paused;
     string buttonFace = "oi-media-play";
-    string animation = "none";
+    string animation = "start";
     string duration = "500ms";
+    string playState = "paused";
     bool initialized;
 
     int _tempo = 120;
@@ -68,21 +69,8 @@
         {
             _tempo = value;
             duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
-            SetAnimation();
-        }
-    }
-
-    bool _isRunning = false;
-    bool IsRunning
-    {
-        get
-        {
-            return _isRunning;
-        }
-        set
-        {
-            _isRunning = value;
-            SetAnimation();
+            // Need to change the animation for the duration change to take effect
+            animation = "start";
         }
     }
 
@@ -98,38 +86,20 @@
     void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
     void IncrementTempo() { Tempo = Math.Min(Tempo + 1, MAX_TEMPO); }
 
-    void SetAnimation()
-    {
-        if (IsRunning)
-        {
-            animation = "start";
-        }
-        else
-        {
-            animation = "none";
-        }
-    }
-
     void StartMetronome()
     {
         switch (status)
         {
-            case TimerState.Stopped:
-                buttonFace = "oi-media-pause";
-                status = TimerState.Running;
-                IsRunning = true;
-                break;
-
             case TimerState.Paused:
                 buttonFace = "oi-media-pause";
                 status = TimerState.Running;
-                IsRunning = true;
+                playState = "running";
                 break;
 
             case TimerState.Running:
                 buttonFace = "oi-media-play";
                 status = TimerState.Paused;
-                IsRunning = false;
+                playState = "paused";
                 break;
 
             default:
