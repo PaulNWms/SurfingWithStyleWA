@@ -73,15 +73,23 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>http://surfingwithstyle.com/notes/data-science/data-analysis/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/data-science/deep-learning/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/notes/data-science/machine-learning/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>http://surfingwithstyle.com/notes/design-patterns/"/</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>http://surfingwithstyle.com/notes/git/"/</loc>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
-    <loc>http://surfingwithstyle.com/notes/machine-learning/"/</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
