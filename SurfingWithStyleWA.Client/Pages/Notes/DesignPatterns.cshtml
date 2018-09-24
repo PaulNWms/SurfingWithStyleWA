@@ -69,6 +69,9 @@ Flyweight
 - Everyday usage: Graphics context in drawing, string interning
 - Structural
 
+Identity Map
+- Everyday usage: Database table has a unique primary key
+
 Interpreter
 - Example: a laser scanner interprets a UPC bar code
 - The interpreter builds objects based on a grammar expressed in EBNF
@@ -95,8 +98,6 @@ Memento
 - The <em>caretaker</em> performs operations on the originator.
 - The <em>memento</em> holds the state of the originator.
 - Behavioral
-
-MVC
 
 MVP
 
@@ -161,6 +162,11 @@ Template Method
 - Behavioral
 
 Unit of Work
+- Everyday usage: ADO.NET SqlDataAdapter, Entity Framework
+- Track changes in persistent objects and commit them in a batch
+  - Efficient data access
+  - Reduces concurrency problems
+  - Manages transactions
 
 Visitor
 - Implement interface IBlah { void Accept(IVisitor visitor); } in each of the classes (double dispatch)
