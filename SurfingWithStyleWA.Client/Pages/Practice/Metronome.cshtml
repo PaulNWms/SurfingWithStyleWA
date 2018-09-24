@@ -53,7 +53,7 @@
     const int MAX_TEMPO = 240;
     TimerState status = TimerState.Paused;
     string buttonFace = "oi-media-play";
-    string animation = "start";
+    string animation = "none";
     string duration = "500ms";
     string playState = "paused";
     bool initialized;
@@ -74,13 +74,22 @@
         }
     }
 
-    protected override void OnAfterRender()
+    protected override async Task OnAfterRenderAsync()
     {
         if (!initialized)
         {
-            JSRuntime.Current.InvokeAsync<object>("registerListener", ".audio-click");
             initialized = true;
+            Action<string> setAnimationName = delegate (string name)
+            {
+                animation = name;
+                this.StateHasChanged();
+            };
+
+            DotNetObjectRef dotNetHelper = new DotNetObjectRef(new AnimationHelper(setAnimationName));
+            await JSRuntime.Current.InvokeAsync<object>("registerListener", ".audio-click", dotNetHelper);
         }
+
+        await base.OnAfterRenderAsync();
     }
 
     void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
@@ -92,6 +101,12 @@
         {
             case TimerState.Paused:
                 status = TimerState.Running;
+
+                if (animation.Equals("none"))
+                {
+                    animation = "start";
+                }
+
                 buttonFace = "oi-media-pause";
                 playState = "running";
                 break;

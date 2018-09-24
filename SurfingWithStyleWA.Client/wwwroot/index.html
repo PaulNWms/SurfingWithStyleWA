@@ -19,7 +19,18 @@
         function uncolorBody() { $("body").css({ "background-color": "", "color": "" }); }
         function playAudio(selector) { $(selector)[0].play(); }
         function setTitle(title) { document.title = title; }
-        function registerListener(selector) {
+        function registerListener(selector, dotnetHelper) {
+            var element = $(".pendulum-parent");
+            var audio = $(selector)[0];
+            element.on("animationstart", function () { audio.play(); });
+            element.on("animationiteration", function () {
+                audio.play();
+                if (element.css("animation-name") === "start") {
+                    dotnetHelper.invokeMethodAsync("SetAnimationToSwing");
+                }
+            });
+        }
+        function registerScheduled(selector) {
             var element = $(".pendulum-parent");
             var audio = $(selector)[0];
             element.on("animationstart", function () { audio.play(); });

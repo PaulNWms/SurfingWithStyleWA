@@ -116,7 +116,7 @@
 
         if (!initialized)
         {
-            JSRuntime.Current.InvokeAsync<object>("registerListener", ".audio-click");
+            JSRuntime.Current.InvokeAsync<object>("registerScheduled", ".audio-click");
             string newRow = string.Format(Schedule.HTML_TEMPLATE, 120, "2:00", string.Empty);
             JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", newRow);
             initialized = true;
