@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-9 jumbotron text-center">
             <div class="row">
-                <button class="offset-3 btn btn-primary btn-lg start" type="button" onclick="@schedule.OnStartPause"><span class="oi @eggTimer.ButtonFace"></span></button>
+                <button class="offset-3 btn btn-primary btn-lg start" type="button" onclick="@schedule.OnPlayPause"><span class="oi @eggTimer.ButtonFace"></span></button>
                 <h1 class="offset-1 display"><span class="display">@metronome.TempoDisplay</span></h1>
             </div>
             <br />
@@ -27,7 +27,7 @@
             <div class="metronome-object">
                 <div class="pendulum-crossbar">
                     <div class="pendulum-grandparent">
-                        <div class="pendulum-parent" style="animation-name: @metronome.Animation; animation-duration: @metronome.Duration;">
+                        <div class="pendulum-parent" style="animation-name: @metronome.Animation; animation-duration: @metronome.Duration; animation-play-state: @metronome.PlayState;">
                             <div class="pendulum-child"></div>
                         </div>
                     </div>
@@ -110,17 +110,24 @@
         Metronome.StateHasChanged = this.StateHasChanged;
     }
 
-    protected override void OnAfterRender()
+    protected override async Task OnAfterRenderAsync()
     {
-        base.OnAfterRender();
-
         if (!initialized)
         {
-            JSRuntime.Current.InvokeAsync<object>("registerScheduled", ".audio-click");
-            string newRow = string.Format(Schedule.HTML_TEMPLATE, 120, "2:00", string.Empty);
-            JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", newRow);
             initialized = true;
+            Action<string> setAnimationName = delegate (string name)
+            {
+                metronome.Animation = name;
+                this.StateHasChanged();
+            };
+
+            DotNetObjectRef dotNetHelper = new DotNetObjectRef(new AnimationHelper(setAnimationName));
+            await JSRuntime.Current.InvokeAsync<object>("registerListener", ".audio-click", dotNetHelper);
+            string newRow = string.Format(Schedule.HTML_TEMPLATE, 120, "2:00", string.Empty);
+            await JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", newRow);
         }
+
+        await base.OnAfterRenderAsync();
     }
 
     class EggTimer
@@ -285,9 +292,26 @@
             this.metronome = metronome;
         }
 
-        public void OnStartPause()
+        public void OnPlayPause()
         {
-            Update();
+            switch (status)
+            {
+                case TimerState.Paused:
+                    status = TimerState.Running;
+                    eggTimer.IsRunning = true;
+                    metronome.PlayState = "running";
+                    break;
+
+                case TimerState.Running:
+                    status = TimerState.Paused;
+                    eggTimer.IsRunning = false;
+                    metronome.PlayState = "paused";
+                    break;
+
+                default:
+                    Update();
+                    break;
+            }
         }
 
         public async void CreateLink()
@@ -347,10 +371,7 @@
                     this.status = TimerState.Running;
                     break;
 
-                case TimerState.Paused:
-                    break;
-
-                case TimerState.Running:
+                default:
                     break;
             }
         }
@@ -613,6 +634,7 @@
 
         public string Animation = "none";
         public string Duration = "0s";
+        public string PlayState = "running";
         private EggTimer eggTimer;
 
         private int _tempo = 120;

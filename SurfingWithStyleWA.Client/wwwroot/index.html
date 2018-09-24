@@ -30,17 +30,6 @@
                 }
             });
         }
-        function registerScheduled(selector) {
-            var element = $(".pendulum-parent");
-            var audio = $(selector)[0];
-            element.on("animationstart", function () { audio.play(); });
-            element.on("animationiteration", function () {
-                audio.play();
-                if (element.css("animation-name") === "start") {
-                    element.css("animation-name", "swing");
-                }
-            });
-        }
         function registerFormRowListener(html) {
             $(".add-schedule-row").off("click");
             $(".delete-schedule-row").off("click");
