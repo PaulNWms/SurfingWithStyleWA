@@ -11,7 +11,8 @@
 </head>
 <body>
     When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
-    $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+    $$\sigma^2 = \frac {1}{n} \sum_{i=1}^n{(x_i-\bar{x})^2} \quad or \quad \sigma^2 = \frac {1}{n-1} \sum_{i=1}^n{(x_i-\bar{x})^2}$$
+    $$\sigma = \sqrt {\sigma^2} = \sqrt {\frac {1}{n} \sum_{i=1}^n{(x_i-\bar{x})^2}} \quad or \quad \sigma = \sqrt {\frac {1}{n-1} \sum_{i=1}^n{(x_i-\bar{x})^2}}$$
     $$precision = \frac {TP}{TP + FP}$$
     $$recall = \frac {TP}{TP + FN}$$
     $$F_1 = \frac {2}{\frac {1}{precision} + \frac {1}{recall}} = 2 \times \frac {precision \times recall}{precision + recall} = \frac {TP}{TP + \frac {FN + FP}{2}}$$
