@@ -2,7 +2,7 @@
 
 <h1>Deep Learning</h1>
 
-<pre class="kaypro10">Links:
+<div class="kaypro10"><pre>Links:
 <a target="_blank" href="https://www.manning.com/books/grokking-deep-learning">Grokking Deep Learning</a>
 
 <em>Type</em> of machine learning: supervised vs. unsupervised
@@ -65,4 +65,31 @@ for iteration in range(60):
  
     if(iteration % 10 == 9):
         print("Error:" + str(layer_2_error))
-</pre>
+
+Normalization techniques:
+- minibatch
+- early stopping
+- dropout
+
+Activation functions:
+- relu is fast
+- sigmoid is often used for output because it squishes the values between 0 and 1
+- tanh is often used for middle layers because it squishes the values between -1 and 1
+
+Output activation functions:
+- predicting raw data values (like temperature) => no activation
+- predicting yes/no probabilities => sigmoid
+- predicting "which one" probabilities => softmax
+
+<u>function   forward prop                     back prop delta</u>
+- Relu     ones_and_zeros = (input > 0)     mask = output > 0
+           output = input*ones_and_zeros    deriv = output * mask
+- Sigmoid  output = 1/(1 + np.exp(-input))  deriv = output*(1-output)
+- Tanh     output = np.tanh(input)          deriv = 1 - (output**2)
+- Softmax  temp = np.exp(input)             temp = (output - true)
+           output /= np.sum(temp)           output = temp/len(true)
+
+A convolution layer aggregates the kernels with sum pooling, mean pooling, or max pooling.  Max pooling is the most common.
+
+When a neural network needs to use the same idea in mutliple places, endeavor to use the same weights in both places.
+</pre></div>
