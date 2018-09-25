@@ -8,10 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\scripts\Metronome.ts" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="MathJax" Version="2.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Browser" Version="0.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.Blazor.Build" Version="0.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.1.1" />
@@ -21,10 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SurfingWithStyleWA.Shared\SurfingWithStyleWA.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\scripts\Metronome.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -83,6 +76,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\audio\" />
+    <Folder Include="wwwroot\scripts\" />
   </ItemGroup>
 
 </Project>

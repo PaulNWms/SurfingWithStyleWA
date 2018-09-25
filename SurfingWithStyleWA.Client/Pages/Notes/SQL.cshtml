@@ -15,4 +15,11 @@
 10. apply the ORDER BY clause
 11. apply the TOP operation
 
+Three-valued logic in SQL means values can be TRUE, FALSE, or UNKNOWN (e.g. NULL > 0).  
+
+UNKNOWN is treated as FALSE in ON, WHERE and HAVING filters.
+UNKNOWN is treated as TRUE in in check constraints.
+
+A GROUP BY clause groups all NULLs in one group.
+An ORDER BY clause sorts all NULLs together.
 </pre>
