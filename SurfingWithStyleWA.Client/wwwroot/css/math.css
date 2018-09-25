@@ -1,0 +1,97 @@
+﻿.MathJax_Display {
+    text-align: center;
+    margin: 1em 0em;
+    position: relative;
+    display: block !important;
+    text-indent: 0px;
+    max-width: none;
+    max-height: none;
+    min-width: 0px;
+    min-height: 0px;
+    width: 100%;
+}
+
+.MathJax {
+    display: inline;
+    font-style: normal;
+    font-weight: normal;
+    line-height: normal;
+    font-size: 100%;
+    font-size-adjust: none;
+    text-indent: 0px;
+    text-align: left;
+    text-transform: none;
+    letter-spacing: normal;
+    word-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    float: none;
+    direction: ltr;
+    max-width: none;
+    max-height: none;
+    min-width: 0px;
+    min-height: 0px;
+    border: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.MJX_Assistive_MathML {
+    position: absolute !important;
+    top: 0px;
+    left: 0px;
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 1px 0 0 0 !important;
+    border: 0 !important;
+    height: 1px !important;
+    width: 1px !important;
+    overflow: hidden !important;
+    display: block !important;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.MathJax * {
+    transition: none;
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+}
+
+.MathJax img, .MathJax nobr, .MathJax a {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    max-width: none;
+    max-height: none;
+    min-width: 0px;
+    min-height: 0px;
+    vertical-align: 0px;
+    line-height: normal;
+    text-decoration: none;
+}
+
+.MathJax nobr {
+    white-space: nowrap !important;
+}
+
+.MathJax span {
+    display: inline;
+    position: static;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    vertical-align: 0px;
+    line-height: normal;
+    text-decoration: none;
+    box-sizing: content-box;
+}
+
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {
+    width: 100% !important;
+}
