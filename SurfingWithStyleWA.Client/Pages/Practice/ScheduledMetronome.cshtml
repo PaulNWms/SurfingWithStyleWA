@@ -134,7 +134,7 @@
     {
         public static Action StateHasChanged;
         public string ButtonFace = "oi-media-play";
-        public TimeSpan Duration = new TimeSpan(0, 2, 0);
+        public TimeSpan TimeRemaining = new TimeSpan(0, 2, 0);
         public DateTime TargetTime = DateTime.Now;
         public string TimerDisplay = "2:00";
 
@@ -193,16 +193,16 @@
 
         private void Start()
         {
-            this.TargetTime = DateTime.Now + this.Duration;
+            this.TargetTime = DateTime.Now + this.TimeRemaining;
             JSRuntime.Current.InvokeAsync<object>("uncolorBody");
-            this.TimerDisplay = RoundAndTrimDuration(this.Duration);
+            this.TimerDisplay = RoundAndTrimDuration(this.TimeRemaining);
             timer.Start();
         }
 
-        void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
+        public void OnTimer(Object source, System.Timers.ElapsedEventArgs e)
         {
-            this.Duration = this.TargetTime - e.SignalTime;
-            this.TimerDisplay = RoundAndTrimDuration(this.Duration);
+            this.TimeRemaining = this.TargetTime - DateTime.Now;
+            this.TimerDisplay = RoundAndTrimDuration(this.TimeRemaining);
             JSRuntime.Current.InvokeAsync<object>("setTitle", this.TimerDisplay);
             schedule.Update();
 
@@ -306,6 +306,7 @@
                     status = TimerState.Paused;
                     eggTimer.IsRunning = false;
                     metronome.PlayState = "paused";
+                    eggTimer.OnTimer(null, null);
                     break;
 
                 default:
@@ -362,7 +363,7 @@
                     this.ExerciseDisplay = this.CurrentStep.Description;
                     this.metronome.Tempo = this.CurrentStep.Tempo;
                     this.metronome.IsRunning = this.metronome.Tempo >= Metronome.MIN_TEMPO;
-                    this.eggTimer.Duration = this.CurrentStep.Duration;
+                    this.eggTimer.TimeRemaining = this.CurrentStep.Duration;
                     this.eggTimer.IsRunning = true;
                     this.status = TimerState.Running;
                     break;
