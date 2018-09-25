@@ -122,6 +122,16 @@ Proxy
 Repository
 
 Rules
+- Separate the logic of each individual rule and its effects into its own class
+- Separate the selection and processing of rules into a separate Evaluator class
+- Use when you have a growing amount of conditional complexity
+- Special case of the Command pattern
+- Links:
+  - <a target="_blank" href="http://thedailywtf.com/articles/soft_coding.aspx">Soft Coding</a>
+  - <a target="_blank" href="http://www.jessrules.com/guidelines.shtml">Should You Use a Rules Engine?</a>
+  - <a target="_blank" href="http://bit.ly/fDH8r">Simple .NET Rules Engine Discussion (StackOverflow)</a>
+  - <a target="_blank" href="http://en.wikipedia.org/wiki/Business_rules_engine">Business Rules Engines</a>
+  - <a target="_blank" href="http://bit.ly/aetfj0">Intro to WF Rules Engine</a>
 
 Service Locator
 
@@ -164,9 +174,9 @@ Template Method
 Unit of Work
 - Track changes in persistent objects and commit them in a batch
 - Everyday usage: ADO.NET SqlDataAdapter, Entity Framework
- - Efficient data access
- - Reduces concurrency problems
- - Manages transactions
+  - Efficient data access
+  - Reduces concurrency problems
+  - Manages transactions
 
 Visitor
 - Implement interface IBlah { void Accept(IVisitor visitor); } in each of the classes (double dispatch)
