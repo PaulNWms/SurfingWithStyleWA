@@ -99,15 +99,13 @@
         base.OnInit();
 
         Uri uri = new Uri(UriHelper.GetAbsoluteUri());
-        schedule = new Schedule(uri);
-        eggTimer = new EggTimer();
+        schedule = new Schedule(this.StateHasChanged, uri);
+        eggTimer = new EggTimer(this.StateHasChanged);
         metronome = new Metronome();
         schedule.Initialize(eggTimer, metronome);
         eggTimer.Initialize(schedule, metronome);
         metronome.Initialize(eggTimer);
         schedule.ExerciseMarkup = schedule.ToHtml();
-        EggTimer.StateHasChanged = this.StateHasChanged;
-        Metronome.StateHasChanged = this.StateHasChanged;
     }
 
     protected override async Task OnAfterRenderAsync()
@@ -132,12 +130,12 @@
 
     class EggTimer
     {
-        public static Action StateHasChanged;
         public string ButtonFace = "oi-media-play";
         public TimeSpan TimeRemaining = new TimeSpan(0, 2, 0);
         public DateTime TargetTime = DateTime.Now;
         public string TimerDisplay = "2:00";
 
+        private Action StateHasChanged;
         private Schedule schedule;
         private Metronome metronome;
         System.Timers.Timer timer = new System.Timers.Timer(1000);
@@ -164,6 +162,11 @@
                     timer.Stop();
                 }
             }
+        }
+
+        public EggTimer(Action stateHasChanged)
+        {
+            this.StateHasChanged = stateHasChanged;
         }
 
         public void Initialize(Schedule schedule, Metronome metronome)
@@ -211,7 +214,7 @@
                 TimerExpired();
             }
 
-            EggTimer.StateHasChanged();
+            this.StateHasChanged();
         }
 
         public void TimerExpired()
@@ -241,6 +244,7 @@
         public Exercise LastStep;
         public string ExerciseDisplay;
 
+        private Action StateHasChanged;
         private TimerState status = TimerState.Stopped;
         private Uri uri;
         private EggTimer eggTimer;
@@ -277,8 +281,9 @@
 
         }
 
-        public Schedule(Uri uri)
+        public Schedule(Action stateHasChanged, Uri uri)
         {
+            this.StateHasChanged = stateHasChanged;
             this.uri = uri;
             this.rest = new TimeSpan(0, 0, 5);
             this.StartWithRest = true;
@@ -292,10 +297,34 @@
             this.metronome = metronome;
         }
 
-        public void OnPlayPause()
+        public async void OnPlayPause()
         {
             switch (status)
             {
+                case TimerState.Stopped:
+                    try
+                    {
+                        if (timeline == null || timeline.Count == 0)
+                        {
+                            await ParseControls();
+                            this.timeline = this.ToTimeline();
+
+                            if (timeline.Count == 0)
+                            {
+                                return;
+                            }
+                        }
+
+                        this.status = TimerState.StartNext;
+                        Update();
+                        this.StateHasChanged();
+                    }
+                    catch (Exception e)
+                    {
+                        await JSRuntime.Current.InvokeAsync<object>("alert", e.Message + e.StackTrace);
+                    }
+                    break;
+
                 case TimerState.Paused:
                     status = TimerState.Running;
                     eggTimer.IsRunning = true;
@@ -329,33 +358,10 @@
             }
         }
 
-        public async void Update()
+        public void Update()
         {
             switch (status)
             {
-                case TimerState.Stopped:
-                    try
-                    {
-                        if (timeline == null || timeline.Count == 0)
-                        {
-                            await ParseControls();
-                            this.timeline = this.ToTimeline();
-
-                            if (timeline.Count == 0)
-                            {
-                                return;
-                            }
-                        }
-
-                        this.status = TimerState.StartNext;
-                        Update();
-                    }
-                    catch (Exception e)
-                    {
-                        await JSRuntime.Current.InvokeAsync<object>("alert", e.Message + e.StackTrace);
-                    }
-                    break;
-
                 case TimerState.StartNext:
                     this.LastStep = this.CurrentStep;
                     this.CurrentStep = timeline[0];
@@ -631,11 +637,10 @@
         public const int MIN_TEMPO = 20;
         public const int MAX_TEMPO = 240;
 
-        public static Action StateHasChanged;
-
         public string Animation = "none";
         public string Duration = "0s";
         public string PlayState = "running";
+
         private EggTimer eggTimer;
 
         private int _tempo = 120;
