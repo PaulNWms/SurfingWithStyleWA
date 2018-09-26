@@ -91,7 +91,7 @@
 @functions {
     bool initialized;
     Schedule schedule;
-    Metronome metronome;
+    MiniMetronome metronome;
     EggTimer eggTimer;
 
     protected override void OnInit()
@@ -101,10 +101,9 @@
         Uri uri = new Uri(UriHelper.GetAbsoluteUri());
         schedule = new Schedule(this.StateHasChanged, uri);
         eggTimer = new EggTimer(this.StateHasChanged);
-        metronome = new Metronome();
+        metronome = new MiniMetronome();
         schedule.Initialize(eggTimer, metronome);
         eggTimer.Initialize(schedule, metronome);
-        metronome.Initialize(eggTimer);
         schedule.ExerciseMarkup = schedule.ToHtml();
     }
 
@@ -137,7 +136,7 @@
 
         private Action StateHasChanged;
         private Schedule schedule;
-        private Metronome metronome;
+        private MiniMetronome metronome;
         System.Timers.Timer timer = new System.Timers.Timer(1000);
 
         private bool _isRunning = false;
@@ -169,7 +168,7 @@
             this.StateHasChanged = stateHasChanged;
         }
 
-        public void Initialize(Schedule schedule, Metronome metronome)
+        public void Initialize(Schedule schedule, MiniMetronome metronome)
         {
             this.schedule = schedule;
             this.metronome = metronome;
@@ -248,7 +247,7 @@
         private TimerState status = TimerState.Stopped;
         private Uri uri;
         private EggTimer eggTimer;
-        private Metronome metronome;
+        private MiniMetronome metronome;
         private List<Exercise> exercises;
 
         private TimeSpan rest;
@@ -291,7 +290,7 @@
             ParseUrl();
         }
 
-        public void Initialize(EggTimer eggTimer, Metronome metronome)
+        public void Initialize(EggTimer eggTimer, MiniMetronome metronome)
         {
             this.eggTimer = eggTimer;
             this.metronome = metronome;
@@ -368,7 +367,7 @@
                     timeline.RemoveAt(0);
                     this.ExerciseDisplay = this.CurrentStep.Description;
                     this.metronome.Tempo = this.CurrentStep.Tempo;
-                    this.metronome.IsRunning = this.metronome.Tempo >= Metronome.MIN_TEMPO;
+                    this.metronome.IsRunning = this.metronome.Tempo >= MiniMetronome.MIN_TEMPO;
                     this.eggTimer.TimeRemaining = this.CurrentStep.Duration;
                     this.eggTimer.IsRunning = true;
                     this.status = TimerState.Running;
@@ -630,89 +629,6 @@
                 <button type='button' class='btn btn-primary add-schedule-row' onclick='@AddRow'><span class='oi oi-plus'></span></button>
             </td>
         </tr>";
-    }
-
-    class Metronome
-    {
-        public const int MIN_TEMPO = 20;
-        public const int MAX_TEMPO = 240;
-
-        public string Animation = "none";
-        public string Duration = "0s";
-        public string PlayState = "running";
-
-        private EggTimer eggTimer;
-
-        private int _tempo = 120;
-        public int Tempo
-        {
-            get
-            {
-                return _tempo;
-            }
-            set
-            {
-                _tempo = value;
-
-                if (_tempo < MIN_TEMPO)
-                {
-                    IsRunning = false;
-                    Duration = "0s";
-                }
-                else
-                    Duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
-
-                SetAnimation();
-            }
-        }
-
-        public string TempoDisplay
-        {
-            get
-            {
-                return (_tempo >= 0) ? _tempo.ToString() : "";
-            }
-        }
-
-        private bool _isRunning = false;
-        public bool IsRunning
-        {
-            get
-            {
-                return _isRunning;
-            }
-            set
-            {
-                _isRunning = value;
-
-                if (Tempo < MIN_TEMPO)
-                {
-                    _isRunning = false;
-                }
-
-                SetAnimation();
-            }
-        }
-
-        public void Initialize(EggTimer eggTimer)
-        {
-            this.eggTimer = eggTimer;
-        }
-
-        void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
-        void IncrementTempo() { Tempo = Math.Min(Tempo + 1, MAX_TEMPO); }
-
-        public void SetAnimation()
-        {
-            if (IsRunning)
-            {
-                Animation = "start";
-            }
-            else
-            {
-                Animation = "none";
-            }
-        }
     }
 
     struct Exercise
