@@ -8,7 +8,8 @@ namespace SurfingWithStyleWA.Client
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+//            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IHeaderDictionary, HeaderDictionary>();
         }
 
         public void Configure(IBlazorApplicationBuilder app)
