@@ -103,7 +103,7 @@
         eggTimer = new EggTimer(this.StateHasChanged);
         metronome = new MiniMetronome();
         schedule.Initialize(eggTimer, metronome);
-        eggTimer.Initialize(schedule, metronome);
+        eggTimer.Initialize(schedule);
         schedule.ExerciseMarkup = schedule.ToHtml();
     }
 
@@ -136,7 +136,6 @@
 
         private Action StateHasChanged;
         private Schedule schedule;
-        private MiniMetronome metronome;
         System.Timers.Timer timer = new System.Timers.Timer(1000);
 
         private bool _isRunning = false;
@@ -168,10 +167,9 @@
             this.StateHasChanged = stateHasChanged;
         }
 
-        public void Initialize(Schedule schedule, MiniMetronome metronome)
+        public void Initialize(Schedule schedule)
         {
             this.schedule = schedule;
-            this.metronome = metronome;
             timer.Elapsed += OnTimer;
         }
 
