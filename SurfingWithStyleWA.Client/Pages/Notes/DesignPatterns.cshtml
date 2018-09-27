@@ -112,7 +112,7 @@ Null Object
 Observer
 - Uses events to notify changes automatically
 - Publish/Subscribe relationship
-- Synchronous; the observable notifies the observers directly
+- Synchronous; the observable notifies the observers immediately (either directly or through an Event Aggregator)
 - Risk of memory leaks, see Event Aggregator
 - Everyday usage: Event Handlers
 - Everyday usage: IObservable&lt;T&gt; and IObserver&lt;T&gt;
@@ -164,6 +164,9 @@ Singleton
 - Creational
 
 Specification
+- Defines a predicate that matches qualifying objects
+- Predicates in link look like Expression&lt;Func&lt;T, bool&gt;&gt;
+- Part of domain-driven design (DDD)
 
 State
 - Implement an FSM with state objects derived from a base class
