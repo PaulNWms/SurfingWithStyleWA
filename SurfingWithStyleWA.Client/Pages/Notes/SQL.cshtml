@@ -24,4 +24,6 @@ A GROUP BY clause groups all NULLs in one group.
 An ORDER BY clause sorts all NULLs together.
 
 You can't use aggregate filters in a WHERE condition because the data hasn't been grouped yet.
+
+If a GROUP BY clause is specified in a query, all following steps (HAVING, SELECT) can specify only expressions that result in a scalar value for the group.
 </pre>
