@@ -53,6 +53,9 @@ Decorator (wrapper)
 - Structural
 
 Event Aggregator
+- Subscibers subscribe only to the event aggregator instead of all the subscribers
+- The event aggregator typically uses weak references to minimize memory leaks
+- Use when: there are many publishers and subscribers
 
 Façade
 - Hides complexity
@@ -103,9 +106,14 @@ MVP
 MVVM
 
 Null Object
+- Provide a non-functional object in place of a null reference
+- Often implemented as a static inner class of a base class
 
 Observer
+- Uses events to notify changes automatically
 - Publish/Subscribe relationship
+- Synchronous; the observable notifies the observers directly
+- Risk of memory leaks, see Event Aggregator
 - Everyday usage: Event Handlers
 - Everyday usage: IObservable&lt;T&gt; and IObserver&lt;T&gt;
 - Behavioral
@@ -117,6 +125,11 @@ Proxy
 - Placeholder / Stand-in for actual object
 - Everyday usage: SOAP Service Proxies
 - Structural
+
+Publish/Subscribe
+- Uses events to notify changes explicitly
+- Publish/Subscribe relationship
+- Asynchronous, generally uses a message queue
 
 Repository
 
