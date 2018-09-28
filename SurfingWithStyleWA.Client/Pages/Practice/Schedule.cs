@@ -148,6 +148,15 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
                     this.eggTimer.TimeRemaining = this.CurrentStep.Duration;
                     this.eggTimer.IsRunning = true;
                     this.status = TimerState.Running;
+
+                    if (this.metronome.IsRunning)
+                    {
+                        metronome.State = "starting";
+                    }
+
+                    this.StateHasChanged();
+                    //            JSRuntime.Current.InvokeAsync<object>("alert", "LineCompleted " + metronome.State);
+                    //            JSRuntime.Current.InvokeAsync<object>("showState");
                     break;
 
                 case TimerState.Settling:
@@ -161,6 +170,11 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
 
         public void LineCompleted()
         {
+            if (CurrentStep.Tempo != -1)
+            {
+                metronome.State = "makeitstop";
+            }
+
             if (timeline.Count > 0)
             {
                 if (this.EndWithBell && CurrentStep.Tempo != -1)

@@ -5,17 +5,29 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
 {
     public class AnimationHelper
     {
-        Action<string> SetAnimationName;
+        Action<string> SetAnimationState;
 
-        public AnimationHelper(Action<string> setAnimationName)
+        public AnimationHelper(Action<string> setAnimationState)
         {
-            this.SetAnimationName = setAnimationName;
+            this.SetAnimationState = setAnimationState;
         }
 
         [JSInvokable]
-        public void SetAnimationToSwing()
+        public void SetAnimationToRunning()
         {
-            SetAnimationName("swing");
+            SetAnimationState("running");
+        }
+
+        [JSInvokable]
+        public void SetAnimationToStopping()
+        {
+            SetAnimationState("stopping");
+        }
+
+        [JSInvokable]
+        public void SetAnimationToStopped()
+        {
+            SetAnimationState("stopped");
         }
     }
 }

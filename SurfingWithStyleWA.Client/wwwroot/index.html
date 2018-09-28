@@ -26,8 +26,35 @@
             element.on("animationstart", function () { audio.play(); });
             element.on("animationiteration", function () {
                 audio.play();
-                if (element.css("animation-name") === "start") {
-                    dotnetHelper.invokeMethodAsync("SetAnimationToSwing");
+                if (element.css("animation-name") === "starting") {
+                    dotnetHelper.invokeMethodAsync("SetAnimationToRunning");
+                }
+            });
+        }
+        function registerScheduled(selector, dotnetHelper) {
+            var element = $(".pendulum-parent");
+            var audio = $(selector)[0];
+            element.on("animationstart", function () { audio.play(); });
+            element.on("animationiteration", function () {
+                switch (element[0].getAttribute("data-metronome-state")) {
+                    case "starting":
+                        audio.play();
+                        dotnetHelper.invokeMethodAsync("SetAnimationToRunning");
+                        break;
+                    case "running":
+                        audio.play();
+                        dotnetHelper.invokeMethodAsync("SetAnimationToRunning");
+                        break;
+                    case "makeitstop":
+                        dotnetHelper.invokeMethodAsync("SetAnimationToStopping");
+                        break;
+                    case "stopping":
+                    case "stopped":
+                        dotnetHelper.invokeMethodAsync("SetAnimationToStopped");
+                        break;
+                    default:
+                        alert("metronome-state invalid");
+                        break;
                 }
             });
         }

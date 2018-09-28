@@ -30,7 +30,8 @@
             <div class="metronome-object">
                 <div class="pendulum-crossbar">
                     <div class="pendulum-grandparent">
-                        <div class="pendulum-parent" style="animation-name: @animation; animation-duration: @duration; animation-play-state: @playState;">
+                        <div class="pendulum-parent"
+                             style="animation-name: @animation; animation-duration: @duration; animation-play-state: @playState; animation-direction: alternate;">
                             <div class="pendulum-child"></div>
                         </div>
                     </div>
@@ -70,7 +71,7 @@
             _tempo = value;
             duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
             // Need to change the animation for the duration change to take effect
-            animation = "start";
+            animation = "starting";
         }
     }
 
@@ -81,7 +82,7 @@
             initialized = true;
             Action<string> setAnimationName = delegate (string name)
             {
-                animation = name;
+                animation = "running-lr";
                 this.StateHasChanged();
             };
 
@@ -104,7 +105,7 @@
 
                 if (animation.Equals("none"))
                 {
-                    animation = "start";
+                    animation = "starting";
                 }
 
                 buttonFace = "oi-media-pause";

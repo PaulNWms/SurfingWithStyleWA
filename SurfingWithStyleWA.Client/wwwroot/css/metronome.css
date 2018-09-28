@@ -62,10 +62,10 @@
         transform: rotate(0deg) scale(1);
         -webkit-transform-origin: 50% 50%;
         transform-origin: 50% 50%;
-        animation: none 0s ease-in-out alternate infinite;
+        animation: none 0s ease-in-out normal infinite;
     }
 
-@keyframes start {
+@keyframes starting {
     0% {
         transform: rotate(0deg);
     }
@@ -75,7 +75,7 @@
     }
 }
 
-@keyframes swing {
+@keyframes running-lr {
     0% {
         transform: rotate(-40deg);
     }
@@ -85,7 +85,31 @@
     }
 }
 
-@keyframes stop {
+@keyframes running-rl {
+    0% {
+        transform: rotate(40deg);
+    }
+
+    100% {
+        transform: rotate(-40deg);
+    }
+}
+
+@keyframes stopping-lr {
+    0% {
+        transform: rotate(-40deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes stopping-rl {
+    0% {
+        transform: rotate(40deg);
+    }
+
     100% {
         transform: rotate(0deg);
     }

@@ -8,6 +8,7 @@
         public string Animation = "none";
         public string Duration = "0s";
         public string PlayState = "running";
+        public string State = "stopped";
 
         private int _tempo = 120;
         public int Tempo
@@ -23,7 +24,6 @@
                 if (_tempo < MIN_TEMPO)
                 {
                     IsRunning = false;
-                    Duration = "0s";
                 }
                 else
                     Duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
@@ -64,11 +64,7 @@
         {
             if (IsRunning)
             {
-                Animation = "start";
-            }
-            else
-            {
-                Animation = "none";
+                Animation = "starting";
             }
         }
     }

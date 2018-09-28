@@ -27,8 +27,9 @@
             <div class="metronome-object">
                 <div class="pendulum-crossbar">
                     <div class="pendulum-grandparent">
-                        <div class="pendulum-parent" style="animation-name: @metronome.Animation; animation-duration: @metronome.Duration; animation-play-state: @metronome.PlayState;">
-                            <div class="pendulum-child"></div>
+                        <div class="pendulum-parent" data-metronome-state="@metronome.State"
+                             style="animation-name: @metronome.Animation; animation-duration: @metronome.Duration; animation-play-state: @metronome.PlayState;">
+                            <div class="pendulum-child" />
                         </div>
                     </div>
                 </div>
@@ -112,18 +113,46 @@
         if (!initialized)
         {
             initialized = true;
-            Action<string> setAnimationName = delegate (string name)
+            Action<string> setAnimationState = delegate (string state)
             {
-                metronome.Animation = name;
+                //JSRuntime.Current.InvokeAsync<object>("alert", "setAnimationState " + state);
+                metronome.State = state;
+
+                switch (state)
+                {
+                    case "starting":
+                        metronome.Animation = state;
+                        break;
+
+                    case "running":
+                        metronome.Animation = (metronome.Animation.Equals("running-lr")) ? "running-rl" : "running-lr";
+                        break;
+
+                    case "stopping":
+                        metronome.Animation = (metronome.Animation.Equals("running-lr")) ? "stopping-rl" : "stopping-lr";
+                        metronome.Tempo = Math.Max(metronome.Tempo, 80);
+                        break;
+
+                    case "stopped":
+                    default:
+                        metronome.Animation = "none";
+                        break;
+                }
+
                 this.StateHasChanged();
             };
 
-            DotNetObjectRef dotNetHelper = new DotNetObjectRef(new AnimationHelper(setAnimationName));
-            await JSRuntime.Current.InvokeAsync<object>("registerListener", ".audio-click", dotNetHelper);
-            string newRow = string.Format(Schedule.HTML_TEMPLATE, 120, "2:00", string.Empty);
-            await JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", newRow);
+            try
+            {
+                DotNetObjectRef dotNetHelper = new DotNetObjectRef(new AnimationHelper(setAnimationState));
+                await JSRuntime.Current.InvokeAsync<object>("registerListener", ".audio-click", dotNetHelper);
+                string newRow = string.Format(Schedule.HTML_TEMPLATE, 120, "2:00", string.Empty);
+                await JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", newRow);
+            }
+            catch (Exception e)
+            {
+                await JSRuntime.Current.InvokeAsync<object>("alert", e.Message);
+            }
         }
-
-        await base.OnAfterRenderAsync();
     }
 }
