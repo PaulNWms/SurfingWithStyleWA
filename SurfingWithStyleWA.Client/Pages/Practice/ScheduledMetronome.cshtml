@@ -130,7 +130,6 @@
 
                     case "stopping":
                         metronome.Animation = (metronome.Animation.Equals("running-lr")) ? "stopping-rl" : "stopping-lr";
-                        metronome.Tempo = Math.Max(metronome.Tempo, 80);
                         break;
 
                     case "stopped":
@@ -145,7 +144,7 @@
             try
             {
                 DotNetObjectRef dotNetHelper = new DotNetObjectRef(new AnimationHelper(setAnimationState));
-                await JSRuntime.Current.InvokeAsync<object>("registerListener", ".audio-click", dotNetHelper);
+                await JSRuntime.Current.InvokeAsync<object>("registerScheduled", ".audio-click", dotNetHelper);
                 string newRow = string.Format(Schedule.HTML_TEMPLATE, 120, "2:00", string.Empty);
                 await JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", newRow);
             }
