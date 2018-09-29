@@ -78,7 +78,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\audio\" />
-    <Folder Include="wwwroot\scripts\" />
   </ItemGroup>
 
 </Project>
