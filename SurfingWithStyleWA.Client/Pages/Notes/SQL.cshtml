@@ -28,4 +28,10 @@ You can't use aggregate filters in a WHERE condition because the data hasn't bee
 If a GROUP BY clause is specified in a query, all following steps (HAVING, SELECT) can specify only expressions that result in a scalar value for the group.
 
 The only clause that can refer to column aliases defined in the SELECT list is ORDER BY.
+
+Each step hands a logical "virtual tables" to the subsequent step until ORDER BY, which returns a cursor.
+
+A query with an ORDER BY clause can therefore not be used as a table expression - view, inline table-valued function, subquery or CTE.
+
+TOP is non-standard SQL and can use the cursor created by ORDER BY, that is mainly how it is used.
 </pre>
