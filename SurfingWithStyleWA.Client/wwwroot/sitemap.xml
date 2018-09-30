@@ -108,4 +108,12 @@
     <loc>http://surfingwithstyle.com/notes/other/food/"/</loc>
     <changefreq>monthly</changefreq>
   </url>
+  <url>
+    <loc>http://surfingwithstyle.com/links/books/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>http://surfingwithstyle.com/links/tools/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
 </urlset>
