@@ -34,4 +34,6 @@ Each step hands a logical "virtual tables" to the subsequent step until ORDER BY
 A query with an ORDER BY clause can therefore not be used as a table expression - view, inline table-valued function, subquery or CTE.
 
 TOP is non-standard SQL and can use the cursor created by ORDER BY, that is mainly how it is used.
+
+UNION removes duplicate records, UNION ALL does not.
 </pre>
