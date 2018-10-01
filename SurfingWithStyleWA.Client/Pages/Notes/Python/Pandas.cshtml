@@ -157,4 +157,8 @@ s.fillna(0)
 # split a dataframe into X and y vectors
 X = df.iloc[:,:-1]
 y = df.iloc[:,-1]
+
+# or if y is an inner column
+outcomes = full_data['Survived']
+features_raw = full_data.drop('Survived', axis = 1)
 </pre>
