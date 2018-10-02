@@ -39,6 +39,18 @@ model.fit(X, y)
 from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(features, outcomes, test_size=0.2, random_state=42)
 
+# The accuracy score measures the measures accuracy between to vectors
+from sklearn.metrics import accuracy_score
+acc = accuracy_score(y, y_pred)
+
+# decision tree classifier
+from sklearn.tree import DecisionTreeClassifier
+model = DecisionTreeClassifier(max_depth = 10, min_samples_leaf = 1)
+
+# support vector machine
+from sklearn.svm import SVC
+model = SVC(kernel='poly', degree=4, C=0.1)
+
 
 from sklearn import preprocessing
 from sklearn import pipeline
