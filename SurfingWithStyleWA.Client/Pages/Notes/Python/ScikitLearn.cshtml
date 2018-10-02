@@ -51,6 +51,19 @@ model = DecisionTreeClassifier(max_depth = 10, min_samples_leaf = 1)
 from sklearn.svm import SVC
 model = SVC(kernel='poly', degree=4, C=0.1)
 
+# Adaboost - requires a weak learner
+# base_estimator: The model utilized for the weak learners (Warning: Don't forget to import the model that you decide to use for the weak learner).
+# n_estimators: The maximum number of weak learners used.
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.tree import DecisionTreeClassifier
+model = AdaBoostClassifier(base_estimator = DecisionTreeClassifier(max_depth=2), n_estimators = 4)
+
+# related links
+<a target="_blank" href="http://scikit-learn.org/stable/modules/ensemble.html">Ensemble methods</a>
+<a target="_blank" href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.BaggingClassifier.html#sklearn.ensemble.BaggingClassifier">sklearn.ensemble.BaggingClassifier</a>
+<a target="_blank" href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier">sklearn.ensemble.RandomForestClassifier</a>
+<a target="_blank" href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html#sklearn.ensemble.AdaBoostClassifier">sklearn.ensemble.AdaBoostClassifier</a>
+
 
 from sklearn import preprocessing
 from sklearn import pipeline
