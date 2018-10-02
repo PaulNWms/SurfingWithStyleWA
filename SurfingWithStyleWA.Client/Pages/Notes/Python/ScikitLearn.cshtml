@@ -36,7 +36,7 @@ model = LinearRegression()
 model.fit(X, y)
 
 # split the data into training and testing sets
-from sklearn.model_selection import train_test_split
+from sklearn.cross_validation import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(features, outcomes, test_size=0.2, random_state=42)
 
 # The accuracy score measures the measures accuracy between to vectors
@@ -63,6 +63,7 @@ model = AdaBoostClassifier(base_estimator = DecisionTreeClassifier(max_depth=2),
 <a target="_blank" href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.BaggingClassifier.html#sklearn.ensemble.BaggingClassifier">sklearn.ensemble.BaggingClassifier</a>
 <a target="_blank" href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier">sklearn.ensemble.RandomForestClassifier</a>
 <a target="_blank" href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html#sklearn.ensemble.AdaBoostClassifier">sklearn.ensemble.AdaBoostClassifier</a>
+<a target="_blank" href="http://scikit-learn.org/stable/modules/generated/sklearn.metrics.fbeta_score.html">sklearn.metrics.fbeta_score</a>
 
 
 from sklearn import preprocessing
