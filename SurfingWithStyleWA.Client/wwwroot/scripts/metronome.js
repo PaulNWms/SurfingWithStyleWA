@@ -71,3 +71,19 @@ function getExerciseValues() {
     $(".exercise").each(function () { exercises.push($(this).val()); });
     return [tempos, durations, exercises];
 }
+
+function registerAcceleratingFormRowListener(html) {
+    $(".add-schedule-row").off("click");
+    $(".delete-schedule-row").off("click");
+    $(".add-schedule-row").click(function () {
+        $(this).parent().parent().after(html);
+        registerAcceleratingFormRowListener(html);
+        $(this).parent().parent().next().children().children(".tempo").focus();
+    });
+    $(".delete-schedule-row").click(function () {
+        var row = $(this).parent().parent();
+        if (row.siblings().length > 0) {
+            row.remove();
+        }
+    });
+}

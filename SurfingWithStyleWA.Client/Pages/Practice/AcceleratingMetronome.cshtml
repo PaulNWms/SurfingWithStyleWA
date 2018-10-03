@@ -42,7 +42,7 @@
     <div class="row">
         <table class="table offset-2 col-7">
             <thead>
-                <tr><th></th><th>Tempo</th><th>Time</th><th>Exercise</th><th></th></tr>
+                <tr><th></th><th>Tmp 1</th><th>Tmp 2</th><th>Time</th><th>Exercise</th><th></th></tr>
             </thead>
             <tbody class="schedule">
                 @((MarkupString)schedule.ExerciseMarkup)
@@ -91,7 +91,7 @@
 
 @functions {
     bool initialized;
-    Schedule schedule;
+    AcceleratingSchedule schedule;
     MiniMetronome metronome;
     EggTimer eggTimer;
 
@@ -100,7 +100,7 @@
         base.OnInit();
 
         Uri uri = new Uri(UriHelper.GetAbsoluteUri());
-        schedule = new Schedule(this.StateHasChanged, uri);
+        schedule = new AcceleratingSchedule(this.StateHasChanged, uri);
         eggTimer = new EggTimer(this.StateHasChanged);
         metronome = new MiniMetronome();
         schedule.Initialize(eggTimer, metronome);
@@ -145,8 +145,8 @@
             {
                 DotNetObjectRef dotNetHelper = new DotNetObjectRef(new AnimationHelper(setAnimationState));
                 await JSRuntime.Current.InvokeAsync<object>("registerScheduled", ".audio-click", dotNetHelper);
-                string newRow = string.Format(Schedule.HTML_TEMPLATE, 120, "2:00", string.Empty);
-                await JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", newRow);
+                string newRow = string.Format(AcceleratingSchedule.HTML_TEMPLATE, 60, 120, "2:00", string.Empty);
+                await JSRuntime.Current.InvokeAsync<object>("registerAcceleratingFormRowListener", newRow);
             }
             catch (Exception e)
             {
