@@ -65,6 +65,10 @@ model = AdaBoostClassifier(base_estimator = DecisionTreeClassifier(max_depth=2),
 <a target="_blank" href="http://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html#sklearn.ensemble.AdaBoostClassifier">sklearn.ensemble.AdaBoostClassifier</a>
 <a target="_blank" href="http://scikit-learn.org/stable/modules/generated/sklearn.metrics.fbeta_score.html">sklearn.metrics.fbeta_score</a>
 
+# K-fold cross validation
+from sklearn.model import KFold
+kf = KFold(12, 3, shuffle=True)
+
 
 from sklearn import preprocessing
 from sklearn import pipeline

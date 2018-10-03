@@ -152,5 +152,19 @@ Regression metrics:
 - Mean absolute error
 - MSE
 - r2 score = 1 - MSE / (score of a horizontal line)
+
+Underfitting = high bias
+Overfitting = high variance
+
+Model Complexity Graph
+- Underfitting gives a high error on both training and cross-validation sets
+- Overfitting gives a low error on the training set and high error on the cross-validation set
+
+K-fold cross validation (see scikit-learn)
+
+A model with high bias converges to a high error as the number of training points increases
+A model that's just right converges to a low error
+A model with high variance does not converge
+
 </pre>
 </div>

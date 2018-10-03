@@ -10,6 +10,7 @@
 <a target="_blank" href="https://en.wikipedia.org/wiki/Kolmogorov–Smirnov_test">Kolmogorov–Smirnov test</a>
 <a target="_blank" href="http://www.statsmodels.org/stable/glm.html">Generalized Linear Models</a>
 <a target="_blank" href="http://onlinestatbook.com/2/sampling_distributions/samp_dist_mean.html">Sampling Distribution of the Mean</a>
+<a target="_blank" href="https://rebeccaebarnes.github.io/2018/05/01/what-is-a-p-value">What is a p-value and how do you calculate it?</a>
 
 Step 1: Ask questions
 
@@ -156,13 +157,13 @@ Type II Errors
 3. Type II errors are often called false negatives.
 
 Common hypothesis tests include:
-1. Testing a population mean <a href="http://sites.utexas.edu/sos/guided/inferential/numeric/claim/one-sample-t/">(One sample t-test).</a>
-2. Testing the difference in means <a href="https://www.isixsigma.com/tools-templates/hypothesis-testing/making-sense-two-sample-t-test/">(Two sample t-test)</a>
-3. Testing the difference before and after some treatment on the same individual <a href="http://www.statstutor.ac.uk/resources/uploaded/paired-t-test.pdf">(Paired t-test)</a>
-4. Testing a population proportion <a href="https://stattrek.com/statistics/dictionary.aspx?definition=one-sample%20z-test">(One sample z-test)</a>
-5. Testing the difference between population proportions <a href="https://onlinecourses.science.psu.edu/stat414/node/268/">(Two sample z-test)</a>
+1. Testing a population mean <a target="_blank" href="http://sites.utexas.edu/sos/guided/inferential/numeric/claim/one-sample-t/">(One sample t-test).</a>
+2. Testing the difference in means <a target="_blank" href="https://www.isixsigma.com/tools-templates/hypothesis-testing/making-sense-two-sample-t-test/">(Two sample t-test)</a>
+3. Testing the difference before and after some treatment on the same individual <a target="_blank" href="http://www.statstutor.ac.uk/resources/uploaded/paired-t-test.pdf">(Paired t-test)</a>
+4. Testing a population proportion <a target="_blank" href="https://stattrek.com/statistics/dictionary.aspx?definition=one-sample%20z-test">(One sample z-test)</a>
+5. Testing the difference between population proportions <a target="_blank" href="https://onlinecourses.science.psu.edu/stat414/node/268/">(Two sample z-test)</a>
 
-You can use one of these sites to provide a t-table or z-table to support one of the above approaches: <a href="https://s3.amazonaws.com/udacity-hosted-downloads/t-table.jpg">t-table</a>, <a href="http://www.z-table.com/t-value-table.html">t-table or z-table</a>
+You can use one of these sites to provide a t-table or z-table to support one of the above approaches: <a target="_blank" href="https://s3.amazonaws.com/udacity-hosted-downloads/t-table.jpg">t-table</a>, <a target="_blank" href="http://www.z-table.com/t-value-table.html">t-table or z-table</a>
 
 In hypothesis testing, we first simulate from the closest value to the alternative that is still in the null space.
 
@@ -177,5 +178,11 @@ By comparing our p-value to our type I error threshold (α), we can make our dec
 
 p ≤ α ⇒ Reject H₀
 p > α ⇒ Fail to Reject H₀
+
+Type I error compounds when you take multiple hypothesis tests.
+Bonferroni Correction says that if you have m tests, use α/m.
+Other methods include the <a target="_blank" href="https://www.itl.nist.gov/div898/handbook/prc/section4/prc471.htm">Tukey correction</a> and <a target="_blank" href="http://www.nonlinear.com/support/progenesis/comet/faq/v2.0/pq-values.aspx">Q-values</a>.
+
+A two-sided hypothesis test (that is a test involving a ≠ in the alternative) is the same in terms of the conclusions made as a confidence interval as long as 1 − CI=α
 </pre>
 </div>
