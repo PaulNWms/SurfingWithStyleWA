@@ -72,6 +72,8 @@ function getExerciseValues() {
     return [tempos, durations, exercises];
 }
 
+/////////////////////////////////////////////////////////////////////////
+
 function registerAcceleratingFormRowListener(html) {
     $(".add-schedule-row").off("click");
     $(".delete-schedule-row").off("click");
@@ -87,3 +89,16 @@ function registerAcceleratingFormRowListener(html) {
         }
     });
 }
+
+function getAcceleratingExerciseValues() {
+    var tempo1s = [];
+    var tempo2s = [];
+    var durations = [];
+    var exercises = [];
+    $(".tempo-0").each(function () { tempo1s.push($(this).val()); });
+    $(".tempo-1").each(function () { tempo2s.push($(this).val()); });
+    $(".midpoint-0").each(function () { durations.push($(this).val()); });
+    $(".exercise").each(function () { exercises.push($(this).val()); });
+    return [tempo1s, tempo2s, durations, exercises];
+}
+

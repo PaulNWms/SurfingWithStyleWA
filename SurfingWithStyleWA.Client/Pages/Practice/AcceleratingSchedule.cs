@@ -206,21 +206,23 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
             int minutes;
             int seconds;
             exercises = new List<Exercise>();
-            List<List<string>> raw = await JSRuntime.Current.InvokeAsync<List<List<string>>>("getExerciseValues");
+            List<List<string>> raw = await JSRuntime.Current.InvokeAsync<List<List<string>>>("getAcceleratingExerciseValues");
 
             if (raw[0].Count != raw[1].Count || raw[1].Count != raw[2].Count)
             {
-                throw new DataMisalignedException(string.Format("Lists are different lengths: {0} {1} {2}", raw[0].Count, raw[1].Count, raw[3].Count));
+                throw new DataMisalignedException(string.Format("Lists are different lengths: {0} {1} {2}", raw[0].Count, raw[1].Count, raw[3].Count, raw[4].Count));
             }
 
             for (int i = 0; i < raw[0].Count; i++)
             {
-                int tempo;
+                int tempo1 = 0;
+                int tempo2 = 0;
                 TimeSpan duration;
 
-                if (int.TryParse(raw[0][i], out tempo))
+                if (int.TryParse(raw[0][i], out tempo1))
                 {
-                    match = regex.Match(raw[1][i]);
+                    int.TryParse(raw[1][i], out tempo2);
+                    match = regex.Match(raw[2][i]);
 
                     if (match.Success)
                     {
@@ -228,7 +230,7 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
                         seconds = int.Parse(match.Groups[2].Value);
                         duration = new TimeSpan(0, minutes, seconds);
                     }
-                    else if (int.TryParse(raw[1][i], out seconds))
+                    else if (int.TryParse(raw[2][i], out seconds))
                     {
                         duration = new TimeSpan(0, 0, seconds);
                     }
@@ -236,17 +238,18 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
 
                 if (duration.Ticks == 0)
                 {
-                    throw new ArgumentException(string.Format("Invalid time format: {0}", raw[1][i]));
+                    throw new ArgumentException(string.Format("Invalid time format: {0}", raw[2][i]));
                 }
 
-                exercises.Add(new Exercise() { Tempo = tempo, Duration = duration, Description = raw[2][i] });
+                exercises.Add(new Exercise() { Tempo = tempo1, Tempo2 = tempo2, Duration = duration, Description = raw[3][i] });
             }
         }
 
         private void ParseUrl()
         {
             var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(this.uri.Query);
-            int[] tempos = null;
+            int[] tempo1s = null;
+            int[] tempo2s = null;
             TimeSpan[] durations = null;
             string[] exes = null;
             exercises = new List<Exercise>();
@@ -269,9 +272,9 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
                             bool.TryParse(query["b"].ToString(), out this.EndWithBell);
                             break;
 
-                        case "t":
+                        case "l":
                             {
-                                string[] strs = query["t"].ToString().Split('-');
+                                string[] strs = query["l"].ToString().Split('-');
                                 List<int> ts = new List<int>(strs.Length);
 
                                 foreach (string str in strs)
@@ -288,7 +291,30 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
                                     }
                                 }
 
-                                tempos = ts.ToArray();
+                                tempo1s = ts.ToArray();
+                            }
+                            break;
+
+                        case "h":
+                            {
+                                string[] strs = query["h"].ToString().Split('-');
+                                List<int> ts = new List<int>(strs.Length);
+
+                                foreach (string str in strs)
+                                {
+                                    int tempo;
+
+                                    if (int.TryParse(str, out tempo))
+                                    {
+                                        ts.Add(tempo);
+                                    }
+                                    else
+                                    {
+                                        ts.Add(120);
+                                    }
+                                }
+
+                                tempo2s = ts.ToArray();
                             }
                             break;
 
@@ -327,9 +353,9 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
                     }
                 }
 
-                for (int i = 0; i < tempos.Length; i++)
+                for (int i = 0; i < tempo1s.Length; i++)
                 {
-                    this.exercises.Add(new Exercise() { Tempo = tempos[i], Duration = durations[i], Description = exes[i] });
+                    this.exercises.Add(new Exercise() { Tempo = tempo1s[i], Tempo2 = tempo2s[i], Duration = durations[i], Description = exes[i] });
                 }
             }
             else
