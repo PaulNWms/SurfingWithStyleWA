@@ -74,6 +74,9 @@
     <Content Update="Pages\Notes\SOLID.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Pages\Practice\AcceleratingMetronome.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Pages\Tools\WhatsMyIP.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
