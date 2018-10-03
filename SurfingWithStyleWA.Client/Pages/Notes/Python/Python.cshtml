@@ -13,6 +13,26 @@
 <a target="_blank" href="https://www.python.org/dev/peps/pep-0008/">PEP 8 -- Style Guide for Python Code</a>
 <a target="_blank" href="http://www.jrsoftware.org/isinfo.php">Inno Setup install wizard creator</a>
 
+Common Jupyter keystrokes
+SHIFT+ENTER
+CTRL+ENTER
+UP/DOWN
+TAB
+SHIFT+TAB
+SHIFT+TAB,SHIFT+TAB
+ESC,H
+CTRL+SHIFT+P
+
+Common magic keywords:
+%matplotlib
+%timeit
+%pdb
+
+# convert a notebook to HTML, slides
+jupyter nbconvert --to html notebook.ipynb
+jupyter nbconvert notebook.ipynb --to slides
+jupyter nbconvert notebook.ipynb --to slides --post serve
+
 Continue one line with '\'
 
 Continue multiple lines with parenthetical expression '(...)' (preferred)

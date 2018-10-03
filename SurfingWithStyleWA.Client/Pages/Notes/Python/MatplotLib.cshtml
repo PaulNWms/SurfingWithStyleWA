@@ -33,4 +33,10 @@ save_fig("attribute_histogram_plots")
 plt.show()
 
 country_stats.plot(kind='scatter', x="GDP per capita", y='Life satisfaction')
+
+# plot histogram w/ lines on the confidence intervals
+lower, upper = np.percentile(means, 2.5), np.percentile(means,97.5)
+plt.hist(means);
+plt.axvline(x=lower, color='r', linewidth=2);
+plt.axvline(x=upper, color='r', linewidth=2);
 </pre>
