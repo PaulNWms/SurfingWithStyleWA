@@ -6,66 +6,9 @@ using System.Threading.Tasks;
 
 namespace SurfingWithStyleWA.Client.Pages.Practice
 {
-    class AcceleratingSchedule
+    class AcceleratingSchedule : Schedule
     {
-        private enum TimerState { Stopped, Running, Paused, StartNext, Settling };
-        private System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"(\d+):(\d\d)");
-        private System.Text.RegularExpressions.Match match;
-
-        public bool StartWithRest;
-        public bool EndWithBell;
-        public string ExerciseMarkup;
-        public List<Exercise> timeline;
-        public Exercise CurrentStep;
-        public Exercise LastStep;
-        public string ExerciseDisplay;
-
-        private Action StateHasChanged;
-        private TimerState status = TimerState.Stopped;
-        private Uri uri;
-        private EggTimer eggTimer;
-        private MiniMetronome metronome;
-        private List<Exercise> exercises;
-
-        private TimeSpan rest;
-        public string RestDisplay
-        {
-            get
-            {
-                return ((int)rest.TotalSeconds).ToString();
-            }
-            set
-            {
-                match = regex.Match(value);
-                int seconds;
-
-                if (match.Success)
-                {
-                    int minutes = int.Parse(match.Groups[1].Value);
-                    seconds = int.Parse(match.Groups[2].Value);
-                    rest = new TimeSpan(0, minutes, seconds);
-                }
-                else if (int.TryParse(value, out seconds))
-                {
-                    rest = new TimeSpan(0, 0, seconds);
-                }
-                else
-                {
-                    JSRuntime.Current.InvokeAsync<object>("alert", "what?  " + value);
-                }
-            }
-
-        }
-
-        public AcceleratingSchedule(Action stateHasChanged, Uri uri)
-        {
-            this.StateHasChanged = stateHasChanged;
-            this.uri = uri;
-            this.rest = new TimeSpan(0, 0, 3);
-            this.StartWithRest = true;
-            this.EndWithBell = true;
-            ParseUrl();
-        }
+        public AcceleratingSchedule(Action stateHasChanged, Uri uri) : base(stateHasChanged, uri) { }
 
         public int CalculateTempo()
         {
@@ -100,141 +43,7 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
             }
         }
 
-        public void Initialize(EggTimer eggTimer, MiniMetronome metronome)
-        {
-            this.eggTimer = eggTimer;
-            this.metronome = metronome;
-        }
-
-        public async void OnPlayPause()
-        {
-            switch (status)
-            {
-                case TimerState.Stopped:
-                    try
-                    {
-                        if (timeline == null || timeline.Count == 0)
-                        {
-                            await ParseControls();
-                            this.timeline = this.ToTimeline();
-
-                            if (timeline.Count == 0)
-                            {
-                                return;
-                            }
-                        }
-
-                        this.status = TimerState.StartNext;
-                        Update();
-                        this.StateHasChanged();
-                    }
-                    catch (Exception e)
-                    {
-                        await JSRuntime.Current.InvokeAsync<object>("alert", e.Message + e.StackTrace);
-                    }
-                    break;
-
-                case TimerState.Paused:
-                    status = TimerState.Running;
-                    eggTimer.IsRunning = true;
-                    metronome.PlayState = "running";
-                    break;
-
-                case TimerState.Running:
-                    status = TimerState.Paused;
-                    eggTimer.IsRunning = false;
-                    metronome.PlayState = "paused";
-                    eggTimer.OnTimer(null, null);
-                    break;
-
-                default:
-                    Update();
-                    break;
-            }
-        }
-
-        public async void CreateLink()
-        {
-            try
-            {
-                await ParseControls();
-                string url = ToUrl();
-                await JSRuntime.Current.InvokeAsync<object>("window.open", url);
-            }
-            catch (Exception e)
-            {
-                await JSRuntime.Current.InvokeAsync<object>("alert", e.Message + e.StackTrace);
-            }
-        }
-
-        public void Update()
-        {
-            switch (status)
-            {
-                case TimerState.StartNext:
-                    this.LastStep = this.CurrentStep;
-                    this.CurrentStep = timeline[0];
-                    timeline.RemoveAt(0);
-                    this.ExerciseDisplay = this.CurrentStep.Description;
-                    this.metronome.Tempo = this.CurrentStep.Tempo;
-                    this.metronome.IsRunning = this.metronome.Tempo >= MiniMetronome.MIN_TEMPO;
-                    this.eggTimer.TimeRemaining = this.CurrentStep.Duration;
-                    this.eggTimer.IsRunning = true;
-                    this.status = TimerState.Running;
-
-                    if (this.metronome.IsRunning)
-                    {
-                        metronome.State = "starting";
-                    }
-
-                    this.StateHasChanged();
-                    //            JSRuntime.Current.InvokeAsync<object>("alert", "LineCompleted " + metronome.State);
-                    //            JSRuntime.Current.InvokeAsync<object>("showState");
-                    break;
-
-                case TimerState.Settling:
-                    this.status = TimerState.Running;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        public void LineCompleted()
-        {
-            if (CurrentStep.Tempo != -1)
-            {
-                metronome.State = "makeitstop";
-            }
-
-            if (timeline.Count > 0)
-            {
-                if (this.EndWithBell && CurrentStep.Tempo != -1)
-                {
-                    JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-exercise");
-                }
-
-                status = TimerState.StartNext;
-                Update();
-            }
-            else
-            {
-                if (this.EndWithBell)
-                {
-                    JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-routine");
-                }
-
-                metronome.Tempo = 0;
-                metronome.IsRunning = false;
-                eggTimer.IsRunning = false;
-                status = TimerState.Stopped;
-                JSRuntime.Current.InvokeAsync<object>("colorBody");
-                this.ExerciseDisplay = "Done!";
-            }
-        }
-
-        public async Task ParseControls()
+        public override async Task ParseControls()
         {
             int minutes;
             int seconds;
@@ -278,7 +87,7 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
             }
         }
 
-        private void ParseUrl()
+        protected override void ParseUrl()
         {
             var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(this.uri.Query);
             int[] tempo1s = null;
@@ -397,30 +206,7 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
             }
         }
 
-        public List<Exercise> ToTimeline()
-        {
-            List<Exercise> timeline = new List<Exercise>();
-            var restStep = new Exercise() { Tempo = -1, Duration = this.rest, Description = "Resting..." };
-
-            if (exercises.Count > 0 && this.rest.Ticks > 0 && this.StartWithRest)
-            {
-                timeline.Add(restStep);
-            }
-
-            for (var i = 0; i < exercises.Count; i++)
-            {
-                timeline.Add(exercises[i]);
-
-                if (i < exercises.Count - 1 && this.rest.Ticks > 0)
-                {
-                    timeline.Add(restStep);
-                }
-            }
-
-            return timeline;
-        }
-
-        public string ToUrl()
+        public override string ToUrl()
         {
             List<int> tempo1s = new List<int>(exercises.Count);
             List<int> tempo2s = new List<int>(exercises.Count);
@@ -449,7 +235,7 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
                 t1s, t2s, ds, es);
         }
 
-        public string ToHtml()
+        public override string ToHtml()
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             foreach (var exercise in exercises)
@@ -464,9 +250,14 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
             return sb.ToString();
         }
 
-        const string URL_TEMPLATE = "{0}?r={1}&s={2}&b={3}&l={4}&h={5}&d={6}&e={7}";
+        public override string GetNewRow()
+        {
+            return string.Format(HTML_TEMPLATE, 60, 120, "2:00", string.Empty);
+        }
 
-        public const string HTML_TEMPLATE = @"                        <tr>
+        private const string URL_TEMPLATE = "{0}?r={1}&s={2}&b={3}&l={4}&h={5}&d={6}&e={7}";
+
+        private const string HTML_TEMPLATE = @"                        <tr>
             <td>
                 <button type='button' class='btn btn-primary delete-schedule-row'><span class='oi oi-x'></span></button>
             </td>

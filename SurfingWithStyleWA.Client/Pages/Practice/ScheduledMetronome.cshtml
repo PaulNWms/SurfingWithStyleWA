@@ -149,8 +149,7 @@
             {
                 DotNetObjectRef dotNetHelper = new DotNetObjectRef(new AnimationHelper(setAnimationState));
                 await JSRuntime.Current.InvokeAsync<object>("registerScheduled", ".audio-click", dotNetHelper);
-                string newRow = string.Format(Schedule.HTML_TEMPLATE, 120, "2:00", string.Empty);
-                await JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", newRow);
+                await JSRuntime.Current.InvokeAsync<object>("registerFormRowListener", schedule.GetNewRow());
             }
             catch (Exception e)
             {

@@ -8,9 +8,9 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
 {
     class Schedule
     {
-        private enum TimerState { Stopped, Running, Paused, StartNext, Settling };
-        private System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"(\d+):(\d\d)");
-        private System.Text.RegularExpressions.Match match;
+        protected enum TimerState { Stopped, Running, Paused, StartNext, Settling };
+        protected System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(@"(\d+):(\d\d)");
+        protected System.Text.RegularExpressions.Match match;
 
         public bool StartWithRest;
         public bool EndWithBell;
@@ -20,14 +20,14 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
         public Exercise LastStep;
         public string ExerciseDisplay;
 
-        private Action StateHasChanged;
-        private TimerState status = TimerState.Stopped;
-        private Uri uri;
-        private EggTimer eggTimer;
-        private MiniMetronome metronome;
-        private List<Exercise> exercises;
+        protected Action StateHasChanged;
+        protected TimerState status = TimerState.Stopped;
+        protected Uri uri;
+        protected EggTimer eggTimer;
+        protected MiniMetronome metronome;
+        protected List<Exercise> exercises;
 
-        private TimeSpan rest;
+        protected TimeSpan rest;
         public string RestDisplay
         {
             get
@@ -54,7 +54,6 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
                     JSRuntime.Current.InvokeAsync<object>("alert", "what?  " + value);
                 }
             }
-
         }
 
         public Schedule(Action stateHasChanged, Uri uri)
@@ -201,7 +200,7 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
             }
         }
 
-        public async Task ParseControls()
+        public virtual async Task ParseControls()
         {
             int minutes;
             int seconds;
@@ -243,7 +242,7 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
             }
         }
 
-        private void ParseUrl()
+        protected virtual void ParseUrl()
         {
             var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(this.uri.Query);
             int[] tempos = null;
@@ -361,7 +360,7 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
             return timeline;
         }
 
-        public string ToUrl()
+        public virtual string ToUrl()
         {
             List<int> tempos = new List<int>(exercises.Count);
             List<TimeSpan> durations = new List<TimeSpan>(exercises.Count);
@@ -387,7 +386,7 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
                 ts, ds, es);
         }
 
-        public string ToHtml()
+        public virtual string ToHtml()
         {
             System.Text.StringBuilder sb = new System.Text.StringBuilder();
             foreach (var exercise in exercises)
@@ -401,9 +400,14 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
             return sb.ToString();
         }
 
-        const string URL_TEMPLATE = "{0}?r={1}&s={2}&b={3}&t={4}&d={5}&e={6}";
+        public virtual string GetNewRow()
+        {
+            return string.Format(HTML_TEMPLATE, 120, "2:00", string.Empty);
+        }
 
-        public const string HTML_TEMPLATE = @"                        <tr>
+        private const string URL_TEMPLATE = "{0}?r={1}&s={2}&b={3}&t={4}&d={5}&e={6}";
+
+        private const string HTML_TEMPLATE = @"                        <tr>
             <td>
                 <button type='button' class='btn btn-primary delete-schedule-row'><span class='oi oi-x'></span></button>
             </td>
