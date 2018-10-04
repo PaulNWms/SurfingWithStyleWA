@@ -19,9 +19,15 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
         }
 
         [JSInvokable]
-        public void SetAnimationToStopping()
+        public void SetAnimationToStoppingLR()
         {
-            SetAnimationState("stopping");
+            SetAnimationState("stopping-lr");
+        }
+
+        [JSInvokable]
+        public void SetAnimationToStoppingRL()
+        {
+            SetAnimationState("stopping-rl");
         }
 
         [JSInvokable]

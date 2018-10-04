@@ -18,6 +18,8 @@ function registerListener(selector, dotnetHelper) {
     });
 }
 
+var direction = 1;
+
 function registerScheduled(selector, dotnetHelper) {
     var element = $(".pendulum-parent");
     var audio = $(selector)[0];
@@ -26,16 +28,23 @@ function registerScheduled(selector, dotnetHelper) {
         switch (element[0].getAttribute("data-metronome-state")) {
             case "starting":
                 audio.play();
+                direction = 1;
                 dotnetHelper.invokeMethodAsync("SetAnimationToRunning");
                 break;
             case "running":
                 audio.play();
-                dotnetHelper.invokeMethodAsync("SetAnimationToRunning");
+                direction = (direction + 1) % 2;
+                //dotnetHelper.invokeMethodAsync("SetAnimationToRunning");
                 break;
             case "makeitstop":
-                dotnetHelper.invokeMethodAsync("SetAnimationToStopping");
+                if (direction) {
+                    dotnetHelper.invokeMethodAsync("SetAnimationToStoppingRL");
+                } else {
+                    dotnetHelper.invokeMethodAsync("SetAnimationToStoppingLR");
+                }
                 break;
-            case "stopping":
+            case "stopping-lr":
+            case "stopping-rl":
             case "stopped":
                 dotnetHelper.invokeMethodAsync("SetAnimationToStopped");
                 break;

@@ -125,11 +125,15 @@
                         break;
 
                     case "running":
-                        metronome.Animation = (metronome.Animation.Equals("running-lr")) ? "running-rl" : "running-lr";
+                        metronome.Animation = "running-lr";
                         break;
 
-                    case "stopping":
-                        metronome.Animation = (metronome.Animation.Equals("running-lr")) ? "stopping-rl" : "stopping-lr";
+                    case "stopping-lr":
+                        metronome.Animation = "stopping-lr";
+                        break;
+
+                    case "stopping-rl":
+                        metronome.Animation = "stopping-rl";
                         break;
 
                     case "stopped":
