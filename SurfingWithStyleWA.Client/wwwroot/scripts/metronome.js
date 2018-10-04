@@ -18,9 +18,8 @@ function registerListener(selector, dotnetHelper) {
     });
 }
 
-var direction = 1;
-
 function registerScheduled(selector, dotnetHelper) {
+    var direction = 1;
     var element = $(".pendulum-parent");
     var audio = $(selector)[0];
     element.on("animationstart", function () { audio.play(); });
@@ -34,7 +33,6 @@ function registerScheduled(selector, dotnetHelper) {
             case "running":
                 audio.play();
                 direction = (direction + 1) % 2;
-                //dotnetHelper.invokeMethodAsync("SetAnimationToRunning");
                 break;
             case "makeitstop":
                 if (direction) {

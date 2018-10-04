@@ -75,23 +75,13 @@
     }
 }
 
-@keyframes running-lr {
+@keyframes running {
     0% {
         transform: rotate(-40deg);
     }
 
     100% {
         transform: rotate(40deg);
-    }
-}
-
-@keyframes running-rl {
-    0% {
-        transform: rotate(40deg);
-    }
-
-    100% {
-        transform: rotate(-40deg);
     }
 }
 
