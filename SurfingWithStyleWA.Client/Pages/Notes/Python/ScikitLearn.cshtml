@@ -69,6 +69,49 @@ model = AdaBoostClassifier(base_estimator = DecisionTreeClassifier(max_depth=2),
 from sklearn.model import KFold
 kf = KFold(12, 3, shuffle=True)
 
+# Grid search various kernels
+# 1. Import GridSearchCV
+from sklearn.model_selection import GridSearchCV
+
+# 2. Select the parameters:
+# Here we pick what are the parameters we want to choose from, and form a dictionary.
+# In this dictionary, the keys will be the names of the parameters, and the values will be the lists of possible values for each parameter.
+parameters = {'kernel':['poly', 'rbf'],'C':[0.1, 1, 10]}
+
+# 3. Create a scorer.
+# We need to decide what metric we'll use to score each of the candidate models. In here, we'll use F1 Score.
+from sklearn.metrics import make_scorer
+from sklearn.metrics import f1_score
+scorer = make_scorer(f1_score)
+
+# 4. Create a GridSearch Object with the parameters, and the scorer. Use this object to fit the data.
+# Create the object.
+grid_obj = GridSearchCV(clf, parameters, scoring=scorer)
+# Fit the data
+grid_fit = grid_obj.fit(X, y)
+
+# 5. Get the best estimator.
+best_clf = grid_fit.best_estimator_
+
+# Random grid search
+clf_svm = SVC()
+# Set up the hyperparameter search
+param_dist = {"C": [0.1, 0.5, 1, 3, 5],
+              "kernel": ['linear','rbf']}
+# Run a randomized search over the hyperparameters
+random_search = RandomizedSearchCV(clf_svm, param_distributions=param_dist)
+# Fit the model on the training data
+random_search.fit(X_train, y_train)
+# Make predictions on the test data
+svc_preds = random_search.best_estimator_.predict(X_test)
+# Return your metrics on test data
+ch.print_metrics(y_test, svc_preds, 'svc')
+
+
+
+
+
+
 
 from sklearn import preprocessing
 from sklearn import pipeline
