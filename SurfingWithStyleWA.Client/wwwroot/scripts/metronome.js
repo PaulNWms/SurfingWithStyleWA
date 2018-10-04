@@ -109,3 +109,38 @@ function getAcceleratingExerciseValues() {
     return [tempo1s, tempo2s, durations, exercises];
 }
 
+function registerAccelerating(selector, dotnetHelper) {
+    var direction = 1;
+    var element = $(".pendulum-parent");
+    var audio = $(selector)[0];
+    element.on("animationstart", function () { audio.play(); });
+    element.on("animationiteration", function () {
+        switch (element[0].getAttribute("data-metronome-state")) {
+            case "starting":
+                audio.play();
+                direction = 1;
+                dotnetHelper.invokeMethodAsync("SetAnimationToRunning");
+                break;
+            case "running":
+                audio.play();
+                direction = (direction + 1) % 2;
+                dotnetHelper.invokeMethodAsync("SetAnimationToRunning");
+                break;
+            case "makeitstop":
+                if (direction) {
+                    dotnetHelper.invokeMethodAsync("SetAnimationToStoppingRL");
+                } else {
+                    dotnetHelper.invokeMethodAsync("SetAnimationToStoppingLR");
+                }
+                break;
+            case "stopping-lr":
+            case "stopping-rl":
+            case "stopped":
+                dotnetHelper.invokeMethodAsync("SetAnimationToStopped");
+                break;
+            default:
+                alert("metronome-state invalid");
+                break;
+        }
+    });
+}

@@ -67,6 +67,39 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
             ParseUrl();
         }
 
+        public int CalculateTempo()
+        {
+            long plateau = (new TimeSpan(0, 0, 3)).Ticks;
+            if (CurrentStep.Duration.Ticks - eggTimer.TimeRemaining.Ticks < plateau)
+            {
+                return CurrentStep.Tempo;
+            }
+            else if (eggTimer.TimeRemaining.Ticks < plateau)
+            {
+                return CurrentStep.Tempo;
+            }
+            else if (Math.Abs(eggTimer.TimeRemaining.Ticks - CurrentStep.Duration.Ticks / 2) < plateau)
+            {
+                return CurrentStep.Tempo2;
+            }
+            else if (eggTimer.TimeRemaining.Ticks > CurrentStep.Duration.Ticks / 2)
+            {
+                double duration = CurrentStep.Duration.Ticks / 2 - 2 * plateau;
+                double tempoChange = CurrentStep.Tempo2 - CurrentStep.Tempo;
+                double progress = CurrentStep.Duration.Ticks - plateau - eggTimer.TimeRemaining.Ticks;
+                double tempo = CurrentStep.Tempo + progress * tempoChange / duration;
+                return (int)tempo;
+            }
+            else
+            {
+                double duration = CurrentStep.Duration.Ticks / 2 - 2 * plateau;
+                double tempoChange = CurrentStep.Tempo2 - CurrentStep.Tempo;
+                double progress = CurrentStep.Duration.Ticks / 2 - plateau - eggTimer.TimeRemaining.Ticks;
+                double tempo = CurrentStep.Tempo2 - progress * tempoChange / duration;
+                return (int)tempo;
+            }
+        }
+
         public void Initialize(EggTimer eggTimer, MiniMetronome metronome)
         {
             this.eggTimer = eggTimer;

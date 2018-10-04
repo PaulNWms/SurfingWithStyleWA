@@ -125,11 +125,16 @@
                         break;
 
                     case "running":
-                        metronome.Animation = (metronome.Animation.Equals("running-lr")) ? "running-rl" : "running-lr";
+                        metronome.Tempo = schedule.CalculateTempo();
+                        metronome.Animation = "running";
                         break;
 
-                    case "stopping":
-                        metronome.Animation = (metronome.Animation.Equals("running-lr")) ? "stopping-rl" : "stopping-lr";
+                    case "stopping-lr":
+                        metronome.Animation = "stopping-lr";
+                        break;
+
+                    case "stopping-rl":
+                        metronome.Animation = "stopping-rl";
                         break;
 
                     case "stopped":
@@ -144,7 +149,7 @@
             try
             {
                 DotNetObjectRef dotNetHelper = new DotNetObjectRef(new AnimationHelper(setAnimationState));
-                await JSRuntime.Current.InvokeAsync<object>("registerScheduled", ".audio-click", dotNetHelper);
+                await JSRuntime.Current.InvokeAsync<object>("registerAccelerating", ".audio-click", dotNetHelper);
                 string newRow = string.Format(AcceleratingSchedule.HTML_TEMPLATE, 60, 120, "2:00", string.Empty);
                 await JSRuntime.Current.InvokeAsync<object>("registerAcceleratingFormRowListener", newRow);
             }

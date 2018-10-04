@@ -61,7 +61,7 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
         {
             this.StateHasChanged = stateHasChanged;
             this.uri = uri;
-            this.rest = new TimeSpan(0, 0, 5);
+            this.rest = new TimeSpan(0, 0, 3);
             this.StartWithRest = true;
             this.EndWithBell = true;
             ParseUrl();
