@@ -6,7 +6,7 @@
     <meta itemprop="applicationCategory" content="Tool, Multimedia" />
     <meta itemprop="applicationSubCategory" content="Music Rehearsal" />
     <meta itemprop="operatingSystem" content="IIS/ASP.NET MVC" />
-    <h2>Scheduled Metronome</h2>
+    <h2>Accelerating Metronome</h2>
     <div class="row">
         <div class="col-9 jumbotron text-center">
             <div class="row">
@@ -127,6 +127,11 @@
                     case "running":
                         metronome.Tempo = schedule.CalculateTempo();
                         metronome.Animation = "running";
+                        break;
+
+                    case "running-rl":
+                        metronome.Tempo = schedule.CalculateTempo();
+                        metronome.Animation = "running-rl";
                         break;
 
                     case "stopping-lr":

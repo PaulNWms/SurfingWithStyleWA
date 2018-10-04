@@ -122,9 +122,14 @@ function registerAccelerating(selector, dotnetHelper) {
                 dotnetHelper.invokeMethodAsync("SetAnimationToRunning");
                 break;
             case "running":
+            case "running-rl":
                 audio.play();
                 direction = (direction + 1) % 2;
-                dotnetHelper.invokeMethodAsync("SetAnimationToRunning");
+                if (direction) {
+                    dotnetHelper.invokeMethodAsync("SetAnimationToRunning");
+                } else {
+                    dotnetHelper.invokeMethodAsync("SetAnimationToRunningRL");
+                }
                 break;
             case "makeitstop":
                 if (direction) {
