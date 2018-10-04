@@ -50,4 +50,20 @@ np.random.normal(loc=mean, scale=stdev, size=1000)
 # compute the p-value
 obs_diff = experiment_ctr - control_ctr # from full population
 (null_vals > obs_diff).mean()
+
+# ⚠ element-wise matrix multiplication (Why are you doing this?)
+a * b
+np.multiply(a, b)
+
+# ⚠ dot product (This API is slippery, read docs first.)
+np.dot(a, b)
+a.dot(b)
+
+# matrix product - you probably want this one
+a @@ b
+np.matmul(a, b)
+
+# matrix transpose
+m.T
+m.transpose()
 </pre>
