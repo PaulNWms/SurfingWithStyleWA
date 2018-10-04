@@ -46,4 +46,8 @@ np.percentile(hnd, 2.5), np.percentile(hnd, 97.5)
 
 # create a bell curve
 np.random.normal(loc=mean, scale=stdev, size=1000)
+
+# compute the p-value
+obs_diff = experiment_ctr - control_ctr # from full population
+(null_vals > obs_diff).mean()
 </pre>
