@@ -12,32 +12,35 @@ namespace SurfingWithStyleWA.Client.Pages.Practice
 
         public int CalculateTempo()
         {
-            long plateau = (new TimeSpan(0, 0, 3)).Ticks;
-            if (CurrentStep.Duration.Ticks - eggTimer.TimeRemaining.Ticks < plateau)
+            double plateau = (new TimeSpan(0, 0, 3)).Ticks;
+            // EggTimer.TimeRemaining is updated on timer callback, more accurate to recalculate
+            double timeRemaining = (eggTimer.TargetTime - DateTime.Now).Ticks;
+
+            if (CurrentStep.Duration.Ticks - timeRemaining < plateau)
             {
                 return CurrentStep.Tempo;
             }
-            else if (eggTimer.TimeRemaining.Ticks < plateau)
+            else if (timeRemaining < plateau)
             {
                 return CurrentStep.Tempo;
             }
-            else if (Math.Abs(eggTimer.TimeRemaining.Ticks - CurrentStep.Duration.Ticks / 2) < plateau)
+            else if (Math.Abs(timeRemaining - CurrentStep.Duration.Ticks / 2) < plateau)
             {
                 return CurrentStep.Tempo2;
             }
-            else if (eggTimer.TimeRemaining.Ticks > CurrentStep.Duration.Ticks / 2)
+            else if (timeRemaining > CurrentStep.Duration.Ticks / 2)
             {
-                double duration = CurrentStep.Duration.Ticks / 2 - 2 * plateau;
+                double duration = CurrentStep.Duration.Ticks / 2.0 - 2.0 * plateau;
                 double tempoChange = CurrentStep.Tempo2 - CurrentStep.Tempo;
-                double progress = CurrentStep.Duration.Ticks - plateau - eggTimer.TimeRemaining.Ticks;
+                double progress = CurrentStep.Duration.Ticks - plateau - timeRemaining;
                 double tempo = CurrentStep.Tempo + progress * tempoChange / duration;
                 return (int)tempo;
             }
             else
             {
-                double duration = CurrentStep.Duration.Ticks / 2 - 2 * plateau;
+                double duration = CurrentStep.Duration.Ticks / 2.0 - 2.0 * plateau;
                 double tempoChange = CurrentStep.Tempo2 - CurrentStep.Tempo;
-                double progress = CurrentStep.Duration.Ticks / 2 - plateau - eggTimer.TimeRemaining.Ticks;
+                double progress = CurrentStep.Duration.Ticks / 2.0 - plateau - timeRemaining;
                 double tempo = CurrentStep.Tempo2 - progress * tempoChange / duration;
                 return (int)tempo;
             }
