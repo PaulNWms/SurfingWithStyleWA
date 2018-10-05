@@ -161,4 +161,34 @@ y = df.iloc[:,-1]
 # or if y is an inner column
 outcomes = full_data['Survived']
 features_raw = full_data.drop('Survived', axis = 1)
+
+# Split the data into features and target label
+income_raw = data['income']
+features_raw = data.drop('income', axis = 1)
+
+# Log-transform the skewed features
+skewed = ['capital-gain', 'capital-loss']
+features_log_transformed = pd.DataFrame(data = features_raw)
+features_log_transformed[skewed] = features_raw[skewed].apply(lambda x: np.log(x + 1))
+
+# Normalize numerical features (including those that were just log-scaled)
+from sklearn.preprocessing import MinMaxScaler
+scaler = MinMaxScaler() # default=(0, 1)
+numerical = ['age', 'education-num', 'capital-gain', 'capital-loss', 'hours-per-week']
+features_log_minmax_transform = pd.DataFrame(data = features_log_transformed)
+features_log_minmax_transform[numerical] = scaler.fit_transform(features_log_transformed[numerical])
+
+# Convert categorical data with 2 categories to 0s and 1s
+features_raw[two_cat].apply(lambda x: 0 if x == 'A' else 1))
+
+# One-hot encode categorical data with &gt; 2 categores
+stripped = df.apply(lambda x: x.str.strip() if x.dtype == 'object' else x)
+pd.get_dummies(stripped, columns=["body_style", "drive_wheels"], prefix=["body", "drive"])
+
+# Split data into training and testing sets
+from sklearn.cross_validation import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(features_final, 
+                                                    income, 
+                                                    test_size = 0.2, 
+                                                    random_state = 0)
 </pre>
