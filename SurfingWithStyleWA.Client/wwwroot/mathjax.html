@@ -10,28 +10,37 @@
     </script>
 </head>
 <body>
-    Probability of event: $P$<br />
-    Probability of opposite event: $1 - P$<br />
-    Probability of composite event: $P \times P \times P ... \times P$<br />
-    $$\sigma^2 = \frac{1}{n} \sum_{i=1}^n{(x_i-\bar{x})^2} \quad or \quad \sigma^2 = \frac{1}{n-1} \sum_{i=1}^n{(x_i-\bar{x})^2}$$
-    $$\sigma = \sqrt{\sigma^2} = \sqrt{\frac{1}{n} \sum_{i=1}^n{(x_i-\bar{x})^2}} \quad or \quad \sigma = \sqrt{\frac{1}{n-1} \sum_{i=1}^n{(x_i-\bar{x})^2}}$$
-    $$precision = \frac{TP}{TP + FP}$$
-    $$recall = \frac{TP}{TP + FN}$$
-    $$F_1 = \frac{2}{\frac{1}{precision} + \frac{1}{recall}} = 2 \times \frac{precision \times recall}{precision + recall} = \frac{TP}{TP + \frac{FN + FP}{2}}$$
-    $$\binom{n}{k} = \frac{n!}{k!(n-k)!}$$
-    $$\frac{n!}{k!(n-k)!} \times p^k(1-p)^{(n-k)}$$
-    $$P(A|B) = \frac{P(A \cap B)}{P(B)}$$
-    $$Error = \frac{1}{m}\sum_{i=1}^m{|y - \hat y|}$$
-    $$Error = \frac{1}{2m}\sum_{i=1}^m{(y - \hat y)^2}$$
-    $$P(A|B) = \frac{P(B|A)\cdot P(A)}{P(B)}$$
-    $$f(x\mid \mu ,\sigma ^{2})={\frac {1}{\sqrt {2\pi \sigma ^{2}}}}e^{-{\frac {(x-\mu )^{2}}{2\sigma ^{2}}}}$$
-    $$entropy = -\frac{m}{m+n}log_2(\frac{m}{m+n})-\frac{n}{m+n}log_2(\frac{n}{m+n})$$
-    $$entropy = -\sum_{i=1}^n p_i\log_2(p_i)$$
-    $$InformationGain = Entropy(Parent) - (\frac{m}{m+n}Entropy(Child₁) + \frac{n}{m+n}Entropy(Child₂))$$
-    $$Margin = \frac{2}{|W|} \qquad Error = |W|^2$$
-    $$HarmonicMean= \frac{2xy}{x+y} \qquad F_1 = 2\cdot\frac{Precision\times Recall}{Precision+Recall}$$
-    $$F_\beta = (1+N^2) \cdot \frac{\text{Precision} \cdot \text{Recall}}{N^2 \cdot \text{Precision} + \text{Recall}} = \frac{\text{Precision} \cdot \text{Recall}}{\frac{N^2}{1+N^2}\text{Precision} + \frac{1}{1+N^2}\text{Recall}}$$
-    $$\sum\limits_{i=1}^n(y_i - \hat{y_i})^2$$
-    $$\sigma(\mathbf{z})_j=\frac{e^{z_j}}{\sum_{k=1}^{K}e^{z_k}}$$
+    $$w_i' \leftarrow w_i + \alpha (y - \hat{y}) x_i \qquad b' \leftarrow b + \alpha (y - \hat{y})$$
+    <!--
+        Probability of event: $P$<br />
+        Probability of opposite event: $1 - P$<br />
+        Probability of composite event: $P \times P \times P ... \times P$<br />
+        $$\sigma^2 = \frac{1}{n} \sum_{i=1}^n{(x_i-\bar{x})^2} \quad or \quad \sigma^2 = \frac{1}{n-1} \sum_{i=1}^n{(x_i-\bar{x})^2}$$
+        $$\sigma = \sqrt{\sigma^2} = \sqrt{\frac{1}{n} \sum_{i=1}^n{(x_i-\bar{x})^2}} \quad or \quad \sigma = \sqrt{\frac{1}{n-1} \sum_{i=1}^n{(x_i-\bar{x})^2}}$$
+        $$precision = \frac{TP}{TP + FP}$$
+        $$recall = \frac{TP}{TP + FN}$$
+        $$F_1 = \frac{2}{\frac{1}{precision} + \frac{1}{recall}} = 2 \times \frac{precision \times recall}{precision + recall} = \frac{TP}{TP + \frac{FN + FP}{2}}$$
+        $$\binom{n}{k} = \frac{n!}{k!(n-k)!}$$
+        $$\frac{n!}{k!(n-k)!} \times p^k(1-p)^{(n-k)}$$
+        $$P(A|B) = \frac{P(A \cap B)}{P(B)}$$
+        $$Error = \frac{1}{m}\sum_{i=1}^m{|y - \hat y|}$$
+        $$Error = \frac{1}{2m}\sum_{i=1}^m{(y - \hat y)^2}$$
+        $$P(A|B) = \frac{P(B|A)\cdot P(A)}{P(B)}$$
+        $$f(x\mid \mu ,\sigma ^{2})={\frac {1}{\sqrt {2\pi \sigma ^{2}}}}e^{-{\frac {(x-\mu )^{2}}{2\sigma ^{2}}}}$$
+        $$entropy = -\frac{m}{m+n}log_2(\frac{m}{m+n})-\frac{n}{m+n}log_2(\frac{n}{m+n})$$
+        $$entropy = -\sum_{i=1}^n p_i\log_2(p_i)$$
+        $$InformationGain = Entropy(Parent) - (\frac{m}{m+n}Entropy(Child₁) + \frac{n}{m+n}Entropy(Child₂))$$
+        $$Margin = \frac{2}{|W|} \qquad Error = |W|^2$$
+        $$HarmonicMean= \frac{2xy}{x+y} \qquad F_1 = 2\cdot\frac{Precision\times Recall}{Precision+Recall}$$
+        $$F_\beta = (1+N^2) \cdot \frac{\text{Precision} \cdot \text{Recall}}{N^2 \cdot \text{Precision} + \text{Recall}} = \frac{\text{Precision} \cdot \text{Recall}}{\frac{N^2}{1+N^2}\text{Precision} + \frac{1}{1+N^2}\text{Recall}}$$
+        $$\sum\limits_{i=1}^n(y_i - \hat{y_i})^2$$
+        $$Softmax=\sum(\mathbf{z})_j=\frac{e^{z_j}}{\sum_{k=1}^{K}e^{z_k}}$$
+        $$CrossEntropy=-\sum_{i=1}^m y_i ln(p_i) + (1-y_i)ln(1-p_i)$$
+        $$MultiClassCE=-\sum_{i=1}^n \sum_{j=1}^m y_{ij} ln(p_{ij})$$
+        $$Error=-\frac{1}{m}\sum_{i=1}^m (1-y_i)ln(1-\hat{y}_i) + y_i ln(\hat{y}_i)$$
+        $$E(W,b)=-\frac{1}{m}\sum_{i=1}^m (1-y_i)ln(1-\sigma(Wx^{(i)}+b)) + y_i ln(\sigma(Wx^{(i)}+b))$$
+        $$MultiClassError=-\sum_{i=1}^n \sum_{j=1}^m y_{ij} ln(\hat{y}_{ij})$$
+    $$\sigma'(x) = \sigma(x) (1-\sigma(x))$$
+    -->
 </body>
 </html>
