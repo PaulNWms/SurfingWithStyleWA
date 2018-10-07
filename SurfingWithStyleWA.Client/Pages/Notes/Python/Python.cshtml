@@ -12,6 +12,7 @@
 <a target="_blank" href="https://www.oreilly.com/programming/free/files/how-to-make-mistakes-in-python.pdf">How to Make Mistakes in Python</a>
 <a target="_blank" href="https://www.python.org/dev/peps/pep-0008/">PEP 8 -- Style Guide for Python Code</a>
 <a target="_blank" href="http://www.jrsoftware.org/isinfo.php">Inno Setup install wizard creator</a>
+<a target="_blank" href="https://web.stanford.edu/~mrosenfe/soc_meth_proj3/matrix_OLS_NYU_notes.pdf">OLS in Matrix Form</a>
 
 Common Jupyter keystrokes
 SHIFT+ENTER
@@ -501,7 +502,7 @@ with open(enrollments_filename, 'rb') as f:
 # linear regression
 import statsmodels.api as sm;
 df['intercept'] = 1
-mod = sm.OLS(df['price'], df['area']) # (y, X)
+mod = sm.OLS(df['price'], df[['intercept','area']]) # (y, X)
 res = mod.fit()
-print(res.summary())
+res.summary()
 </pre>
