@@ -6,7 +6,7 @@
 <a target="_blank" href="https://matplotlib.org/">Matplotlib</a>
 
 import matplotlib.pyplot as plt
-import seaborn as sns
+import seaborn as sb
 %matplotlib inline
 
 # plot bars
@@ -39,4 +39,7 @@ lower, upper = np.percentile(means, 2.5), np.percentile(means,97.5)
 plt.hist(means);
 plt.axvline(x=lower, color='r', linewidth=2);
 plt.axvline(x=upper, color='r', linewidth=2);
+
+# visually check for collinearity between variables
+sb.pairplot(df[['area', 'bedrooms', 'bathrooms']])
 </pre>

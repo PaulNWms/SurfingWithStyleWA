@@ -183,7 +183,7 @@ features_raw[two_cat].apply(lambda x: 0 if x == 'A' else 1))
 
 # One-hot encode categorical data with &gt; 2 categores
 stripped = df.apply(lambda x: x.str.strip() if x.dtype == 'object' else x)
-pd.get_dummies(stripped, columns=["body_style", "drive_wheels"], prefix=["body", "drive"])
+df2 = pd.get_dummies(stripped, columns=["body_style", "drive_wheels"], prefix=["body", "drive"])
 
 # Split data into training and testing sets
 from sklearn.cross_validation import train_test_split
@@ -191,4 +191,29 @@ X_train, X_test, y_train, y_test = train_test_split(features_final,
                                                     income, 
                                                     test_size = 0.2, 
                                                     random_state = 0)
+
+# linear regression
+import statsmodels.api as sm;
+df['intercept'] = 1
+mod = sm.OLS(df['price'], df[['intercept','area']]) # (y, X)
+res = mod.fit()
+res.summary()
+
+# check for VIF
+from patsy import dmatrices
+import statsmodels.api as sm;
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+y, X = dmatrices('price ~ area + bedrooms + bathrooms', df, return_type='dataframe')
+vif = pd.DataFrame()
+vif["VIF Factor"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+vif["features"] = X.columns
+vif.round(1)
+
+# logistic regression (see also scikit-learn)
+df['intercept'] = 1
+log_mod = sm.Logit(df['fraud'], df[['intercept', 'weekday', 'duration']])
+results = log_mod.fit()
+results.summary()
+np.exp(results.params)
+1/_
 </pre>

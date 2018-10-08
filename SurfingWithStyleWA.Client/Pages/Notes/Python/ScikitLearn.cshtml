@@ -107,9 +107,14 @@ svc_preds = random_search.best_estimator_.predict(X_test)
 # Return your metrics on test data
 ch.print_metrics(y_test, svc_preds, 'svc')
 
-
-
-
+# logistic regression (see also pandas)
+log_mod = LogisticRegression()
+log_mod.fit(X_train, y_train)
+preds = log_mod.predict(X_test)
+confusion_matrix(y_test, preds) 
+accuracy_score(y_test, preds)
+recall_score(y_test, preds)
+precision_score(y_test, preds) 
 
 
 

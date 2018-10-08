@@ -498,11 +498,4 @@ import unicodecsv
 with open(enrollments_filename, 'rb') as f:
     reader = unicodecsv.DictReader(f)
     enrollments = list(reader)
-
-# linear regression
-import statsmodels.api as sm;
-df['intercept'] = 1
-mod = sm.OLS(df['price'], df[['intercept','area']]) # (y, X)
-res = mod.fit()
-res.summary()
 </pre>
