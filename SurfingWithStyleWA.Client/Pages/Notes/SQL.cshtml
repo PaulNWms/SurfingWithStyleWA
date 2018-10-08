@@ -33,7 +33,12 @@ Each step hands a logical "virtual tables" to the subsequent step until ORDER BY
 
 A query with an ORDER BY clause can therefore not be used as a table expression - view, inline table-valued function, subquery or CTE.
 
-TOP is non-standard SQL and can use the cursor created by ORDER BY, that is mainly how it is used.
+TOP is non-standard SQL and can use the cursor created by ORDER BY.  That is mainly how it is used.
 
 UNION removes duplicate records, UNION ALL does not.
+
+APPLY (logically) evaluates the left table, and then the right table is evaluated once for each row of the left table.
+- CROSS APPLY only returns matching rows
+- OUTER APPLY includes rows from the left table that didn't match (similar to LEFT OUTER JOIN)
+- Use case: get the 2 most recent orders from each customer
 </pre>

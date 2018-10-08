@@ -10,7 +10,6 @@
     </script>
 </head>
 <body>
-    $$w_i' \leftarrow w_i + \alpha (y - \hat{y}) x_i \qquad b' \leftarrow b + \alpha (y - \hat{y})$$
     <!--
         Probability of event: $P$<br />
         Probability of opposite event: $1 - P$<br />
@@ -40,7 +39,11 @@
     $$Error=-\frac{1}{m}\sum_{i=1}^m (1-y_i)ln(1-\hat{y}_i) + y_i ln(\hat{y}_i)$$
     $$E(W,b)=-\frac{1}{m}\sum_{i=1}^m (1-y_i)ln(1-\sigma(Wx^{(i)}+b)) + y_i ln(\sigma(Wx^{(i)}+b))$$
     $$MultiClassError=-\sum_{i=1}^n \sum_{j=1}^m y_{ij} ln(\hat{y}_{ij})$$
-    -->
     $$\sigma'(x) = \sigma(x) (1-\sigma(x))$$
+    $$w_i' \leftarrow w_i + \alpha (y - \hat{y}) x_i \qquad b' \leftarrow b + \alpha (y - \hat{y})$$
+            -->
+    $$\hat{y} = \sigma \circ W^{(n)} \circ \ldots \circ \sigma \circ W^{(2)} \circ \sigma \circ W^{(1)}(x)$$
+    $$\nabla E = (\ldots, \frac{\delta E}{\delta W_{ij}^{(k)}}, \ldots)$$
+    $$\forall W_{ij}^{(k)}\text{ in }\nabla E: \quad W_{ij}^{'(k)} \leftarrow W_{ij}^{(k)} - \alpha\frac{\delta E}{\delta W_{ij}^{(k)}}$$
 </body>
 </html>
