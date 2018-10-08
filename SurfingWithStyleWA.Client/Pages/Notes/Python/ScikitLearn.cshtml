@@ -111,7 +111,7 @@ ch.print_metrics(y_test, svc_preds, 'svc')
 log_mod = LogisticRegression()
 log_mod.fit(X_train, y_train)
 preds = log_mod.predict(X_test)
-confusion_matrix(y_test, preds) 
+confusion_matrix(y_test, preds) # ⚠️ Warning: scikit-learn outputs binary tables with true positives (1, 1) in the lower right 
 accuracy_score(y_test, preds)
 recall_score(y_test, preds)
 precision_score(y_test, preds) 
