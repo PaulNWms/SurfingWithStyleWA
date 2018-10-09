@@ -44,6 +44,9 @@
     <Content Update="Pages\Notes\Python\NumPy.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Pages\Notes\Python\TensorFlow.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Pages\Notes\Python\ScikitLearn.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

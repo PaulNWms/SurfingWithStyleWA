@@ -77,6 +77,10 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>http://surfingwithstyle.com/notes/python/tensorflow/"/</loc>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>http://surfingwithstyle.com/notes/data-science/data-analysis/"/</loc>
     <changefreq>monthly</changefreq>
   </url>

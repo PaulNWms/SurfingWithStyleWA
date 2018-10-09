@@ -498,4 +498,9 @@ import unicodecsv
 with open(enrollments_filename, 'rb') as f:
     reader = unicodecsv.DictReader(f)
     enrollments = list(reader)
+
+# clear the display in a jupyter notebook
+from IPython.display import display, clear_output
+clear_output(wait=True)
+display(...)
 </pre>
