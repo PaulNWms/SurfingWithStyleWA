@@ -199,7 +199,7 @@ mod = sm.OLS(df['price'], df[['intercept','area']]) # (y, X)
 res = mod.fit()
 res.summary()
 
-# check for VIF
+# VIF factor
 from patsy import dmatrices
 import statsmodels.api as sm;
 from statsmodels.stats.outliers_influence import variance_inflation_factor
@@ -216,4 +216,10 @@ results = log_mod.fit()
 results.summary()
 np.exp(results.params)
 1/_
+
+# find missing values
+null_data = df[df.isnull().any(axis=1)]
+
+# find Pearson's R between 2 columns
+df['hours-per-week'].corr(df['capital-gain'])
 </pre>

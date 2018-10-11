@@ -172,6 +172,16 @@ The sampling distribution for the mean is also equal to σ/√n.
 
 With a sample size of 150, the mean should follow a normal distribution by the central limit theorem.
 
+# Simulating from the Null
+diffs = np.zeros(10000)
+for i in range(len(diffs)):
+    b_samp = df.sample(df.shape[0], replace=True)
+    control_df = b_samp.query('group == "control"')
+    experiment_df = b_samp.query('group == "experiment"')
+    control_ctr = control_df.query('action == "click"').id.nunique() / control_df.query('action == "view"').id.nunique()
+    experiment_ctr = experiment_df.query('action == "click"').id.nunique() / experiment_df.query('action == "view"').id.nunique()
+    diffs[i] = experiment_ctr - control_ctr
+
 The p-value is the probability of getting our statistic or a more extreme value if the null is true. 
 Therefore, small p-values suggest our null is not true. Rather, our statistic is likely to have come from a different distribution than the null.
 When the p-value is large, we have evidence that our statistic was likely to come from the null hypothesis. Therefore, we do not have evidence to reject the null. 
