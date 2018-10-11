@@ -13,6 +13,9 @@
 <a target="_blank" href="https://www.python.org/dev/peps/pep-0008/">PEP 8 -- Style Guide for Python Code</a>
 <a target="_blank" href="http://www.jrsoftware.org/isinfo.php">Inno Setup install wizard creator</a>
 <a target="_blank" href="https://web.stanford.edu/~mrosenfe/soc_meth_proj3/matrix_OLS_NYU_notes.pdf">OLS in Matrix Form</a>
+<a target="_blank" href="http://docs.python-requests.org/en/master/">Requests: HTTP for Humans™</a>
+<a target="_blank" href="https://www.crummy.com/software/BeautifulSoup/">Beautiful Soup</a>
+<a target="_blank" href="https://www.sqlalchemy.org/">SQLAlchemy</a>
 
 Common Jupyter keystrokes
 SHIFT+ENTER
@@ -503,4 +506,11 @@ with open(enrollments_filename, 'rb') as f:
 from IPython.display import display, clear_output
 clear_output(wait=True)
 display(...)
+
+# download an image
+import requests
+from PIL import Image
+from io import BytesIO
+r = requests.get(url)
+i = Image.open(BytesIO(r.content))
 </pre>

@@ -24,6 +24,7 @@ df.info()
 df.nunique()
 df.describe() # descriptive statistics for each column of data
 df.tail(2)
+df[col].value_counts()
 
 # select all the columns from 'id' to the last mean column
 df_means = df.loc[:,'id':'fractal_dimension_mean']
