@@ -18,8 +18,8 @@ Step 1: Ask questions
 Step 2: Wrangle data
 - Gather
 - Assess
-  - Quality: issues with content. Low quality data is also known as dirty data.
-  - Tidiness: issues with structure that prevent easy analysis. Untidy data is also known as messy data. Tidy data requirements:
+  - Dirty data, also known as low quality data. Low quality data has content issues.
+  - Messy data, also known as untidy data. Untidy data has structural issues.
     1. Each variable forms a column.
     2. Each observation forms a row. 
     3. Each type of observational unit forms a table.
@@ -271,5 +271,12 @@ Precision: True Positive / (True Positive + False Positive)
 Eselsbrücke: Precision ⇔ Positives
 ⚠️ Warning: The tables are usually formatted with actuals on the row and predicted values on the columns, but not always.
 ⚠️ Warning: scikit-learn outputs binary tables with true positives (1, 1) in the lower right, whereas handwritten tables often have true positives in the upper left.
+
+Data Quality Dimensions
+- Completeness: do we have all of the records that we should? Do we have missing records or not? Are there specific rows, columns, or cells missing?
+- Validity: we have the records, but they're not valid, i.e., they don't conform to a defined schema. A schema is a defined set of rules for data. These rules can be real-world constraints (e.g. negative height is impossible) and table-specific constraints (e.g. unique key constraints in tables).
+- Accuracy: inaccurate data is wrong data that is valid. It adheres to the defined schema, but it is still incorrect. Example: a patient's weight that is 5 lbs too heavy because the scale was faulty.
+- Consistency: inconsistent data is both valid and accurate, but there are multiple correct ways of referring to the same thing. Consistency, i.e., a standard format, in columns that represent the same data across tables and/or within tables is desired.
+
 </pre>
 </div>

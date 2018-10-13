@@ -18,12 +18,13 @@ Pandas actually stores pointers to strings in dataframes and series, which is wh
 
 # inspect DataFrame
 df.head()
+df.tail()
+df.sample()
 df.shape
 df.dtypes
 df.info()
 df.nunique()
 df.describe() # descriptive statistics for each column of data
-df.tail(2)
 df[col].value_counts()
 
 # select all the columns from 'id' to the last mean column
@@ -223,4 +224,8 @@ null_data = df[df.isnull().any(axis=1)]
 
 # find Pearson's R between 2 columns
 df['hours-per-week'].corr(df['capital-gain'])
+
+# find duplicate column names across tables
+all_columns = pd.Series(list(patients) + list(treatments) + list(adverse_reactions))
+all_columns[all_columns.duplicated()]
 </pre>
