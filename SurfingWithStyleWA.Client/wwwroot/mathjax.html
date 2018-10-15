@@ -41,9 +41,11 @@
     $$MultiClassError=-\sum_{i=1}^n \sum_{j=1}^m y_{ij} ln(\hat{y}_{ij})$$
     $$\sigma'(x) = \sigma(x) (1-\sigma(x))$$
     $$w_i' \leftarrow w_i + \alpha (y - \hat{y}) x_i \qquad b' \leftarrow b + \alpha (y - \hat{y})$$
-            -->
     $$\hat{y} = \sigma \circ W^{(n)} \circ \ldots \circ \sigma \circ W^{(2)} \circ \sigma \circ W^{(1)}(x)$$
     $$\nabla E = (\ldots, \frac{\delta E}{\delta W_{ij}^{(k)}}, \ldots)$$
     $$\forall W_{ij}^{(k)}\text{ in }\nabla E: \quad W_{ij}^{'(k)} \leftarrow W_{ij}^{(k)} - \alpha\frac{\delta E}{\delta W_{ij}^{(k)}}$$
+        -->
+    $$\delta^h_j = \sum{W_{jk}\delta^0_kf'(h_j)}$$
+    $$\Delta w_{ij} = \eta \delta^h_jx_i$$
 </body>
 </html>
