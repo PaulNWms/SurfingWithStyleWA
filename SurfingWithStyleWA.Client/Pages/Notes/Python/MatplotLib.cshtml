@@ -43,4 +43,42 @@ plt.axvline(x=upper, color='r', linewidth=2);
 
 # visually check for collinearity between variables
 sb.pairplot(df[['area', 'bedrooms', 'bathrooms']])
+
+# basic bar chart
+base_color = sb.color_palette()[0]
+sb.countplot(data = df, x = 'cat_var', color = base_color)
+
+# bar chart with sorted x-axis
+base_color = sb.color_palette()[0]
+cat_order = df['cat_var'].value_counts().index
+sb.countplot(data = df, x = 'cat_var', color = base_color, order = cat_order)
+
+# horizontal bar chart
+base_color = sb.color_palette()[0]
+sb.countplot(data = df, y = 'cat_var', color = base_color)
+
+# vertical bars with rotated labels
+base_color = sb.color_palette()[0]
+sb.countplot(data = df, x = 'cat_var', color = base_color)
+plt.xticks(rotation = 90)
+
+# proportional bar chart
+# get proportion taken by most common group for derivation
+# of tick marks
+n_points = df.shape[0]
+max_count = df['cat_var'].value_counts().max()
+max_prop = max_count / n_points
+# generate tick mark locations and names
+tick_props = np.arange(0, max_prop, 0.05)
+tick_names = ['{:0.2f}'.format(v) for v in tick_props]
+# create the plot
+base_color = sb.color_palette()[0]
+sb.countplot(data = df, x = 'cat_var', color = base_color)
+plt.yticks(tick_props * n_points, tick_names)
+plt.ylabel('proportion')
+
+# plot counts of missing data
+na_counts = df.isna().sum()
+base_color = sb.color_palette()[0]
+sb.barplot(na_counts.index.values, na_counts, color = base_color)
 </pre>
