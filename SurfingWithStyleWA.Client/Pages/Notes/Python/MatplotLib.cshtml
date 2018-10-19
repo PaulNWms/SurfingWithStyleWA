@@ -81,4 +81,26 @@ plt.ylabel('proportion')
 na_counts = df.isna().sum()
 base_color = sb.color_palette()[0]
 sb.barplot(na_counts.index.values, na_counts, color = base_color)
+
+# pie chart
+sorted_counts = df['cat_var'].value_counts()
+plt.pie(sorted_counts, labels = sorted_counts.index, startangle = 90,
+        counterclock = False);
+plt.axis('square')
+
+# doughnut plot
+sorted_counts = df['cat_var'].value_counts()
+plt.pie(sorted_counts, labels = sorted_counts.index, startangle = 90,
+        counterclock = False, wedgeprops = {'width' : 0.4});
+plt.axis('square')
+
+# histogram with explicit bin edges
+width = 5
+bin_edges = np.arange(0, df['num_var'].max()+width, width)
+plt.hist(data = df, x = 'num_var', bins = bin_edges)
+
+# similar, but with distribution plot
+width = 5
+bin_edges = np.arange(0, df['num_var'].max()+width, width)
+sb.distplot(df['num_var'], bins = bin_edges)
 </pre>
