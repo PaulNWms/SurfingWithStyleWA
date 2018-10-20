@@ -103,4 +103,170 @@ plt.hist(data = df, x = 'num_var', bins = bin_edges)
 width = 5
 bin_edges = np.arange(0, df['num_var'].max()+width, width)
 sb.distplot(df['num_var'], bins = bin_edges)
+
+# subplot functions
+plt.subplot()
+plt.subplots()
+ax = plt.gca()
+# or
+fig = plt.figure()
+fig.add_subplot()
+axes = fig.get_axes()
+
+# Get current size
+fig_size = plt.rcParams["figure.figsize"]
+print("Current size:", fig_size)
+fig_size[0] = 12
+fig_size[1] = 9
+plt.rcParams["figure.figsize"] = fig_size
+
+# histogram for discrete data
+width = 1
+bin_edges = np.arange(1.5, 12.5+width, width)
+plt.hist(die_rolls, bins = bin_edges, rwidth = 0.7)
+plt.xticks(np.arange(2, 12+1, 1))
+
+# limit histogram domain with xlim
+width = 1
+bin_edges = np.arange(0, 35+width, width)
+plt.hist(data = df, x = 'skew_var', bins = bin_edges)
+plt.xlim(0, 35) # could also be called as plt.xlim((0, 35))
+
+# histogram with log transform
+width = .1
+bin_edges = 10 ** np.arange(0.8, np.log10(ln_data.max())+width, width)
+plt.hist(ln_data, bins = bin_edges)
+plt.xscale('log')
+tick_locs = [10, 30, 100, 300, 1000, 3000]
+plt.xticks(tick_locs, tick_locs)
+
+# scatter plot
+plt.scatter(data = df, x = 'num_var1', y = 'num_var2')
+sb.regplot(data = df, x = 'num_var1', y = 'num_var2')
+
+# scatter plot with log scale on the y axis
+def log_trans(x, inverse = False):
+    if not inverse:
+        return np.log10(x)
+    else:
+        return np.power(10, x)
+sb.regplot(df['num_var1'], df['num_var2'].apply(log_trans))
+tick_locs = [10, 20, 50, 100, 200, 500]
+plt.yticks(log_trans(tick_locs), tick_locs)
+
+# overplotting - transparency
+plt.scatter(data = df, x = 'disc_var1', y = 'disc_var2', alpha = 1/5)
+
+# overplotting - transparency and jitter
+sb.regplot(data = df, x = 'disc_var1', y = 'disc_var2', fit_reg = False,
+           x_jitter = 0.2, y_jitter = 0.2, scatter_kws = {'alpha' : 1/3})
+
+# heat map
+width = 5
+height = 50
+bins_x = np.arange(0.5, 10.5+width,width)
+bins_y = np.arange(-0.5, 10.5+height,height)
+plt.hist2d(data = df, x = 'disc_var1', y = 'disc_var2',
+           bins = [bins_x, bins_y], cmap = 'viridis_r', cmin = 0.1)
+plt.colorbar();
+
+# in case you want to add counts to the above heat map, use plt.txt()
+# loop through the cell counts and add text annotations for each
+for i in range(counts.shape[0]):
+    for j in range(counts.shape[1]):
+        c = counts[i,j]
+        if c >= 7: # increase visibility on darkest cells
+            plt.text(bins_x[i]+0.5, bins_y[j]+0.5, int(c),
+                     ha = 'center', va = 'center', color = 'white')
+        elif c > 0:
+            plt.text(bins_x[i]+0.5, bins_y[j]+0.5, int(c),
+                     ha = 'center', va = 'center', color = 'black')
+
+# violin plot
+base_color = sb.color_palette()[0]
+sb.violinplot(data = df, x = 'cat_var', y = 'num_var', color = base_color,
+              inner = None)
+
+# violin plot showing quartile
+base_color = sb.color_palette()[0]
+sb.violinplot(data = df, x = 'cat_var', y = 'num_var', color = base_color,
+              inner = 'quartile')
+
+# horizontal violin plot
+base_color = sb.color_palette()[0]
+sb.violinplot(data = df, x = 'num_var', y = 'cat_var', color = base_color,
+              inner = None)
+
+# box plot - similar to violin plot
+base_color = sb.color_palette()[0]
+sb.boxplot(data = df, x = 'cat_var', y = 'num_var', color = base_color))
+
+# clustered bar chart
+ax = sb.countplot(data = df, x = 'cat_var1', hue = 'cat_var2')
+# optional: reposition the legend
+ax.legend(loc = 8, ncol = 3, framealpha = 1, title = 'cat_var2')
+
+# a heatmap showing the same data requires creating a new DataFrame
+ct_counts = df.groupby(['cat_var1', 'cat_var2']).size()
+ct_counts = ct_counts.reset_index(name = 'count')
+ct_counts = ct_counts.pivot(index = 'cat_var2', columns = 'cat_var1', values = 'count')
+sb.heatmap(ct_counts, annot = True, fmt = 'd')
+
+# faceting - plot multiple histograms faceted by a categorical variable
+g = sb.FacetGrid(data = df, col = 'cat_var')
+g.map(plt.hist, "num_var")
+
+# faceting - similar, but forcing the same bin edges for a better comparison
+width = 1/3
+bin_edges = np.arange(-3, df['num_var'].max()+width, width)
+g = sb.FacetGrid(data = df, col = 'cat_var')
+g.map(plt.hist, "num_var", bins = bin_edges)
+
+# faceting - sorting and wrapping
+group_means = df.groupby(['many_cat_var']).mean()
+group_order = group_means.sort_values(['num_var'], ascending = False).index
+g = sb.FacetGrid(data = df, col = 'many_cat_var', col_wrap = 5, size = 2,
+                 col_order = group_order)
+g.map(plt.hist, 'num_var', bins = np.arange(5, 15+1, 1))
+g.set_titles('{col_name}')
+
+# bar plot
+base_color = sb.color_palette()[0]
+sb.barplot(data = df, x = 'cat_var', y = 'num_var', color = base_color)
+
+# point plot
+sb.pointplot(data = df, x = 'cat_var', y = 'num_var', linestyles = "")
+
+# line plot with error bars
+# set bin edges, compute centers
+width = 1/4
+xbin_edges = np.arange(0.5, df['num_var1'].max()+width, width)
+xbin_centers = (xbin_edges + width/2)[:-1]
+# compute statistics in each bin
+data_xbins = pd.cut(df['num_var1'], xbin_edges, right = False, include_lowest = True)
+y_means = df['num_var2'].groupby(data_xbins).mean()
+y_sems = df['num_var2'].groupby(data_xbins).sem()
+# plot the summarized data
+plt.errorbar(x = xbin_centers, y = y_means, yerr = y_sems)
+
+# swarm plot
+base_color = sb.color_palette()[0]
+sb.swarmplot(data = df, x = 'cat_var', y = 'num_var', color = base_color)
+
+# rug plot
+g = sb.JointGrid(data = df, x = 'num_var1', y = 'num_var2')
+g.plot_joint(plt.scatter)
+g.plot_marginals(sb.rugplot, height = 0.25)
+
+# strip plot
+plt.figure(figsize = [10, 5])
+base_color = sb.color_palette()[0]
+# left plot: strip plot
+plt.subplot(1, 2, 1)
+ax1 = sb.stripplot(data = df, x = 'num_var', y = 'cat_var',
+                   color = base_color)
+# right plot: violin plot with inner strip plot as lines
+plt.subplot(1, 2, 2)
+sb.violinplot(data = df, x = 'num_var', y = 'cat_var', color = base_color,
+             inner = 'stick')
 </pre>
