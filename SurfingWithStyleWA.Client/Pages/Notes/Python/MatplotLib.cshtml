@@ -4,6 +4,11 @@
 
 <pre class="kaypro10">Links:
 <a target="_blank" href="https://matplotlib.org/">Matplotlib</a>
+<a target="_blank" href="https://matplotlib.org/tutorials/colors/colormaps.html">Colormaps in Matplotlib</a>
+<a target="_blank" href="https://seaborn.pydata.org/tutorial/color_palettes.html">Choosing color palettes</a>
+<a target="_blank" href="https://eagereyes.org/basics/rainbow-color-map">How The Rainbow Color Map Misleads</a>
+<a target="_blank" href="https://agilescientific.com/blog/2017/12/14/no-more-rainbows">No more rainbows!</a>
+<a target="_blank" href="https://blog.datawrapper.de/how-to-choose-a-color-palette-for-choropleth-maps/">How to choose a color palette for choropleth maps</a>
 
 import matplotlib.pyplot as plt
 import seaborn as sb
@@ -269,4 +274,92 @@ ax1 = sb.stripplot(data = df, x = 'num_var', y = 'cat_var',
 plt.subplot(1, 2, 2)
 sb.violinplot(data = df, x = 'num_var', y = 'cat_var', color = base_color,
              inner = 'stick')
+
+# encoding a third variable by shape
+cat_markers = [['A', 'o'],
+               ['B', 's']]
+for cat, marker in cat_markers:
+    df_cat = df[df['cat_var1'] == cat]
+    plt.scatter(data = df_cat, x = 'num_var1', y = 'num_var2', marker = marker)
+plt.legend(['A','B'])
+
+# encoding a third variable by size
+plt.scatter(data = df, x = 'num_var1', y = 'num_var2', s = 'num_var3')
+# dummy series for adding legend
+sizes = [20, 35, 50]
+base_color = sb.color_palette()[0]
+legend_obj = []
+for s in sizes:
+    legend_obj.append(plt.scatter([], [], s = s, color = base_color))
+plt.legend(legend_obj, sizes)
+
+# two-color scatter plot
+g = sb.FacetGrid(data = df, hue = 'cat_var1', size = 5)
+g.map(plt.scatter, 'num_var1', 'num_var2')
+g.add_legend()
+
+# multicolor scatter plot
+plt.scatter(data = df, x = 'num_var1', y = 'num_var2', c = 'num_var3')
+plt.colorbar()
+
+# color palettes
+# qualatative palette for nominal-type data
+sb.palplot(sb.color_palette(n_colors=9))
+# sequential palette for ordinal or numeric data
+sb.palplot(sb.color_palette('viridis', 9))
+# diverging palette for ordinal or numeric data with meaningful zero or center value
+sb.palplot(sb.color_palette('vlag', 9))
+
+Qualitative (all up to 6 colors): 'deep', 'pastel', 'dark', 'muted', 'bright', 'colorblind'
+Sequential: 'rocket' (white-orange-red-purple-black), 'mako' (mint-green-blue-purple-black)
+Diverging: 'vlag' (blue-white-red), 'icefire' (blue-black-orange)
+For all of these strings, appending '_r' reverses the palette
+
+# faceted boxplot
+g = sb.FacetGrid(data = df, col = 'cat_var1', size = 4)
+g.map(sb.boxplot, 'cat_var2', 'num_var2')
+
+# faceted scatter plot
+g = sb.FacetGrid(data = df, col = 'cat_var2', row = 'cat_var1', size = 2.5,
+                margin_titles = True)
+g.map(plt.scatter, 'num_var1', 'num_var2')
+
+# clustered bar chart
+ax = sb.barplot(data = df, x = 'cat_var1', y = 'num_var2', hue = 'cat_var2')
+ax.legend(loc = 8, ncol = 3, framealpha = 1, title = 'cat_var2')
+
+# multiple line plot
+def mean_poly(x, y, bins = 10, **kwargs):
+    """ Custom adapted line plot code. """
+    # set bin edges if none or int specified
+    if type(bins) == int:
+        bins = np.linspace(x.min(), x.max(), bins+1)
+    bin_centers = (bin_edges[1:] + bin_edges[:-1]) / 2
+    # compute counts
+    data_bins = pd.cut(x, bins, right = False,
+                       include_lowest = True)
+    means = y.groupby(data_bins).mean()
+    # create plot
+    plt.errorbar(x = bin_centers, y = means, **kwargs)
+width = 0.5
+bin_edges = np.arange(0.25, df['num_var1'].max()+width, width)
+g = sb.FacetGrid(data = df, hue = 'cat_var2', size = 5)
+g.map(mean_poly, "num_var1", "num_var2", bins = bin_edges)
+g.set_ylabels('mean(num_var2)')
+g.add_legend()
+
+# plot matrix
+g = sb.PairGrid(data = df, vars = ['num_var1', 'num_var2', 'num_var3'])
+g.map_diag(plt.hist)
+g.map_offdiag(plt.scatter)
+
+# pair plot
+g = sb.PairGrid(data = df, x_vars = ['num_var1', 'num_var2', 'num_var3'],
+                y_vars = ['cat_var1','cat_var2'])
+g.map(sb.violinplot, inner = 'quartile')
+
+# heatmap of correlation matrix
+sb.heatmap(df.corr(), annot = True, fmt = '.2f', cmap = 'vlag_r', center = 0)
+
+Another way that you can perform feature engineering is to use the cut function to divide a numeric variable into ordered bins.
 </pre>
