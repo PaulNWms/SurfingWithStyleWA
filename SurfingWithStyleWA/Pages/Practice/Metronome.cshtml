@@ -1,0 +1,125 @@
+﻿@page "/practice/metronome"
+
+<article class="narrow-article metronome" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
+    @*@{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}*@
+    <meta itemprop="applicationCategory" content="Tool, Multimedia" />
+    <meta itemprop="applicationSubCategory" content="Music Rehearsal" />
+    <meta itemprop="operatingSystem" content="IIS/ASP.NET MVC" />
+    <h2 class="offset-2">Metronome</h2>
+    <div class="row">
+        <div class="offset-2 col-8 jumbotron text-center">
+            <div class="row">
+                <button class="offset-3 btn btn-primary btn-lg start" type="button" onclick="@OnPlayPause"><span class="oi @buttonFace"></span></button>
+                <h1 class="offset-1 display"><span class="display">@Tempo</span></h1>
+            </div>
+            <div class="row tempo-slider-container">
+                <div class="col-2">
+                    <button type="button" class="btn btn-primary btn-xs tempo-decrement" onclick="@DecrementTempo"><span class="oi oi-caret-left"></span></button>
+                </div>
+                <div class="col-8">
+                    <input type="range" id="tempo-slider" class="tempo-slider" min="@MIN_TEMPO" max="@MAX_TEMPO" step="1" bind="@Tempo" />
+                </div>
+                <div class="col-2">
+                    <button type="button" class="btn btn-primary btn-xs tempo-increment" onclick="@IncrementTempo"><span class="oi oi-caret-right"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="offset-5 col-2 unpad">
+            <div class="metronome-object">
+                <div class="pendulum-crossbar">
+                    <div class="pendulum-grandparent">
+                        <div class="pendulum-parent"
+                             style="animation-name: @animation; animation-duration: @duration; animation-play-state: @playState; animation-direction: alternate;">
+                            <div class="pendulum-child"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <audio class="audio-click" preload="auto" hidden="hidden">
+            <source src="audio/downbeatClick.wav" type="audio/wav">
+            <source src="audio/downbeatClick.mp3" type="audio/mp3">
+        </audio>
+    </div>
+</article>
+
+@functions {
+    enum TimerState { Running, Paused };
+
+    const int MIN_TEMPO = 20;
+    const int MAX_TEMPO = 240;
+    TimerState status = TimerState.Paused;
+    string buttonFace = "oi-media-play";
+    string animation = "none";
+    string duration = "500ms";
+    string playState = "paused";
+    bool initialized;
+
+    int _tempo = 120;
+    int Tempo
+    {
+        get
+        {
+            return _tempo;
+        }
+        set
+        {
+            _tempo = value;
+            duration = ((int)(60000.0 / _tempo)).ToString() + "ms";
+            // Need to change the animation for the duration change to take effect
+            animation = "starting";
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync()
+    {
+        if (!initialized)
+        {
+            initialized = true;
+            Action<string> setAnimationName = delegate (string name)
+            {
+                animation = "running";
+                this.StateHasChanged();
+            };
+
+            DotNetObjectRef dotNetHelper = new DotNetObjectRef(new AnimationHelper(setAnimationName));
+            await JSRuntime.Current.InvokeAsync<object>("registerListener", ".audio-click", dotNetHelper);
+        }
+
+        await base.OnAfterRenderAsync();
+    }
+
+    void DecrementTempo() { Tempo = Math.Max(Tempo - 1, MIN_TEMPO); }
+    void IncrementTempo() { Tempo = Math.Min(Tempo + 1, MAX_TEMPO); }
+
+    void OnPlayPause()
+    {
+        switch (status)
+        {
+            case TimerState.Paused:
+                status = TimerState.Running;
+
+                if (animation.Equals("none"))
+                {
+                    animation = "starting";
+                }
+
+                buttonFace = "oi-media-pause";
+                playState = "running";
+                break;
+
+            case TimerState.Running:
+                status = TimerState.Paused;
+                buttonFace = "oi-media-play";
+                playState = "paused";
+                break;
+
+            default:
+                break;
+        }
+    }
+}
