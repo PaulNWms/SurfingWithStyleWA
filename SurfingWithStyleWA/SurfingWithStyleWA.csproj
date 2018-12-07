@@ -21,4 +21,10 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Pages\Notes\MS\AspNetCore.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
 </Project>
