@@ -239,14 +239,24 @@ Hierarchical Clustering
 - Average link looks at the distance between every point and every other point in the other cluster and averages them
 - Ward's method
 
-Advantages
+Advantages of HC
 - hierarchical representations are informative and they provide us with an additional ability to visualize the clustering structure of the datasets
 - especially useful when the data contains real hierarchical relationships inside of it
 
-Disadvantages
+Disadvantages of HC
 - sensitive to noise and outliers so you're going to have to clean up the data set from any noise and outliers beforehand
 - O(n²)
 
 Density-based Clustering, DBSCAN (Density-based Spatial Clustering of Applications with Noise)
+
+Advantages of DBSCAN
+- don't need to specify the number of clusters
+- flexibility in the shapes and sizes of clusters it's able to find
+- robust in that it's able to deal with noise and outliers in the data
+
+Disadvantages of DBSCAN
+- not guaranteed to return the same clustering
+- it has difficulties finding clusters of varying densities
+
 </pre>
 </div>
