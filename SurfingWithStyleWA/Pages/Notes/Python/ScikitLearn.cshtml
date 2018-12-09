@@ -245,4 +245,16 @@ fpr, tpr, thresholds = roc_curve(y_train_5, y_scores)
 
 from sklearn.metrics import roc_auc_score
 roc_auc_score(y_train_5, y_scores)
+
+# hierarchical clustering
+from sklearn import datasets, cluster
+X = datasets.load_iris().data[:10]
+clust = cluster.AgglomerativeClustering(n_clusters=3, linkage='ward')
+labels = clust.fit_predict(X)
+
+# DBSCAN
+from sklearn import datasets, cluster
+X = datasets.load_iris().data
+db = cluster.DBSCAN(eps=0.5, min_samples=5)
+db.fit(X)
 </pre>

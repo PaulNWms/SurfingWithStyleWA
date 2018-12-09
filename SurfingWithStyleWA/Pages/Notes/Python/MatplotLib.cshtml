@@ -362,4 +362,18 @@ g.map(sb.violinplot, inner = 'quartile')
 sb.heatmap(df.corr(), annot = True, fmt = '.2f', cmap = 'vlag_r', center = 0)
 
 Another way that you can perform feature engineering is to use the cut function to divide a numeric variable into ordered bins.
+
+# plot dendograms
+from scipy.cluster.hierarchy import dendogram, ward, single
+from sklearn import datasets
+import matplotlib.pyplot as plt
+X = datasets.load_iris().data[:10]
+linkage_matrix = ward(X)
+dendogram(linkage_matrix)
+plt.show()
+
+# plot fancy dendogram
+import seaborn as sns
+sns.clustermap(normalized_X, figsize=(12,18), method=linkage_type, cmap='viridis')
+plt.show()
 </pre>
