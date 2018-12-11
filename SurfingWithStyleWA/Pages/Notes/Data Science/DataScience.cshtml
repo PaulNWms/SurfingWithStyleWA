@@ -258,5 +258,22 @@ Disadvantages of DBSCAN
 - not guaranteed to return the same clustering
 - it has difficulties finding clusters of varying densities
 
+Gaussian Mixture Model (GMM)
+
+Expectation-Maximization for Gaussian Mixtures:
+1. Initialize k Gaussian distributions
+2. Soft-cluster data - "expectation"
+3. Re-estimate the Gaussians - "maximization"
+4. Evaluate the log-likelihood to check for convergence
+5. Repeat from step 2 until converged
+
+Advantages of GMM
+- Soft-clustering (sample membership of multiple clusters)
+- Cluster shape flexibility
+
+Disadvantages of GMM
+- Sensitive to initialization values
+- Possible to converge to a local optimum
+- Slow convergence rate
 </pre>
 </div>

@@ -257,4 +257,11 @@ from sklearn import datasets, cluster
 X = datasets.load_iris().data
 db = cluster.DBSCAN(eps=0.5, min_samples=5)
 db.fit(X)
+
+# GMM
+from sklearn import datasets, mixture
+X = datasets.load_iris().data[:10]
+gmm = mixture.GaussianMixture(n_components=3)
+gmm.fit(X)
+clustering=gmm.predict(X)
 </pre>
