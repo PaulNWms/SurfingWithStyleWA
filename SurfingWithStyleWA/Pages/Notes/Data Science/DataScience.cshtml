@@ -26,6 +26,18 @@
 <a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.117.338&rep=rep1&type=pdf">Speaker Verification Using Adapted Gaussian Mixture Models</a>
 <a target="_blank" href="http://www.ai.mit.edu/projects/vsam/Publications/stauffer_cvpr98_track.pdf">Adaptive background mixture models for real-time tracking</a>
 <a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=83C3BD5E078B1444CB26E243975507E1?doi=10.1.1.707.9034&rep=rep1&type=pdf">Density-Based Clustering Validation</a>
+<a target="_blank" href="https://www.youtube.com/watch?v=PFDu9oVAE-g">Eigenvectors and eigenvalues (YouTube)</a>
+<a target="_blank" href="http://www.cs.otago.ac.nz/cosc453/student_tutorials/principal_components.pdf">A tutorial on Principal Components Analysis</a>
+<a target="_blank" href="https://sebastianraschka.com/Articles/2015_pca_in_3_steps.html">https://sebastianraschka.com/Articles/2015_pca_in_3_steps.html</a>
+<a target="_blank" href="https://scikit-learn.org/stable/auto_examples/applications/plot_face_recognition.html#sphx-glr-auto-examples-applications-plot-face-recognition-py">Faces recognition example using eigenfaces and SVMs</a>
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2669932/">PRINCIPAL COMPONENTS ANALYSIS TO SUMMARIZE MICROARRAY EXPERIMENTS: APPLICATION TO SPORULATION TIME SERIES</a>
+<a target="_blank" href="https://arxiv.org/pdf/1801.01571.pdf">Robust PCA for Anomaly Detection in Cyber Networks</a>
+<a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.853.2380&rep=rep1&type=pdf">Dynamic Principal Component Analysis  in Multivariate Time-Series Segmentation</a>
+<a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.76.8124&rep=rep1&type=pdf">Random projection in dimensionality reduction: Applications to image and text data</a>
+<a target="_blank" href="https://papers.nips.cc/paper/3901-random-projections-for-k-means-clustering.pdf">Random Projections for k-means Clustering</a>
+<a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.322.679&rep=rep1&type=pdf">Independent component analysis: algorithms and applications</a>
+<a target="_blank" href="http://papers.nips.cc/paper/1091-independent-component-analysis-of-electroencephalographic-data.pdf">Independent Component Analysis of Electroencephalographic Data</a>
+<a target="_blank" href="https://pdfs.semanticscholar.org/a34b/e08a20eba7523600203a32abb026a8dd85a3.pdf">Applying Independent Component Analysis to Factor Model in Finance</a>
 
 Classification -> categorical outcomes
 Regression -> numerical outcomes
@@ -280,5 +292,24 @@ Disadvantages of GMM
 - Sensitive to initialization values
 - Possible to converge to a local optimum
 - Slow convergence rate
+
+Principle Component Analysis (PCA)
+I. The amount of variance explained by each component. This is called an eigenvalue.
+II. The principal components themselves, each component is a vector of weights. In this case, the principal components help us understand which pixels of the image are most helpful in identifying the difference between between digits. Principal components are also known as eigenvectors.
+
+Dimensionality Reduction and Latent Features
+- Principal Component Analysis is a technique that is used to reduce the dimensionality of your dataset. The reduced features are called principal components, which can be thought of as latent features. These principal components are simply a linear combination of the original features in your dataset.
+- these components have two major properties:
+  - They aim to capture the most amount of variability in the original dataset.
+  - They are orthogonal to (independent of) one another.
+Interpreting Results 
+- The variance (eigenvalue) explained by each component.  Visualize this with scree plots to understand how many components you might keep based on how much information was being retained.
+- The components (eigenvectors) give us an idea of which original features were most related to why a component was able to explain certain aspects about the original datasets.
+
+Random Projection
+
+Independent Component Analysis (ICA)
+
+Scikit Learn uses FastICA
 </pre>
 </div>

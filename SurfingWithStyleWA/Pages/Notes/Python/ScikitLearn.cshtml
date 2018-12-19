@@ -264,4 +264,35 @@ X = datasets.load_iris().data[:10]
 gmm = mixture.GaussianMixture(n_components=3)
 gmm.fit(X)
 clustering=gmm.predict(X)
+
+# PCA
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
+def do_pca(n_components, data):
+    '''
+    Transforms data using PCA to create n_components, and provides back the results of the
+    transformation.
+    
+    INPUT: n_components - int - the number of principal components to create
+           data - the data you would like to transform
+           
+    OUTPUT: pca - the pca object created after fitting the data
+            X_pca - the transformed X matrix with new number of components
+    '''
+    X = StandardScaler().fit_transform(data)
+    pca = PCA(n_components)
+    X_pca = pca.fit_transform(X)
+    return pca, X_pca
+
+# Random Projection
+from sklearn import random_projection
+rp = random_projection.SparseRandomProjection()
+new_X = rp.fit_transform(X)
+
+# ICA
+from sklearn.decomposition import FastICA
+X = list(zip(signal_1, signal_2, signal_3))
+ica = FastICA(n_components=3)
+components = ica.fit_transform(X)
 </pre>
