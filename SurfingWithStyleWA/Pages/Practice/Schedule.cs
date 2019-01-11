@@ -176,7 +176,8 @@ namespace SurfingWithStyleWA.Pages.Practice
 
             if (timeline.Count > 0)
             {
-                if (this.EndWithBell && CurrentStep.Tempo != -1)
+                if (this.EndWithBell &&
+                    (CurrentStep.Tempo != -1 || timeline[0].Tempo < MiniMetronome.MIN_TEMPO))
                 {
                     JSRuntime.Current.InvokeAsync<object>("playAudio", ".audio-end-exercise");
                 }
