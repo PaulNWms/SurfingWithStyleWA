@@ -14,6 +14,10 @@ import matplotlib.pyplot as plt
 import seaborn as sb
 %matplotlib inline
 
+# inspect data
+df.hist();
+sns.heatmap(df.corr(), annot=True, fmt='.2f');
+
 # plot bars
 plt.bar([1, 2, 3], [224, 620, 425])
 

@@ -26,6 +26,8 @@ df.info()
 df.nunique()
 df.describe() # descriptive statistics for each column of data
 df[col].value_counts()
+df.hist();
+sns.heatmap(df.corr(), annot=True, fmt='.2f');
 
 # select all the columns from 'id' to the last mean column
 df_means = df.loc[:,'id':'fractal_dimension_mean']
@@ -222,10 +224,26 @@ np.exp(results.params)
 # find missing values
 null_data = df[df.isnull().any(axis=1)]
 
+# find complete rows
+complete_data = df[df.notnull().all(axis=1)]
+
+# Drop only the rows with missing values in column 3.
+only3_drop = small_dataset.dropna(subset=['col3'], how='any')
+
 # find Pearson's R between 2 columns
 df['hours-per-week'].corr(df['capital-gain'])
 
 # find duplicate column names across tables
 all_columns = pd.Series(list(patients) + list(treatments) + list(adverse_reactions))
 all_columns[all_columns.duplicated()]
+
+# split data into test and train sets
+from sklearn.preprocessing import Imputer
+imputer = Imputer()
+columns = ['CareerSatisfaction', 'HoursPerWeek', 'JobSatisfaction', 'StackOverflowSatisfaction', 'Salary']
+Xy = df[columns]
+Xy = pd.DataFrame(imputer.fit_transform(Xy), columns=columns)
+y = Xy['Salary']
+X = Xy.drop('Salary', axis=1)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = .30, random_state=42)
 </pre>
