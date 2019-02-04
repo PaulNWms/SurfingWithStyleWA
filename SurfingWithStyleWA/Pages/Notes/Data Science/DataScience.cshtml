@@ -39,6 +39,12 @@
 <a target="_blank" href="http://papers.nips.cc/paper/1091-independent-component-analysis-of-electroencephalographic-data.pdf">Independent Component Analysis of Electroencephalographic Data</a>
 <a target="_blank" href="https://pdfs.semanticscholar.org/a34b/e08a20eba7523600203a32abb026a8dd85a3.pdf">Applying Independent Component Analysis to Factor Model in Finance</a>
 <a target="_blank" href="https://chrisalbon.com/">Technical Notes On Using Data Science & Artificial Intelligence</a>
+<a target="_blank" href="https://www.predictiveanalyticsworld.com/patimes/four-ways-data-science-goes-wrong-and-how-test-driven-data-analysis-can-help/6947/">Four Ways Data Science Goes Wrong and How Test Driven Data Analysis Can Help</a>
+<a target="_blank" href="https://www.linkedin.com/pulse/data-science-test-driven-development-sam-savage/">Data Science TDD</a>
+<a target="_blank" href="http://engineering.pivotal.io/post/test-driven-development-for-data-science/">TDD for Data Science</a>
+<a target="_blank" href="https://medium.com/%40karijdempsey/test-driven-development-is-essential-for-good-data-science-heres-why-db7975a03a44">TDD is Essential for Good Data Science Here's Why</a>
+<a target="_blank" href="https://github.com/lyst/MakingLyst/tree/master/code-reviews">Code Review</a>
+<a target="_blank" href="https://www.kevinlondon.com/2015/05/05/code-review-best-practices.html">Code Review Best Practices</a>
 
 Classification -> categorical outcomes
 Regression -> numerical outcomes
@@ -332,5 +338,37 @@ GitHub README should have:
 3. File Descriptions
 4. How to Interact with your project
 5. Licensing, Authors, Acknowledgements, etc.
+
+Questions to Ask Yourself When Conducting a Code Review:
+  Is the code clean and modular?
+  - Can I understand the code easily?
+  - Does it use meaningful names and whitespace?
+  - Is there duplicated code?
+  - Can you provide another layer of abstraction?
+  - Is each function and module necessary?
+  - Is each function or module too long?
+
+  Is the code efficient?
+  - Are there loops or other steps we can vectorize?
+  - Can we use better data structures to optimize any steps?
+  - Can we shorten the number of calculations needed for any steps?
+  - Can we use generators or multiprocessing to optimize any steps?
+
+  Is documentation effective?
+  - Are in-line comments concise and meaningful?
+  - Is there complex code that's missing documentation?
+  - Do function use effective docstrings?
+  - Is the necessary project documentation provided?
+
+  Is the code well tested?
+  - Does the code high test coverage?
+  - Do tests check for interesting cases?
+  - Are the tests readable?
+  - Can the tests be made more efficient?
+
+  Is the logging effective?
+  - Are log messages clear, concise, and professional?
+  - Do they include all relevant and useful information?
+  - Do they use the appropriate logging level?
 </pre>
 </div>
