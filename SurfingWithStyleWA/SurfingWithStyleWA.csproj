@@ -25,6 +25,9 @@
     <Content Update="Pages\Notes\MS\AspNetCore.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Pages\Tools\OldEnglishLetters.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,61 @@
+﻿@page "/tools/old-english-letters"
+@using System.Text.RegularExpressions;
+
+<article class="narrow-article timer" itemprop="mainContentOfPage" itemscope itemtype="http://schema.org/WebApplication">
+    @*@{Html.RenderPartial("~/Views/Shared/_StructuredData.cshtml", ViewBag as object);}*@
+    <meta itemprop="applicationCategory" content="Tool, Multimedia" />
+    <meta itemprop="applicationSubCategory" content="Time Management" />
+    <meta itemprop="operatingSystem" content="IIS/ASP.NET MVC" />
+    <h2 class="offset-sm-2" itemprop="name">Old English Letters</h2>
+    <form>
+        <div class="form-group offset-sm-2">
+            <p>Paste some text into the upper box and hit [Convert].</p>
+        </div>
+        <div class="form-group offset-sm-1 col-10">
+            <textarea class="form-control" rows="6" bind="@prose" />
+        </div>
+        <div class="form-group offset-sm-2">
+            <button type="button" class="btn btn-primary" onclick="@Convert">Convert</button>
+        </div>
+        <div class="form-group offset-sm-1 col-10">
+            <textarea class="form-control" rows="6" readonly="readonly">@converted</textarea>
+        </div>
+    </form>
+</article>
+
+<audio class="audio-bell" preload="auto">
+    <source src="audio/EndRoutine.wav" type="audio/wav">
+    <source src="audio/EndRoutine.mp3" type="audio/mp3">
+</audio>
+
+@functions {
+string prose = string.Empty;
+string converted = string.Empty;
+
+string[,] substitutes =
+{
+    { @"([aAeEiIoOuU])ss([aeiou])", @"$1sſ$2" }, { @"ss", @"ß" }, { @"sz", @"ß" },  { @"s([abcsefghijklmnopqrtuvwxy])", @"ſ$1" },
+    { @"and", @"&" },
+    { @"that", @"ꝥ" }, { @"That", @"Ꝥ" }, { @"THAT", @"Ꝥ" },
+    { @"th", @"þ" }, { @"Th", @"Þ" }, { @"TH", @"Þ" },
+    { @"th", @"ð" }, { @"Th", @"Ð" }, { @"TH", @"Ð" },
+    { @"ae", @"æ" }, { @"Ae", @"Æ" }, { @"AE", @"Æ" },
+    { @"oe", @"œ" }, { @"Oe", @"Œ" }, { @"OE", @"Œ" },
+    { @"w", @"ƿ" }, { @"W", @"Ƿ" },
+    { @"gh", @"ȝ" }, { @"GH", @"Ȝ" },
+    { @"ng", @"ŋ" }, { @"NG", @"Ŋ" }
+};
+
+void Convert()
+{
+    string result = prose as string;
+
+    for (int i = 0; i < substitutes.GetLength(0); i++)
+    {
+        Regex regex = new Regex(substitutes[i, 0]);
+        result = regex.Replace(result, substitutes[i, 1]);
+    }
+
+    converted = result;
+}
+}
