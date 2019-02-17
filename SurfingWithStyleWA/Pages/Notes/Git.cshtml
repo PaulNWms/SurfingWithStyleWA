@@ -62,6 +62,44 @@ Like a local branch, a remote branch is a reference to a commit.
 
 Never rebase shared commits.
 
+The Four Areas
+- Working Area
+- Index (Staging Area)
+- Repository
+- Stash
+
+The Two Questions
+- How does this command move information across the Four Areas?
+- How does this command change the Repository?
+
+# compare Working Area to Staging Area (unusual)
+git diff
+
+# compare Staging Area to Repository
+git diff --cached
+
+# compare branches
+git diff lisa master
+
+# move HEAD to a different branch and copy data from the Repository to the Working Area
+git checkout lisa
+
+# remove file from Staging Area
+git rm --cached COPYRIGHT
+
+git rm is NOT the opposite of git add
+
+Git automatically finds out when you're renaming or moving files.
+
+# move/rename file
+git mv menu.md menu.txt
+
+add copies data from the Working Area to the Staging Area
+commit copies data from the Staging Area to the Repository
+checkout copies data from the Repository to the Working Area and the Staging Area
+rm deletes files from both the Working Area and the Staging Area
+mv moves a file in both the Working Area and the Staging Area
+
 # sets up Git with your name
 git config --global user.name "&lt;Your-Full-Name&gt;"
 
