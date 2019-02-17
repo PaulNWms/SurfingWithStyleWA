@@ -12,6 +12,56 @@
 <a target="_blank" href="https://github.com/jlord/git-it-electron">try tackling some Git and GitHub challenges with the Git-it app</a>
 <a target="_blank" href="http://firstpr.me/">First Pull Request</a>
 
+git init
+
+# print the hash of a string
+echo "Apple Pie" | git hash-object --stdin -w
+
+# print the type a hash points to
+git cat-file &lt;SHA1&gt; -t
+
+# print the contents of the object referenced by hash
+git cat-file &lt;SHA1&gt; -p
+
+# print a commit referenced by hash
+git cat-file -p &lt;SHA1 of commit&gt;
+
+# get the number of objects in the repo
+git count-objects
+
+# create an annotated tag
+git tag -a mytag -m "I love cheesecake"
+
+Git Objects
+- Blobs
+- Trees
+- Commits
+- Tags
+
+A branch is a reference to a commit.
+
+HEAD is a reference to a branch, but...
+
+A detached HEAD points directly to a commit.
+
+A merge is a commit with 2 (or more) parents.
+
+1. The current branch tracks new commits
+2. When you move to another commit, Git updates your working directory
+3. Unreachable objects are garbage collected
+
+Merges preserve history.
+
+Rebases refactor history.
+
+When in doubt, merge.
+
+A tag is like a branch that doesn't move.
+
+Like a local branch, a remote branch is a reference to a commit.
+
+Never rebase shared commits.
+
 # sets up Git with your name
 git config --global user.name "&lt;Your-Full-Name&gt;"
 
