@@ -134,6 +134,30 @@ git stash clear
 # inspect object
 git show &lt;SHA1&gt;
 
+# show history
+git log --graph --decorate --oneline
+
+# inspect commit 1 month ago
+git show HEAD@@{"1 month ago"}
+
+# show history of who changed lines
+git blame &lt;file&gt;
+
+# show delta between commits
+git diff HEAD HEAD~2
+
+# show changes that contain specific words
+git log --grep apples --oneline
+
+# show commits that added or removed specific words
+git log -Gapples --patch
+
+# show range of commits
+git log HEAD~5..HEAD^ --oneline
+
+# show all the commits between branches 
+git log nogood..master --oneline
+
 # sets up Git with your name
 git config --global user.name "&lt;Your-Full-Name&gt;"
 
