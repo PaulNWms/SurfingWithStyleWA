@@ -137,7 +137,7 @@ git show &lt;SHA1&gt;
 # show history
 git log --graph --decorate --oneline
 
-# inspect commit 1 month ago
+# inspect commits up to 1 month ago
 git show HEAD@@{"1 month ago"}
 
 # show history of who changed lines
@@ -160,6 +160,28 @@ git log nogood..master --oneline
 
 # sets up Git with your name
 git config --global user.name "&lt;Your-Full-Name&gt;"
+
+# change the current commit
+git commit --amend
+
+# manually edit history
+git rebase -i
+
+# look at reference log
+git reflog
+
+# automatically create a reversing commit
+git revert &lt;SHA1&gt;
+
+Be careful when you revert merge commits.
+
+"revert" doesn't mean "undo"
+
+Distribution Models
+- Peer-to-Peer
+- Centralized
+- Pull Request
+- Dictator and Lieutenants
 
 # sets up Git with your email
 git config --global user.email "&lt;your-email-address&gt;"
