@@ -6,6 +6,8 @@
 <a target="_blank" href="https://pandas.pydata.org/">pandas</a>
 <a target="_blank" href="/pdf/PandasPythonForDataScience.pdf">Cheat Sheet 1 (PDF)</a>
 <a target="_blank" href="/pdf/numpy_pandas_cheatsheet.pdf">Cheat Sheet 2 (PDF)</a>
+<a target="_blank" href="https://pandas.pydata.org/pandas-docs/stable/getting_started/10min.html">10 Minutes to pandas</a>
+<a target="_blank" href="https://pandas.pydata.org/pandas-docs/stable/getting_started/basics.html">Pandas Basic Functionality</a>
 
 # load DataFrame
 import pandas as pd
@@ -18,13 +20,14 @@ Pandas actually stores pointers to strings in dataframes and series, which is wh
 
 # inspect DataFrame
 df.head()
+df.info()
+df.nunique()
+df.describe() # descriptive statistics for each column of data
+
 df.tail()
 df.sample()
 df.shape
 df.dtypes
-df.info()
-df.nunique()
-df.describe() # descriptive statistics for each column of data
 df[col].value_counts()
 df.hist();
 sns.heatmap(df.corr(), annot=True, fmt='.2f');
