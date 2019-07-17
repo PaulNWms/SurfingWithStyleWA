@@ -8,6 +8,12 @@
 <a target="_blank" href="/pdf/numpy_pandas_cheatsheet.pdf">Cheat Sheet 2 (PDF)</a>
 <a target="_blank" href="https://pandas.pydata.org/pandas-docs/stable/getting_started/10min.html">10 Minutes to pandas</a>
 <a target="_blank" href="https://pandas.pydata.org/pandas-docs/stable/getting_started/basics.html">Pandas Basic Functionality</a>
+<a target="_blank" href="https://www.linkedin.com/pulse/data-science-test-driven-development-sam-savage/">Data Science TDD</a>
+<a target="_blank" href="http://engineering.pivotal.io/post/test-driven-development-for-data-science/">TDD for Data Science</a>
+<a target="_blank" href="https://medium.com/@@karijdempsey/test-driven-development-is-essential-for-good-data-science-heres-why-db7975a03a44">TDD is Essential for Good Data Science Here's Why</a>
+<a target="_blank" href="http://docs.python-guide.org/en/latest/writing/tests/">Testing Your Code (general python TDD)</a>
+<a target="_blank" href="https://github.com/lyst/MakingLyst/tree/master/code-reviews">Code Review</a>
+<a target="_blank" href="https://www.kevinlondon.com/2015/05/05/code-review-best-practices.html">Code Review Best Practices</a>
 
 # load DataFrame
 import pandas as pd
@@ -252,4 +258,33 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = .30, rando
 
 # Subset to a dataframe only holding the categorical columns
 cat_df = df.select_dtypes(include=['object'])
+
+Questions to Ask Yourself When Conducting a Code Review
+- Is the code clean and modular?
+  - Can I understand the code easily?
+  - Does it use meaningful names and whitespace?
+  - Is there duplicated code?
+  - Can you provide another layer of abstraction?
+  - Is each function and module necessary?
+  - Is each function or module too long?
+- Is the code efficient?
+  - Are there loops or other steps we can vectorize?
+  - Can we use better data structures to optimize any steps?
+  - Can we shorten the number of calculations needed for any steps?
+  - Can we use generators or multiprocessing to optimize any steps?
+- Is documentation effective?
+  - Are in-line comments concise and meaningful?
+  - Is there complex code that's missing documentation?
+  - Do function use effective docstrings?
+  - Is the necessary project documentation provided?
+- Is the code well tested?
+  - Does the code high test coverage?
+  - Do tests check for interesting cases?
+  - Are the tests readable?
+  - Can the tests be made more efficient?
+- Is the logging effective?
+  - Are log messages clear, concise, and professional?
+  - Do they include all relevant and useful information?
+  - Do they use the appropriate logging level?
+
 </pre>
