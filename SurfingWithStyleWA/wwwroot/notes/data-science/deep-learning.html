@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <title>Surfing With Style</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="css/math.css" rel="stylesheet" />
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_CHTML">
+    </script>
+</head>
+<body>
+    <h1>Deep Learning</h1>
+
+    <div class="kaypro10">
+        <pre>Links:
+<a target="_blank" href="https://selfdrivingcars.mit.edu/deeptraffic/">Deep Traffic</a>
+<a target="_blank" href="https://www.manning.com/books/grokking-deep-learning">Grokking Deep Learning</a>
+
+<em>Type</em> of machine learning: supervised vs. unsupervised
+
+<em>Method</em> of machine learning: parametric (trial-and-error) vs. non-parametric ("counting")
+
+Deep learning is a class of parametric model.
+
+# stare at this
+weight = 0.5
+goal_pred = 0.8
+input = 2
+alpha = 0.1
+for iteration in range(20):
+    pred = input * weight
+    error = (pred - goal_pred) ** 2
+    derivative = input * (pred - goal_pred)
+    weight = weight - (alpha * derivative)
+    print("Error:" + str(error) + " Prediction:" + str(pred))
+
+Stochastic Gradient Descent updates the weights after each input.
+Batch Gradient Descent updates the weights after each batch of input.
+
+# start at this
+import numpy as np
+np.random.seed(1)
+ 
+def relu(x):
+    return (x > 0) * x # returns x if x > 0
+                       # return 0 otherwise
+ 
+def relu2deriv(output):
+    return output>0 # returns 1 for input > 0
+                    # return 0 otherwise
+streetlights = np.array( [[ 1, 0, 1 ],
+                          [ 0, 1, 1 ],
+                          [ 0, 0, 1 ],
+                          [ 1, 1, 1 ] ] )
+ 
+walk_vs_stop = np.array([[ 1, 1, 0, 0]]).T
+ 
+alpha = 0.2
+hidden_size = 4
+ 
+weights_0_1 = 2*np.random.random((3,hidden_size)) - 1
+weights_1_2 = 2*np.random.random((hidden_size,1)) - 1
+ 
+for iteration in range(60):
+    layer_2_error = 0
+    for i in range(len(streetlights)):
+        layer_0 = streetlights[i:i+1]
+        layer_1 = relu(np.dot(layer_0,weights_0_1))
+        layer_2 = np.dot(layer_1,weights_1_2)
+ 
+        layer_2_error += np.sum((layer_2 - walk_vs_stop[i:i+1]) ** 2)
+        layer_2_delta = (layer_2 - walk_vs_stop[i:i+1])
+        layer_1_delta=layer_2_delta.dot(weights_1_2.T)*relu2deriv(layer_1)
+        weights_1_2 -= alpha * layer_1.T.dot(layer_2_delta)
+        weights_0_1 -= alpha * layer_0.T.dot(layer_1_delta)
+ 
+    if(iteration % 10 == 9):
+        print("Error:" + str(layer_2_error))
+
+Normalization techniques:
+- minibatch
+- early stopping
+- dropout
+
+Activation functions:
+- relu is fast
+- sigmoid is often used for output because it squishes the values between 0 and 1
+- tanh is often used for middle layers because it squishes the values between -1 and 1
+
+Output activation functions:
+- predicting raw data values (like temperature) => no activation
+- predicting yes/no probabilities => sigmoid
+- predicting "which one" probabilities => softmax
+
+<u>function   forward prop                     back prop delta</u>
+- Relu     ones_and_zeros = (input > 0)     mask = output > 0
+           output = input*ones_and_zeros    deriv = output * mask
+- Sigmoid  output = 1/(1 + np.exp(-input))  deriv = output*(1-output)
+- Tanh     output = np.tanh(input)          deriv = 1 - (output**2)
+- Softmax  temp = np.exp(input)             temp = (output - true)
+           output /= np.sum(temp)           output = temp/len(true)
+
+A convolution layer aggregates the kernels with sum pooling, mean pooling, or max pooling.  Max pooling is the most common.
+
+When a neural network needs to use the same idea in mutliple places, endeavor to use the same weights in both places.
+
+The perceptron step works as follows. For a point with coordinates (p,q), label y, and prediction given by the equation ŷ = step(w₁x₁ + w₂x₂ + b):
+∀ points:
+    - If the point is correctly classified, do nothing.
+    - If the point is classified positive, but it has a negative label, subtract αp, αq, and α from w₁, w₂ and b respectively.
+    - If the point is classified negative, but it has a positive label, add αp, αq, and α from w₁, w₂ and b respectively.
+
+By replacing the step function with the sigmoid function, ŷ = σ(w₁x₁ + w₂x₂ + b) becomes a probability that the point is above or below the line.
+</pre>
+        $$Softmax=\sum(\mathbf{z})_j=\frac{e^{z_j}}{\sum_{k=1}^{K}e^{z_k}}$$
+        $$CrossEntropy=-\sum_{i=1}^m y_i ln(p_i) + (1-y_i)ln(1-p_i)$$
+        $$MultiClassCE=-\sum_{i=1}^n \sum_{j=1}^m y_{ij} ln(p_{ij})$$
+        $$Error=-\frac{1}{m}\sum_{i=1}^m (1-y_i)ln(1-\hat{y}_i) + y_i ln(\hat{y}_i)$$
+        $$E(W,b)=-\frac{1}{m}\sum_{i=1}^m (1-y_i)ln(1-\sigma(Wx^{(i)}+b)) + y_i ln(\sigma(Wx^{(i)}+b))$$
+        $$MultiClassError=-\sum_{i=1}^n \sum_{j=1}^m y_{ij} ln(\hat{y}_{ij})$$
+<pre>The derivative of the sigmoid function is really simple (here the tick means first-order derivative):</pre>
+        $$\sigma'(x) = \sigma(x) (1-\sigma(x))$$
+<pre>After applying some calculus, this is the gradient step (here the tick means new value):</pre>
+        $$w_i' \leftarrow w_i + \alpha (y - \hat{y}) x_i \qquad b' \leftarrow b + \alpha (y - \hat{y})$$
+<pre>Feedforward:</pre>
+        $$\hat{y} = \sigma \circ W^{(n)} \circ \ldots \circ \sigma \circ W^{(2)} \circ \sigma \circ W^{(1)}(x)$$
+        $$\nabla E = (\ldots, \frac{\delta E}{\delta W_{ij}^{(k)}}, \ldots)$$
+<pre>Backpropagation:</pre>
+        $$\forall W_{ij}^{(k)}\text{ in }\nabla E: \quad W_{ij}^{'(k)} \leftarrow W_{ij}^{(k)} - \alpha\frac{\delta E}{\delta W_{ij}^{(k)}}$$
+<pre>
+If you can't find the right size of pants, it's better to go for the slightly larger pair and use a belt.
+
+# Putting together a <a target="_blank" href="https://keras.io/getting-started/sequential-model-guide/">Keras</a> network is straightforward:
+model = Sequential()
+model.add(...) # a bunch of layers here
+model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+model.fit(x_train, y_train, epochs=20, batch_size=128)
+score = model.evaluate(x_test, y_test, batch_size=128)
+
+An epoch is a single forward and backward pass of the whole dataset.
+
+Backpropagation (another notation):
+</pre>
+        $$\delta^h_j = \sum{W_{jk}\delta^0_kf'(h_j)}$$
+        $$\Delta w_{ij} = \eta \delta^h_jx_i$$
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-51714627-1', 'surfingwithstyle.com');
+        ga('send', 'pageview');
+    </script>
+    <!--<script src="_framework/blazor.webassembly.js"></script>-->
+
+</body>
+</html>

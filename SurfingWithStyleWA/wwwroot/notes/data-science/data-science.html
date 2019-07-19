@@ -1,0 +1,456 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <title>Surfing With Style</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="css/math.css" rel="stylesheet" />
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_CHTML">
+    </script>
+</head>
+<body>
+    <h1>Data Science</h1>
+
+    <div class="kaypro10">
+        <pre>Links:
+<a target="_blank" href="http://blog.kaggle.com/2017/01/23/a-kaggle-master-explains-gradient-boosting/">A Kaggle Master Explains Gradient Boosting</a>
+<a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=83C3BD5E078B1444CB26E243975507E1?doi=10.1.1.707.9034&rep=rep1&type=pdf">Density-Based Clustering Validation</a>
+<a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.117.338&rep=rep1&type=pdf">Speaker Verification Using Adapted Gaussian Mixture Models</a>
+<a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.322.679&rep=rep1&type=pdf">Independent component analysis: algorithms and applications</a>
+<a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.681.3152&rep=rep1&type=pdf">Nonparametric discovery of human routines from sensor data</a>
+<a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.76.8124&rep=rep1&type=pdf">Random projection in dimensionality reduction: Applications to image and text data</a>
+<a target="_blank" href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.853.2380&rep=rep1&type=pdf">Dynamic Principal Component Analysis  in Multivariate Time-Series Segmentation</a>
+<a target="_blank" href="http://cs229.stanford.edu/notes/cs229-notes3.pdf">SVMs - Stanford's CS229 Lecture notes</a>
+<a target="_blank" href="http://engineering.pivotal.io/post/test-driven-development-for-data-science/">TDD for Data Science</a>
+<a target="_blank" href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0029847">Using Hierarchical Clustering of Secreted Protein Families to Classify and Rank Candidate Effectors of Rust Fungi</a>
+<a target="_blank" href="http://papers.nips.cc/paper/1091-independent-component-analysis-of-electroencephalographic-data.pdf">Independent Component Analysis of Electroencephalographic Data</a>
+<a target="_blank" href="http://rob.schapire.net/papers/explaining-adaboost.pdf">Explaining AdaBoost</a>
+<a target="_blank" href="http://www.ai.mit.edu/projects/vsam/Publications/stauffer_cvpr98_track.pdf">Adaptive background mixture models for real-time tracking</a>
+<a target="_blank" href="http://www.cs.otago.ac.nz/cosc453/student_tutorials/principal_components.pdf">A tutorial on Principal Components Analysis</a>
+<a target="_blank" href="https://arxiv.org/abs/1205.6221">Application of the Gaussian mixture model in pulsar astronomy</a>
+<a target="_blank" href="https://arxiv.org/pdf/1801.01571.pdf">Robust PCA for Anomaly Detection in Cyber Networks</a>
+<a target="_blank" href="https://chrisalbon.com/">Technical Notes On Using Data Science & Artificial Intelligence</a>
+<a target="_blank" href="https://cseweb.ucsd.edu/~yfreund/papers/IntroToBoosting.pdf">A Short Introduction to Boosting</a>
+<a target="_blank" href="https://db-engines.com/en/ranking">DB-Engines Ranking</a>
+<a target="_blank" href="https://en.wikipedia.org/wiki/Bias–variance_tradeoff">Bias and Variance</a>
+<a target="_blank" href="https://en.wikipedia.org/wiki/Support_vector_machine">Support Vector Machines</a>
+<a target="_blank" href="https://github.com/lyst/MakingLyst/tree/master/code-reviews">Code Review</a>
+<a target="_blank" href="https://hackernoon.com/the-ai-hierarchy-of-needs-18f111fcc007">The AI Hierarchy of Needs</a>
+<a target="_blank" href="https://ieeexplore.ieee.org/abstract/document/5946052/">Anomaly detection in temperature data using dbscan algorithm</a>
+<a target="_blank" href="https://medium.com/%40karijdempsey/test-driven-development-is-essential-for-good-data-science-heres-why-db7975a03a44">TDD is Essential for Good Data Science Here's Why</a>
+<a target="_blank" href="https://medium.com/@@karpathy/yes-you-should-understand-backprop-e2f06eab496b">Yes, you should understand backprop</a>
+<a target="_blank" href="https://mubaris.com/posts/kmeans-clustering/">K-Means Clustering in Python</a>
+<a target="_blank" href="https://pages.cpsc.ucalgary.ca/~mahanti/papers/clustering.pdf">Traffic Classification Using Clustering Algorithms</a>
+<a target="_blank" href="https://papers.nips.cc/paper/3901-random-projections-for-k-means-clustering.pdf">Random Projections for k-means Clustering</a>
+<a target="_blank" href="https://pdfs.semanticscholar.org/a34b/e08a20eba7523600203a32abb026a8dd85a3.pdf">Applying Independent Component Analysis to Factor Model in Finance</a>
+<a target="_blank" href="https://people.cs.pitt.edu/~milos/courses/cs2750/Readings/boosting.pdf">Experiments with a New Boosting Algorithm</a>
+<a target="_blank" href="https://scikit-learn.org/stable/auto_examples/applications/plot_face_recognition.html#sphx-glr-auto-examples-applications-plot-face-recognition-py">Faces recognition example using eigenfaces and SVMs</a>
+<a target="_blank" href="https://sebastianraschka.com/Articles/2015_pca_in_3_steps.html">https://sebastianraschka.com/Articles/2015_pca_in_3_steps.html</a>
+<a target="_blank" href="https://www.kevinlondon.com/2015/05/05/code-review-best-practices.html">Code Review Best Practices</a>
+<a target="_blank" href="https://www.linkedin.com/pulse/data-science-test-driven-development-sam-savage/">Data Science TDD</a>
+<a target="_blank" href="https://www.naftaliharris.com/blog/visualizing-dbscan-clustering/">Visualizing DBSCAN Clustering</a>
+<a target="_blank" href="https://www.naftaliharris.com/blog/visualizing-k-means-clustering/">Visualizing K-Means Clustering</a>
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2669932/">PRINCIPAL COMPONENTS ANALYSIS TO SUMMARIZE MICROARRAY EXPERIMENTS: APPLICATION TO SPORULATION TIME SERIES</a>
+<a target="_blank" href="https://www.ncbi.nlm.nih.gov/pubmed/21129376">Association between composition of the human gastrointestinal microbiome and development of fatty liver with choline deficiency.</a>
+<a target="_blank" href="https://www.predictiveanalyticsworld.com/patimes/four-ways-data-science-goes-wrong-and-how-test-driven-data-analysis-can-help/6947/">Four Ways Data Science Goes Wrong and How Test Driven Data Analysis Can Help</a>
+<a target="_blank" href="https://www.predictiveanalyticsworld.com/patimes/four-ways-data-science-goes-wrong-and-how-test-driven-data-analysis-can-help/6947/">Four Ways Data Science Goes Wrong and How Test-Driven Data Analysis Can Help</a>
+<a target="_blank" href="https://www.quora.com/What-is-an-intuitive-explanation-of-Gradient-Boosting">What is an intuitive explanation of Gradient Boosting?</a>
+<a target="_blank" href="https://www.youtube.com/watch?v=59Hbtz7XgjM">A lecture from Stanford's CS231n course</a>
+<a target="_blank" href="https://www.youtube.com/watch?v=PFDu9oVAE-g">Eigenvectors and eigenvalues (YouTube)</a>
+
+Classification -> categorical outcomes
+Regression -> numerical outcomes
+
+- Supervised learning
+  - Classification
+  - Regression
+- Unsupervised learning
+  - Classification
+- Reinforcement learning
+
+Absolute Trick (to move a line towards a point)
+Given y = w₁x + w₂, point (p, q) and learning rate α
+y = (w₁ + pα)x + (w₂ + α)
+
+Square Trick
+y = (w₁ + p(q - q')α)x + (w₂ + (q - q')α)
+
+Mean Absolute Error:
+</pre>
+        $$Error = \frac{1}{m}\sum_{i=1}^m{|y - \hat y|}$$
+<pre>Mean Squared Error:</pre>
+        $$Error = \frac{1}{2m}\sum_{i=1}^m{(y - \hat y)^2}$$
+<pre>
+# Example: calculate MSE explicitly to update line (don't actually use this)
+def MSEStep(X, y, W, b, learn_rate = 0.005):
+    y_pred = np.matmul(X, W) + b
+    error = y - y_pred
+    W_new = W + learn_rate * np.matmul(error, X)
+    b_new = b + learn_rate * error.sum()
+    return W_new, b_new
+
+L1 regularization adds the polynomial coefficients and adds them to the error, penalizing complexity.
+L2 regularization adds the squares of the coefficients.
+
+λ is the coefficient used to tune L1 &amp; L2 regularization.
+
+L1 regularization
+- Computationally inefficient (unless data is sparse)
+- Better for sparse outputs
+- Feature selection (drives less relevant columns to 0)
+L2 regularization
+- Computationally efficient
+- Better for non-sparse outputs
+- No feature selection
+
+Standardizing is completed by taking each value of your column, subtracting the mean of the column, and then dividing by the standard deviation of the column.
+Normalizing scales data between 0 and 1.
+
+When Should I Use Feature Scaling?
+- When your algorithm uses a distance based metric to predict. 
+- When you incorporate regularization.
+
+Linear boundary:
+w₁x₁ + w₂x₂ + b = 0 
+Wx + b = 0
+W = (w₁, w₂)
+x = (x₁, x₂)
+
+Perceptron:
+ŷ = 1 if Wx + b ≥ 0
+    0 if Wx + b &lt; 0
+
+Entropy in a set for 2 classes and multi-class:
+</pre>
+        $$entropy = -\frac{m}{m+n}log_2(\frac{m}{m+n})-\frac{n}{m+n}log_2(\frac{n}{m+n})$$
+        $$entropy = -\sum_{i=1}^n p_i\log_2(p_i)$$
+<pre>
+As entropy increases, knowledge decreases, and vice versa.
+
+Information gain is a change in entropy.
+
+When you split a dataset, the information gain is the difference between the entropy of the parent and the average entropy of the children.
+</pre>
+        $$InformationGain = Entropy(Parent) - (\frac{m}{m+n}Entropy(Child₁) + \frac{n}{m+n}Entropy(Child₂))$$
+<pre>
+The decision tree algorithm looks a the possible splits that each column gives, calculates the information gain, and picks the largest one.
+
+Common hyperparameters for decision trees:
+- Maximum depth
+- Minimum number of samples per leaf
+- Minimum number of samples per split
+- Maximum number of features
+
+Naïve Bayes assumes that conditions are independent.
+
+P(spam|'easy','money') ∝ P('easy'|spam)⋅P('money'|spam)⋅P(spam)
+
+Error in Support Vector Machines:  ERROR = C⋅CLASSIFICATION_ERROR + MARGIN_ERROR
+</pre>
+        $$Margin = \frac{2}{|W|} \qquad Error = |W|^2$$
+<pre>
+SVMs can have linear, polynomial or radial basis function (RBF) kernels.
+
+In an RBF kernel, large γ is similar to having a large value of C, that is your algorithm will attempt to classify every point correctly.
+
+By combining algorithms, we can often build models that perform better by meeting in the middle in terms of bias and variance.
+
+The introduction of randomness combats the tendency of these algorithms to overfit.  There are two main ways that randomness is introduced:
+- Bootstrap the data - that is, sampling the data with replacement and fitting your algorithm and fitting your algorithm to the sampled data.
+- Subset the features - in each split of a decision tree or with each algorithm used an ensemble only a subset of the total possible features are used.
+
+A random forest builds multiple decision trees from multiple subsets of <em>features</em>, and then takes a vote.
+
+Bagging takes random samples of <em>data</em> and splits each subset, and then combines the splits.
+
+Adaboost tries a model, adds weight to misclassified points, creates a new model etc., then combines the models.
+
+Bias and Variance:
+- High Bias, Low Variance models tend to underfit data, as they are not flexible. Linear models fall into this category of models.
+- High Variance, Low Bias models tend to overfit data, as they are too flexible. Decision trees fall into this category of models.
+
+Ensemble Models: There were two randomization techniques you saw to combat overfitting:
+- Bootstrap the data - that is, sampling the data with replacement and fitting your algorithm and fitting your algorithm to the sampled data.
+- Subset the features - in each split of a decision tree or with each algorithm used an ensemble only a subset of the total possible features are used.
+
+Thou shalt never use your testing data for training.
+
+Confusion Matrix: Type 1 and Type 2 Errors
+Type 1 Error (Error of the first kind, or False Positive): In the medical example, this is when we misdiagnose a healthy patient as sick.
+Type 2 Error (Error of the second kind, or False Negative): In the medical example, this is when we misdiagnose a sick patient as healthy.
+
+Precision: TP / (TP + FP) - Think: murder trial
+Recall:    TP / (TP + FN) - Think: parachute manufacturer
+</pre>
+        $$HarmonicMean= \frac{2xy}{x+y} \qquad F_1 = 2\cdot\frac{Precision\times Recall}{Precision+Recall}$$
+        $$F_\beta = (1+N^2) \cdot \frac{\text{Precision} \cdot \text{Recall}}{N^2 \cdot \text{Precision} + \text{Recall}} = \frac{\text{Precision} \cdot \text{Recall}}{\frac{N^2}{1+N^2}\text{Precision} + \frac{1}{1+N^2}\text{Recall}}$$
+<pre>
+The area under the Receiver Operating Characteristic (ROC) Curve is 1 for a perfect split, and .5 for a random split.
+
+Classification metrics:
+- Accuracy
+- Precision
+- Recall
+- F<sub>β</sub> Score
+- ROC Curve &amp; AUC
+
+Regression metrics:
+- Mean absolute error
+- MSE
+- r2 score = 1 - MSE / (score of a horizontal line)
+
+Underfitting = high bias
+Overfitting = high variance
+
+Model Complexity Graph
+- Underfitting gives a high error on both training and cross-validation sets
+- Overfitting gives a low error on the training set and high error on the cross-validation set
+
+K-fold cross validation (see scikit-learn)
+
+A model with high bias converges to a high error as the number of training points increases
+A model that's just right converges to a low error
+A model with high variance does not converge
+
+Some Supervised Learning Models available in scikit-learn
+- Gaussian Naive Bayes (GaussianNB)
+- Decision Trees
+- Ensemble Methods (Bagging, AdaBoost, Random Forest, Gradient Boosting)
+- K-Nearest Neighbors (KNeighbors)
+- Stochastic Gradient Descent Classifier (SGDC)
+- Support Vector Machines (SVM)
+- Logistic Regression
+
+Backpropagation:
+</pre>
+        $$\delta^h_j = \sum{W_{jk}\delta^0_kf'(h_j)}$$
+        $$\Delta w_{ij} = \eta \delta^h_jx_i$$
+<pre>2 popular methods for unsupervised machine learning:
+- Clustering
+- Dimensionality Reduction
+
+In the K-means algorithm 'k' represents the number of clusters you have in your dataset.
+
+When you have no idea how many clusters exist in your dataset, a common strategy for determining k is the elbow method.  In the elbow method, you create a plot of the number of clusters (on the x-axis) vs. the average distance of the center of the cluster to each point (on the y-axis). This plot is called a scree plot
+
+To use KMeans, you need to follow three steps:
+1. Instantiate your model.
+2. Fit your model to the data.
+3. Predict the labels for the data.
+
+The starting points of the centroids can actually make a difference as to the final results you obtain from the k-means algorithm.
+
+The best set of clusters is then the clustering that creates the smallest average distance from each point to its corresponding centroid.
+
+Feature scaling - there are two ways that are most common:
+- Normalizing or Max-Min Scaling - this type of scaling moves variables between 0 and 1.
+- Standardizing or Z-Score Scaling - this type of scaling creates variables with a mean of 0 and standard deviation of 1.
+
+I. Clustering
+- Visual Inspection of your data.
+- Pre-conceived ideas of the number of clusters.
+- The elbow method, which compares the average distance of each point to the cluster center for different numbers of centers.
+
+II. K-Means
+You saw the k-means algorithm for clustering data, which has 3 steps:
+1. Randomly place k-centroids amongst your data.
+Then repeat the following two steps until convergence (the centroids don't change):
+   2. Look at the distance from each centroid to each point. Assign each point to the closest centroid. 
+   3. Move the centroid to the center of the points assigned to it.
+
+III. Concerns with K-Means
+1. Concern: The random placement of the centroids may lead to non-optimal solutions.
+   Solution: Run the algorithm multiple times and choose the centroids that create the smallest average distance of the points to the centroids.
+2. Concern: Depending on the scale of the features, you may end up with different groupings of your points.
+   Solution: Scale the features using Standardizing, which will create features with mean 0 and standard deviation 1 before running the k-means algorithm.
+
+Hierarchical Clustering
+- The first step is to assume that each point is already a cluster
+- the next step would be to calculate the distances between each point and each other points
+  - choose the smallest distance between two clusters
+  - group those two points into a cluster
+
+- Single link looks at the closest two points in the two clusters (not in sklearn)
+- Complete link looks at the farthest two points in the two clusters
+- Average link looks at the distance between every point and every other point in the other cluster and averages them
+- Ward's method
+
+Advantages of HC
+- hierarchical representations are informative and they provide us with an additional ability to visualize the clustering structure of the datasets
+- especially useful when the data contains real hierarchical relationships inside of it
+
+Disadvantages of HC
+- sensitive to noise and outliers so you're going to have to clean up the data set from any noise and outliers beforehand
+- O(n²)
+
+Density-based Clustering, DBSCAN (Density-based Spatial Clustering of Applications with Noise)
+
+Advantages of DBSCAN
+- don't need to specify the number of clusters
+- flexibility in the shapes and sizes of clusters it's able to find
+- robust in that it's able to deal with noise and outliers in the data
+
+Disadvantages of DBSCAN
+- not guaranteed to return the same clustering
+- it has difficulties finding clusters of varying densities
+
+Gaussian Mixture Model (GMM)
+
+Expectation-Maximization for Gaussian Mixtures:
+1. Initialize k Gaussian distributions
+2. Soft-cluster data - "expectation"
+3. Re-estimate the Gaussians - "maximization"
+4. Evaluate the log-likelihood to check for convergence
+5. Repeat from step 2 until converged
+
+Advantages of GMM
+- Soft-clustering (sample membership of multiple clusters)
+- Cluster shape flexibility
+
+Disadvantages of GMM
+- Sensitive to initialization values
+- Possible to converge to a local optimum
+- Slow convergence rate
+
+Principle Component Analysis (PCA)
+I. The amount of variance explained by each component. This is called an eigenvalue.
+II. The principal components themselves, each component is a vector of weights. In this case, the principal components help us understand which pixels of the image are most helpful in identifying the difference between between digits. Principal components are also known as eigenvectors.
+
+Dimensionality Reduction and Latent Features
+- Principal Component Analysis is a technique that is used to reduce the dimensionality of your dataset. The reduced features are called principal components, which can be thought of as latent features. These principal components are simply a linear combination of the original features in your dataset.
+- these components have two major properties:
+  - They aim to capture the most amount of variability in the original dataset.
+  - They are orthogonal to (independent of) one another.
+Interpreting Results 
+- The variance (eigenvalue) explained by each component.  Visualize this with scree plots to understand how many components you might keep based on how much information was being retained.
+- The components (eigenvectors) give us an idea of which original features were most related to why a component was able to explain certain aspects about the original datasets.
+
+Random Projection
+
+Independent Component Analysis (ICA)
+
+Scikit Learn uses FastICA
+
+Three strategies for working with missing values include:
+- We can remove (or “drop”) the rows or columns holding the missing values.
+- We can impute the missing values.
+- We can build models that work around them, and only use the information provided.
+
+The CRISP-DM Process (Cross Industry Process for Data Mining)
+1. Business Understanding
+2. Data Understanding
+3. Prepare Data
+4. Data Modeling
+5. Evaluate the Results
+6. Deploy
+
+GitHub README should have:
+1. Installation instructions
+2. Project Motivation
+3. File Descriptions
+4. How to Interact with your project
+5. Licensing, Authors, Acknowledgements, etc.
+
+Questions to Ask Yourself When Conducting a Code Review:
+  Is the code clean and modular?
+  - Can I understand the code easily?
+  - Does it use meaningful names and whitespace?
+  - Is there duplicated code?
+  - Can you provide another layer of abstraction?
+  - Is each function and module necessary?
+  - Is each function or module too long?
+
+  Is the code efficient?
+  - Are there loops or other steps we can vectorize?
+  - Can we use better data structures to optimize any steps?
+  - Can we shorten the number of calculations needed for any steps?
+  - Can we use generators or multiprocessing to optimize any steps?
+
+  Is documentation effective?
+  - Are in-line comments concise and meaningful?
+  - Is there complex code that's missing documentation?
+  - Do function use effective docstrings?
+  - Is the necessary project documentation provided?
+
+  Is the code well tested?
+  - Does the code high test coverage?
+  - Do tests check for interesting cases?
+  - Are the tests readable?
+  - Can the tests be made more efficient?
+
+  Is the logging effective?
+  - Are log messages clear, concise, and professional?
+  - Do they include all relevant and useful information?
+  - Do they use the appropriate logging level?
+
+The 3 stages of an NLP pipeline are: Text Processing > Feature Extraction > Modeling.
+- Text Processing: Take raw input text, clean it, normalize it, and convert it into a form that is suitable for feature extraction.
+- Feature Extraction: Extract and produce feature representations that are appropriate for the type of NLP task you are trying
+                      to accomplish and the type of model you are planning to use.
+- Modeling: Design a statistical or machine learning model, fit its parameters to training data, use an optimization procedure,
+            and then use it to make predictions about unseen data.
+
+Text data from different sources is prepared with the following text processing steps:
+1. Cleaning to remove irrelevant items, such as HTML tags
+   - <a target="_blank" href="http://docs.python-requests.org/en/master/user/quickstart/#make-a-request">Requests</a>
+   - <a target="_blank" href="https://docs.python.org/3/library/re.html">Regular Expressions</a>
+   - <a target="_blank" href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/">Beautiful Soup</a>
+
+2. Normalizing by converting to all lowercase and removing punctuation
+   - <a target="_blank" href="https://docs.python.org/3/library/re.html">Regular Expressions</a>
+
+3. Splitting text into words or tokens
+   - <a target="_blank" href="http://www.nltk.org/api/nltk.tokenize.html">NLTK</a>
+
+4. Removing words that are too common, also known as stop words
+   - <a target="_blank" href="http://www.nltk.org">NLTK</a>
+
+5. Identifying different parts of speech and named entities
+   - Part of Speech (POS) and Named Entity Recognition (NER)
+   - <a target="_blank" href="http://www.nltk.org">NLTK</a>
+
+6. Converting words into their dictionary forms, using stemming and lemmatization
+   - <a target="_blank" href="http://www.nltk.org">NLTK</a>
+
+Bag of Words
+- collect all of the unique words in your corpus into a vocabulary
+- create Document-Term Matrix, where each row is a sentence and each column is a word
+- each entry in the matrix is a word frequency
+- compare sentences in the matrix using cosine similarity
+</pre>
+        $$\cos(\theta) = \frac{a \cdot b}{\|a\| \cdot \|b\|}$$
+<pre>
+TF-IDF (term frequency * inverse document frequency)
+
+Word Embeddings
+- Word2Vec 
+- GloVe
+- t-SNE
+</pre>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-51714627-1', 'surfingwithstyle.com');
+        ga('send', 'pageview');
+    </script>
+    <!--<script src="_framework/blazor.webassembly.js"></script>-->
+
+</body>
+</html>

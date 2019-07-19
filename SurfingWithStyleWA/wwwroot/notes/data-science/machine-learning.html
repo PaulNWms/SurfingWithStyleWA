@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width">
+    <title>Surfing With Style</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+    <link href="css/math.css" rel="stylesheet" />
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+    </script>
+    <script type="text/javascript" async
+            src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS_CHTML">
+    </script>
+</head>
+<body>
+    <h1>Machine Learning</h1>
+
+    <div class="kaypro10">
+        <pre>Links:
+<a target="_blank" href="https://github.com/ageron/handson-ml">Sample code</a>
+
+Data sets:
+<a target="_blank" href="http://archive.ics.uci.edu/ml/index.php">UC Irvine Machine Learning Repository</a>
+<a target="_blank" href="https://www.kaggle.com/datasets">Kaggle</a>
+<a target="_blank" href="https://registry.opendata.aws/">Open Data on AWS</a>
+<a target="_blank" href="http://dataportals.org/">http://dataportals.org/</a>
+<a target="_blank" href="https://opendatamonitor.eu/">OPENDATAMONITOR</a>
+<a target="_blank" href="https://www.quandl.com/">Quandl</a>
+<a target="_blank" href="https://en.wikipedia.org/wiki/List_of_datasets_for_machine_learning_research">Wikipedia's list of datasets</a>
+<a target="_blank" href="https://www.quora.com/Where-can-I-find-large-datasets-open-to-the-public">Quora</a>
+<a target="_blank" href="https://www.reddit.com/r/datasets/">Datasets' Discord server</a>
+
+In supervised learning, the training data is labelled.
+
+Typical supervised learning tasks include classification and predicting a target numeric value.
+
+Some of the most important supervised learning algorithms include
+- k-nearest neighbors
+- linear regression
+- logistical regression
+- support vector machines
+- decision trees and random forests
+- neural networks
+
+In unsupervised learning, the training data is unlabelled.
+
+Typical unsupervised learning tasks include
+- clustering,
+- visualization,
+- dimensionality reduction / feature extraction,
+- anomaly detection and
+- association rule learning.
+
+Some of the most important unsupervised learning algorithms include
+- clustering
+-- k-means
+-- hierarchical cluster analysis (HCA)
+-- expectation maximization
+- visualization and dimensionality reduction
+-- principle component analysis (PCA)
+-- kernel PCA
+-- locally-linear embedding (LLE)
+-- t-distributed stochastic neighbor embedding (t-SNE)
+- association rule learning
+-- Apriori
+-- Eclat
+
+In semisupervised learning, some of the training data is labelled.
+
+In reinforcement learning, an agent observes the environment and receives rewards for actions performed.
+
+In batch learning, the system is trained using all available data.
+
+In online learning, the system is trained incrementally by feeding it data in mini-batches.
+
+In instance-based learning, the system learns examples by heart, then generalizes to new cases using a similarity measure.
+
+In model-based learning, a model is built from a set of examples, then the model is used to make predictions.
+
+Small data sets often suffer from sampling noise, and large data sets can still suffer from sampling bias.
+
+Feature engineering involves feature selection, feature extraction and feature creation.
+
+To fix overfitting you can
+- simplify the model
+- gather more training data
+- fix data errors and remove outliers
+
+Regularization constrains a model to make it simpler and reduce the risk of overfitting.
+
+Underfitting occurs when your model is too simple to learn the underlying structure of the data.
+
+To fix underfitting you can
+- select a more powerful model
+- perform feature engineering
+- reduce regularization
+
+To see how well a model will generalize to new cases, the data is split into a training set and a test set.
+
+It is common to use 80% of the data for training and hold out 20% for testing.
+
+In cross-validation, a validation set is randomly held out from the training set during training.
+
+The No Free Lunch Theorem states that there is no model that is guaranteed to work best on a given dataset.  The only way to know for sure is to evaluate them all.
+
+1. Look at the big picture.
+  - Frame the problem
+  -- How will the model benefit the company?
+  -- What current solutions exist, if any?
+  -- Supervised, unsupervised, or reinforcement learning?
+  -- Classification, regression, or something else?
+  -- Batch learning or online learning?
+  - Select a performance measure (RMSE ‖∙‖<sub>2</sub>, MAE ‖∙‖<sub>1</sub>, or ?)
+  - Check any assumptions
+2. Get the data.
+  - Familiarize yourself with it (pandas)
+  - Plot histograms (matplotlib)
+  - Create a test set
+3. Discover and visualize the data to gain insights.
+  - Scatter plots (pandas)
+  - Correlations plots 
+4. Prepare the data.
+  - Clean data
+  -- Delete rows with nulls (dropna)
+  -- Delete attributes with nulls (drop)
+  -- Replace nulls with default value (fillna or imputer)
+  - Convert text to integers (factorize() to integer or one-hot encode)
+  - Feature scaling (min-max scaling or standardization)
+5. Select a model and train it.
+  - Cross-validation (cross_val_score)
+6. Fine-tune your model.
+  - GridSearchCV
+  - RandomizedSearchCV
+7. Present your solution.
+8. Launch, monitor and maintain your system.
+</pre>
+        $$precision = \frac{TP}{TP + FP}$$
+        $$recall = \frac{TP}{TP + FN}$$
+        $$F_1 = \frac{2}{\frac{1}{precision} + \frac{1}{recall}} = 2 \times \frac{precision \times recall}{precision + recall} = \frac{TP}{TP + \frac{FN + FP}{2}}$$
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-51714627-1', 'surfingwithstyle.com');
+        ga('send', 'pageview');
+    </script>
+    <!--<script src="_framework/blazor.webassembly.js"></script>-->
+
+</body>
+</html>
