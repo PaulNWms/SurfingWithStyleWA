@@ -435,6 +435,87 @@ Word Embeddings
 - Word2Vec 
 - GloVe
 - t-SNE
+
+If you have a lot of control over features, then you have an experiment.
+If you have no control over the features, then you have an observational study.
+If you have some control, then you have a quasi-experiment.
+
+In a between-subjects experiment, each unit only participates in, or sees, one of the conditions being used in the experiment.
+If an individual completes all conditions, rather than just one, this is known as a within-subjects design.
+
+Randomization still has a part in the within-subjects design in the order in which individuals complete conditions.
+
+In a simple random sample, each individual in the population has an equal chance of being selected.
+In a stratified random sample, we need to first divide the entire population into disjoint groups, or strata.  Then, from each group, 
+you take a simple random sample.
+
+Evaluation metrics are the metrics by which we compare groups.
+Invariant metrics are metrics that we hope will not be different between groups.
+
+If we aren't able to control all features or there is a lack of equivalence between groups, then we may be susceptible to confounding variables.
+
+Construct validity is tied to how well one's goals are aligned to the evaluation metrics used to evaluate it.
+Internal validity refers to the degree to which a causal relationship can be derived from an experiment's results.
+External validity is concerned with the ability of an experimental outcome to be generalized to a broader population.
+
+Biases in experiments are systematic effects that interfere with the interpretation of experimental results, 
+mostly in terms of internal validity.
+- Sampling biases are those that cause our observations to not be representative of the population.
+  - Studies that use surveys to collect data often have to deal with the self-selection bias.
+  - Survivor bias is one where losses or dropout of observed units is not accounted for in an analysis.
+- A novelty effect is one that causes observers to change their behavior simply because they're seeing something new.
+- Order bias may occur when the order in which conditions are completed could have an effect on participant responses.
+  - A primacy effect is one that affects early conditions, perhaps biasing them to be recalled better or
+    to serve as anchor values for later conditions.
+  - A recency effect is one that affects later conditions, perhaps causing bias due to being fresher in memory or task fatigue.
+- Experimenter bias is where the presence or knowledge of the experimenter can affect participants' behaviors or performance.
+  - The double-blind design hides condition information from both the administrator and participant
+    in order to have a strong rein on experimenter-based biases.
+
+# Find p-value (two-sided test) - analytic approach
+n_obs = data.shape[0]
+n_control = data.groupby('condition').size()[0]
+p = 0.5
+sd = np.sqrt(p * (1-p) * n_obs)
+z = ((n_control + 0.5) - p * n_obs) / sd
+print(z)
+print(2 * stats.norm.cdf(z))
+
+# Find p-value (two-sided test) - simulation approach
+n_obs = data.shape[0]
+n_control = data.groupby('condition').size()[0]
+p = 0.5
+n_trials = 200_000
+samples = np.random.binomial(n_obs, p, n_trials)
+np.logical_or(samples <= n_control, samples >= (n_obs - n_control)).mean()
+
+# Perform hypothesis test (one-sided test) - analytic approach
+p_click = data.groupby('condition').mean()['click']
+n_control = data.groupby('condition').size()[0]
+n_exper = data.groupby('condition').size()[1]
+p_null = data['click'].mean()
+se_p = np.sqrt(p_null * (1-p_null) * (1/n_control + 1/n_exper))
+z = (p_click[1] - p_click[0]) / se_p
+print(z)
+print(1-stats.norm.cdf(z))
+
+# Perform hypothesis test (one-sided test) - simulation approach
+n_control = data.groupby('condition').size()[0]
+n_exper = data.groupby('condition').size()[1]
+p_null = data['click'].mean()
+n_trials = 200_000
+ctrl_clicks = np.random.binomial(n_control, p_null, n_trials)
+exp_clicks = np.random.binomial(n_exper, p_null, n_trials)
+samples = exp_clicks / n_exper - ctrl_clicks / n_control
+print((samples >= (p_click[1] - p_click[0])).mean())
+
+SMART Experiment Design
+- Specific: Make sure the goals of your experiment are specific.
+- Measurable: Outcomes must be measurable using objective metrics
+- Achievable: The steps taken for the experiment and the goals must be realistic.
+- Relevant: The experiment needs to have purpose behind it.
+- Timely: Results must be obtainable in a reasonable time frame.
+
 </pre>
     </div>
 

@@ -187,15 +187,19 @@ Confidence interval means we are 95% confident the population mean falls between
 
 Bootstrapping can be used in place of traditional confidence interval methods (T-Test, 2 Sample T-Test, Paired T-Test, Z-Test, Chi-squared Test, F-Test).
 
-Type I errors
+The null hypothesis is what we believe to be true before collecting any data.  "Innocent until proven guilty."
+
+Type I errors - choosing H₁ when H₀ is true
 1. You should set up your null and alternative hypotheses, so that the worse of your errors is the type I error.
 2. They are denoted by the symbol α.
 3. The definition of a type I error is: Deciding the alternative (H₁) is true, when actually (H₀) is true.
 4. Type I errors are often called false positives.
-Type II Errors
+Type II Errors - choosing H₀ when H₁ is true
 1. They are denoted by the symbol β.
 2. The definition of a type II error is: Deciding the null (H₀) is true, when actually (H₁) is true.
 3. Type II errors are often called false negatives.
+
+Power = 1 - Type II Error
 
 Common hypothesis tests include:
 1. Testing a population mean <a target="_blank" href="http://sites.utexas.edu/sos/guided/inferential/numeric/claim/one-sample-t/">(One sample t-test).</a>
@@ -222,6 +226,18 @@ for i in range(len(diffs)):
     experiment_ctr = experiment_df.query('action == "click"').id.nunique() / experiment_df.query('action == "view"').id.nunique()
     diffs[i] = experiment_ctr - control_ctr
 
+# Find lower and upper bound of confidence interval using bootstrapping
+boot_means = []
+for _ in range(10000):
+    bootsample = coffee_red.sample(200, replace=True)
+	boot_means.append(bootsample[bootsample['drinks_coffee'] == True]['height'].mean())
+np.percentile(boot_means, 2.5), np.percentile(boot_means, 97.5)
+
+# Find lower and upper bound of confidence interval (in this case difference of means) using statsmodels
+import statsmodels.stats.api as sms
+cm = sms.CompareMeans(sms.DescrStatsW(X1), sms.DescrStatsW(X2))
+print(cm.tconfint_diff(usevar='unequal'))
+
 The p-value is the probability of getting our statistic or a more extreme value if the null is true. 
 Therefore, small p-values suggest our null is not true. Rather, our statistic is likely to have come from a different distribution than the null.
 When the p-value is large, we have evidence that our statistic was likely to come from the null hypothesis. Therefore, we do not have evidence to reject the null. 
@@ -229,6 +245,16 @@ By comparing our p-value to our type I error threshold (α), we can make our dec
 
 p ≤ α ⇒ Reject H₀
 p > α ⇒ Fail to Reject H₀
+
+# Find p-value with numpy (two-sided test)
+n_obs = data.shape[0]
+n_control = data.groupby('condition').size()[0]
+p = 0.5
+n_trials = 200_000
+samples = np.random.binomial(n_obs, p, n_trials)
+np.logical_or(samples <= n_control, samples >= (n_obs - n_control)).mean()
+
+sms.OLS()
 
 Type I error compounds when you take multiple hypothesis tests.
 Bonferroni Correction says that if you have m tests, use α/m.
